@@ -28,6 +28,9 @@
 
 -(Piece*) initWithName:(NSString*)pName andMetadata:(NSDictionary*)metadata{
     if(self = [super init]){
+        CCSprite* pieceSprite = [[CCSprite alloc] 
+                                 initWithSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:pName]];
+        newPiece = [ImageHelper convertSpriteToImage:pieceSprite];
         order= [[metadata objectForKey:@"order"] intValue];
         vAlign= [[metadata objectForKey:@"vAlign"] intValue]; 
         hAlign= [[metadata objectForKey:@"hAlign"] intValue];
@@ -35,9 +38,6 @@
         height = newPiece.size.height;
         name = pName;
         fixed = NO;
-        CCSprite* pieceSprite = [[CCSprite alloc] 
-                                 initWithSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:pName]];
-        newPiece = [ImageHelper convertSpriteToImage:pieceSprite];
         [self addChild:pieceSprite z:1 tag:10];
     }
     return self;

@@ -11,9 +11,10 @@
     CCSpriteFrameCache* piecesSpriteBatchNode;
 
 }
--(void) movePieceToFinalPosition:(Piece*)piece;
 -(BOOL) isPieceInRightPlace:(Piece*)piece;
 -(BOOL) isPuzzleComplete;
+-(void) selectPieceForTouch:(CGPoint)touchLocation;
+-(void) movePieceToFinalPosition:(Piece*)piece;
 -(void) loadPlistLevel;
 -(void) initMenu;
 @end

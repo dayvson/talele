@@ -9,6 +9,7 @@
 #import "GameConfig.h"
 #import "GameManager.h"
 #import "ImageHelper.h"
+#import "GameHelper.h"
 
 @implementation LevelEasyLayer
 
@@ -20,37 +21,9 @@
 	return scene;
 }
 
-- (float)randomFloatBetween:(float)smallNumber and:(float)bigNumber {
-    float diff = bigNumber - smallNumber;
-    return (((float) (arc4random() % ((unsigned)RAND_MAX + 1)) / RAND_MAX) * diff) + smallNumber;
-}
-
--(void) loadPlistLevel {
-    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"buttons.plist"];
-    sceneSpriteBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"buttons.png"];    
-    [self addChild:sceneSpriteBatchNode z:1];
-    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"pieces.plist"];
-    piecesSpriteBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"pieces.png"];    
-    [self addChild:piecesSpriteBatchNode z:2];    
-}
-
 -(void) onClickBack {
     [[GameManager sharedGameManager] runSceneWithID:kPuzzleSelection];
     CCLOG(@"CLICKKKKKK BACK");
-}
-
--(void) initMenu {
-    [CCSpriteFrameCache sharedSpriteFrameCache ];
-    CCSprite *backSprite = [[CCSprite alloc] initWithSpriteFrame:[[CCSpriteFrameCache
-                                                                   sharedSpriteFrameCache]
-                                                                  spriteFrameByName:@"btn-voltar-mini.png"]];
-    [backSprite.texture setAliasTexParameters];
-    CCMenuItemSprite *backButton = [CCMenuItemSprite itemFromNormalSprite:backSprite
-                                    selectedSprite:nil target:self selector:@selector(onClickBack)];
-    CCMenu *mainMenu = [CCMenu menuWithItems:backButton,nil];
-
-    [mainMenu setPosition:ccp(40, screenSize.height - 40.0f)];
-    [self addChild:mainMenu];
 }
 
 -(void) loadPuzzleImage:(NSString*)name {
@@ -96,52 +69,6 @@
     return deltaY;    
 }
 
-- (void)selectPieceForTouch:(CGPoint)touchLocation {
-    Piece * newSelection = nil;
-    for (Piece *piece in pieces) {
-        if (CGRectContainsPoint(piece.getRealBoundingBox, touchLocation)) {            
-            newSelection = piece;
-            break;
-        }
-    }    
-    if (newSelection != selectedPiece) {
-        selectedPiece = newSelection;
-    }
-}
--(void) movePieceToFinalPosition:(Piece*)piece{
-    [selectedPiece setScale:1.0f];
-    selectedPiece.fixed = YES;
-    id action = [CCMoveTo actionWithDuration:0.5f 
-                                    position:CGPointMake(selectedPiece.xTarget, 
-                                                         selectedPiece.yTarget)];
-    id ease = [CCEaseIn actionWithAction:action rate:2];
-    [selectedPiece runAction:ease];
-    
-}
-
-- (BOOL) isPieceInRightPlace:(Piece*)piece {
-    BOOL result = NO;
-    if(selectedPiece && selectedPiece.fixed == NO){
-        int radius = 60;
-        if(selectedPiece.position.x < selectedPiece.xTarget + radius &&
-           selectedPiece.position.x > selectedPiece.xTarget - radius &&
-           selectedPiece.position.y < selectedPiece.yTarget + radius &&
-           selectedPiece.position.y > selectedPiece.yTarget - radius){
-            result = YES;
-        }
-    }
-    return result;
-}
-
--(BOOL) isPuzzleComplete {
-    for (Piece *piece in pieces) {
-        if(piece.fixed == NO){
-            return NO;
-        }
-    }
-    return YES;
-}
-
 -(void) loadPieces {
     float posInitialX = puzzleImage.position.x;
     float posInitialY = puzzleImage.position.y;
@@ -153,11 +80,11 @@
     float randY;
     float wlimit;
     float hlimit;
-
+    NSDictionary* levelInfo = [GameHelper getPlist:@"levelEasy"];
     UIImage* tempPuzzle = [ImageHelper convertSpriteToImage:[CCSprite spriteWithTexture:[puzzleImage texture]]];
     for (int c = 1; c<=totalPieces; c++,i++) {        
         NSString *pName = [NSString stringWithFormat:@"p%d.png", c];
-        Piece* item = [[Piece alloc] initWithName:pName];  
+        Piece* item = [[Piece alloc] initWithName:pName andMetadata:[levelInfo objectForKey:pName]];  
         deltaX = [self getDeltaX:item.hAlign withIndex:i andPieceWidth:item.width];
         deltaY = [self getDeltaY:item.vAlign withIndex:i andPieceHeight:item.height];
         [item createMaskWithPuzzle:tempPuzzle 
@@ -169,11 +96,11 @@
         wlimit = screenSize.width-item.width-30;
         hlimit = screenSize.height-item.height-30;        
         if (c % 2 == 0){
-            randX = [self randomFloatBetween:item.width and:wlimit];
-            randY = [self randomFloatBetween:item.height and: 150];
+            randX = [GameHelper randomFloatBetween:item.width and:wlimit];
+            randY = [GameHelper randomFloatBetween:item.height and: 150];
         }else{
-            randX = [self randomFloatBetween:10 and:90];
-            randY = [self randomFloatBetween:item.height and: hlimit];
+            randX = [GameHelper randomFloatBetween:10 and:90];
+            randY = [GameHelper randomFloatBetween:item.height and: hlimit];
         }
 
         [item setPosition:ccp(randX, randY)];
@@ -187,36 +114,6 @@
     background = [CCSprite spriteWithFile:@"background-gameplay.png"];
 	background.position = ccp(screenSize.width/2, screenSize.height/2);
 	[self addChild: background];    
-}
-
-- (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {    
-    CGPoint touchLocation = [self convertTouchToNodeSpace:touch];
-    [self selectPieceForTouch:touchLocation];
-    if( selectedPiece && selectedPiece.fixed == NO){
-        [selectedPiece setScale:1.0f];
-        zIndex += 1;
-        [selectedPiece setZOrder:zIndex];
-    }
-    return TRUE;
-}
-
-
-- (void)ccTouchMoved:(UITouch *)touch withEvent:(UIEvent *)event {       
-    CGPoint touchLocation = [self convertTouchToNodeSpace:touch];
-    if (selectedPiece && selectedPiece.fixed == NO) {
-        selectedPiece.position = ccp(touchLocation.x - (selectedPiece.width/2), 
-                                     touchLocation.y + (selectedPiece.height/2));
-    }
-}
-
-
-- (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event{
-    if([self isPieceInRightPlace:selectedPiece]){
-        [self movePieceToFinalPosition:selectedPiece];
-        if(self.isPuzzleComplete){
-            CCLOG(@" ########################### PUZZLE COMPLETE ########################### ");
-        }
-    }
 }
 
 -(void) onEnter
@@ -233,7 +130,6 @@
     [self loadPuzzleImage:@"arthur.jpg"];
     [self loadPieces];
 }
-
 
 -(void)dealloc {
     [self removeAllChildrenWithCleanup:TRUE];

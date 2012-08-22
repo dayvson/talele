@@ -38,10 +38,11 @@
 
 -(void) loadPuzzleImage:(NSString*)name {
     puzzleImage = [CCSprite spriteWithFile:name];
-	puzzleImage.position =  ccp(screenSize.width/2, screenSize.height/2);
-    [puzzleImage setScale:0.80f];
+    puzzleImage.anchorPoint = ccp(0,0);
+    [puzzleImage setOpacity:30];
+	puzzleImage.position = ccp(screenSize.width - puzzleImage.contentSize.width - 28,
+                               screenSize.height - puzzleImage.contentSize.height - 20);
 	[self addChild: puzzleImage];
-    
 }
 
 - (void) selectPieceForTouch:(CGPoint)touchLocation {
@@ -53,6 +54,7 @@
         }
     }    
     if (newSelection != selectedPiece) {
+                        CCLOG(@"DIFERENTE");
         selectedPiece = newSelection;
     }
 }
@@ -107,4 +109,5 @@
         }
     }
 }
+
 @end
