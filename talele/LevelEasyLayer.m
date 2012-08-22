@@ -127,7 +127,7 @@
     [self loadPlistLevel];
     [self initBackground];
     [self initMenu];
-    [self loadPuzzleImage:@"arthur.jpg"];
+    [self loadPuzzleImage:[GameManager sharedGameManager].currentPuzzle];
     [self loadPieces];
 }
 

@@ -1,6 +1,6 @@
-#import "SlidingMenuGrid.h"
+#import "SlidingPuzzleGrid.h"
 
-@implementation SlidingMenuGrid
+@implementation SlidingPuzzleGrid
 
 @synthesize padding;
 @synthesize menuOrigin;

@@ -1,6 +1,6 @@
 #import "cocos2d.h"
 
-@interface SlidingMenuGrid : CCLayer
+@interface SlidingPuzzleGrid : CCLayer
 {
 	tCCMenuState state; // State of our menu grid. (Eg. waiting, tracking touch, cancelled, etc)
 	CCMenuItem *selectedItem; // Menu item that was selected/active.

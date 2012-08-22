@@ -8,7 +8,8 @@
 #import "PuzzleSelectionLayer.h"
 #import "GameConstants.h"
 #import "GameManager.h"
-
+#import "GameHelper.h"
+#import "SlidingPuzzleGrid.h"
 
 @implementation PuzzleSelectionLayer
 
@@ -108,13 +109,34 @@
     
 	[self addChild: background];    
 }
+-(void) updateSelectedImage:(CCMenuItemSprite*)sender{
+    [[GameManager sharedGameManager] setCurrentPuzzle:(NSString*)sender.userData];
+}
 
--(void) loadPuzzleImage:(NSString*)name {
-	CCSprite *puzzleImage;
-    puzzleImage = [CCSprite spriteWithFile:name];
-	puzzleImage.position =  ccp(screenSize.width/2, screenSize.height/2);
-    [puzzleImage setScale:0.80f];
-	[self addChild: puzzleImage];
+-(void) loadPuzzleImages {
+    NSDictionary* puzzlesInfo = [GameHelper getPlist:@"puzzles"];
+    NSMutableArray *arrayNames = [[NSMutableArray alloc] initWithObjects:@"arthur.jpg",@"cars2.jpg",@"valente.jpg",@"tangled.jpg", nil];
+    NSMutableArray *items = [[NSMutableArray alloc] initWithCapacity:arrayNames.count];
+    CCLOG(@"LOAD PUZZLE IMAGE %d", arrayNames.count);
+    for (int i=0; i<arrayNames.count; i++) {
+        CCSprite* bg = [CCSprite spriteWithFile:@"photobg.png"];
+        CCSprite* img = [CCSprite spriteWithFile:[arrayNames objectAtIndex:i]];
+        img.anchorPoint = ccp(0,0);
+        img.position = ccp(23,22);
+        [img setScale:0.8];
+
+        [bg addChild:img];
+        CCMenuItemSprite* item = [[CCMenuItemSprite alloc] initWithNormalSprite:bg selectedSprite:nil disabledSprite:nil target:self selector:@selector(updateSelectedImage:)];
+        item.userData = [arrayNames objectAtIndex:i];
+        [items addObject:item];
+    }
+
+    SlidingPuzzleGrid* menuGrid = [SlidingPuzzleGrid menuWithArray:items 
+                                                          cols:1 rows:1
+                                                      position:ccp(screenSize.width/2, screenSize.height/2)
+                                                       padding:CGPointMake(10.f, 0) 
+                                                ];
+    [self addChild:menuGrid];
 
 }
 
@@ -128,7 +150,7 @@
     [self initStartGameButtons];
     [self initNavigationButtons];
     [self initPhotoButton];
-    [self loadPuzzleImage:@"valente.jpg"];
+    [self loadPuzzleImages];
 }
 
 

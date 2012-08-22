@@ -11,9 +11,10 @@
 @interface GameManager : NSObject {
     BOOL isMusicON;
     SceneTypes currentScene;
+    NSString* currentPuzzle;
 }
 @property (readwrite) BOOL isMusicON;
-
+@property (readwrite,retain) NSString* currentPuzzle;
 -(void)runSceneWithID:(SceneTypes)sceneID;
 +(GameManager*)sharedGameManager;                                  
 

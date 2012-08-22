@@ -15,6 +15,7 @@
 
 static GameManager* _sharedGameManager = nil;
 @synthesize isMusicON;
+@synthesize currentPuzzle;
 
 +(GameManager*)sharedGameManager {
     @synchronized([GameManager class])
