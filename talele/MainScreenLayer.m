@@ -28,7 +28,7 @@
 
 
 -(void) onClickPlay {
-    [[GameManager sharedGameManager] runSceneWithID:kPuzzleSelection];
+    [[GameManager sharedGameManager] runSceneWithID:kLevelEasy];
 }
 
 

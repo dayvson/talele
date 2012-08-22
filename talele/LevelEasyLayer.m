@@ -20,6 +20,11 @@
 	return scene;
 }
 
+- (float)randomFloatBetween:(float)smallNumber and:(float)bigNumber {
+    float diff = bigNumber - smallNumber;
+    return (((float) (arc4random() % ((unsigned)RAND_MAX + 1)) / RAND_MAX) * diff) + smallNumber;
+}
+
 -(void) loadPlistLevel {
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"buttons.plist"];
     sceneSpriteBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"buttons.png"];    
@@ -120,6 +125,7 @@
 }
 
 
+
 -(void) loadPieces {
     float posInitialX = puzzleImage.position.x;
     float posInitialY = puzzleImage.position.y;
@@ -127,8 +133,8 @@
     float deltaY = 0;   
     int i = 0;
     int totalPieces = 24;
-    int randX;
-    int randY;
+    float randX;
+    float randY;
     UIImage* tempPuzzle = [ImageHelper convertSpriteToImage:[CCSprite spriteWithTexture:[puzzleImage texture]]];
     for (int c = 1; c<=totalPieces; c++,i++) {        
         NSString *pName = [NSString stringWithFormat:@"p%d.png", c];
@@ -140,14 +146,17 @@
         item.anchorPoint = ccp(0,1);
         item.xTarget = posInitialX + deltaX;
         item.yTarget = posInitialY + tempPuzzle.size.height + deltaY;
-        int wlimit = screenSize.width-item.width-30;
-/*        if (c % 2 == 0){
-            randX = max(wlimit, rand_r(wlimit));
+        float wlimit = screenSize.width-item.width-30;
+        float hlimit = screenSize.height-item.height-30;        
+        if (c % 2 == 0){
+            randX = [self randomFloatBetween:item.width and:wlimit];
+            randY = [self randomFloatBetween:item.height and: 250];
         }else{
-            
+            randX = [self randomFloatBetween:10 and:90];
+            randY = [self randomFloatBetween:item.height and: hlimit];
         }
- */
-//        [item setPosition:ccp(randX, randY);
+
+        [item setPosition:ccp(randX, randY)];
         [self addChild:item];
         [pieces addObject:item];
     }
