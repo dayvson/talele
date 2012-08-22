@@ -147,7 +147,7 @@
             
         }
  */
-        [item setPosition:ccp(randX, randY);
+//        [item setPosition:ccp(randX, randY);
         [self addChild:item];
         [pieces addObject:item];
     }
