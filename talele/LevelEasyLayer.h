@@ -12,6 +12,7 @@
 	CGSize screenSize;
     NSMutableArray* pieces;
     Piece* selectedPiece;
+    int zIndex;
     CCSprite* puzzleImage;
     CCSpriteFrameCache* sceneSpriteBatchNode;
     CCSpriteFrameCache* piecesSpriteBatchNode;

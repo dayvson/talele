@@ -36,6 +36,7 @@
 
 -(void) onClickBack {
     [[GameManager sharedGameManager] runSceneWithID:kPuzzleSelection];
+    CCLOG(@"CLICKKKKKK BACK");
 }
 
 -(void) initMenu {
@@ -46,8 +47,10 @@
     [backSprite.texture setAliasTexParameters];
     CCMenuItemSprite *backButton = [CCMenuItemSprite itemFromNormalSprite:backSprite
                                     selectedSprite:nil target:self selector:@selector(onClickBack)];
-    [backButton setPosition:ccp(40, screenSize.height - 40.0f)];
-    [self addChild:backButton];
+    CCMenu *mainMenu = [CCMenu menuWithItems:backButton,nil];
+
+    [mainMenu setPosition:ccp(40, screenSize.height - 40.0f)];
+    [self addChild:mainMenu];
 }
 
 -(void) loadPuzzleImage:(NSString*)name {
@@ -105,23 +108,56 @@
         selectedPiece = newSelection;
     }
 }
+-(void) movePieceToFinalPosition:(Piece*)piece{
+    [selectedPiece setScale:1.0f];
+    selectedPiece.fixed = YES;
+    id action = [CCMoveTo actionWithDuration:0.5f 
+                                    position:CGPointMake(selectedPiece.xTarget, 
+                                                         selectedPiece.yTarget)];
+    id ease = [CCEaseIn actionWithAction:action rate:2];
+    [selectedPiece runAction:ease];
+    
+}
+
+- (BOOL) isPieceInRightPlace:(Piece*)piece {
+    BOOL result = NO;
+    if(selectedPiece && selectedPiece.fixed == NO){
+        int radius = 60;
+        if(selectedPiece.position.x < selectedPiece.xTarget + radius &&
+           selectedPiece.position.x > selectedPiece.xTarget - radius &&
+           selectedPiece.position.y < selectedPiece.yTarget + radius &&
+           selectedPiece.position.y > selectedPiece.yTarget - radius){
+            result = YES;
+        }
+    }
+    return result;
+}
 
 - (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {    
     CGPoint touchLocation = [self convertTouchToNodeSpace:touch];
     [self selectPieceForTouch:touchLocation];
+    if( selectedPiece && selectedPiece.fixed == NO){
+        [selectedPiece setScale:1.0f];
+        zIndex += 1;
+        [selectedPiece setZOrder:zIndex];
+    }
     return TRUE;
 }
 
+
 - (void)ccTouchMoved:(UITouch *)touch withEvent:(UIEvent *)event {       
     CGPoint touchLocation = [self convertTouchToNodeSpace:touch];
-    if (selectedPiece) {
+    if (selectedPiece && selectedPiece.fixed == NO) {
         selectedPiece.position = ccp(touchLocation.x - (selectedPiece.width/2), 
                                      touchLocation.y + (selectedPiece.height/2));
     }
 }
 
-- (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event{
 
+- (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event{
+    if([self isPieceInRightPlace:selectedPiece]){
+        [self movePieceToFinalPosition:selectedPiece];
+    }
 }
 
 
@@ -135,6 +171,9 @@
     int totalPieces = 24;
     float randX;
     float randY;
+    float wlimit;
+    float hlimit;
+
     UIImage* tempPuzzle = [ImageHelper convertSpriteToImage:[CCSprite spriteWithTexture:[puzzleImage texture]]];
     for (int c = 1; c<=totalPieces; c++,i++) {        
         NSString *pName = [NSString stringWithFormat:@"p%d.png", c];
@@ -146,11 +185,12 @@
         item.anchorPoint = ccp(0,1);
         item.xTarget = posInitialX + deltaX;
         item.yTarget = posInitialY + tempPuzzle.size.height + deltaY;
-        float wlimit = screenSize.width-item.width-30;
-        float hlimit = screenSize.height-item.height-30;        
+        [item setScale:0.8f];
+        wlimit = screenSize.width-item.width-30;
+        hlimit = screenSize.height-item.height-30;        
         if (c % 2 == 0){
             randX = [self randomFloatBetween:item.width and:wlimit];
-            randY = [self randomFloatBetween:item.height and: 250];
+            randY = [self randomFloatBetween:item.height and: 150];
         }else{
             randX = [self randomFloatBetween:10 and:90];
             randY = [self randomFloatBetween:item.height and: hlimit];
@@ -175,6 +215,7 @@
     CCDirector * director_ = [CCDirector sharedDirector];
     screenSize = [director_ winSize];
     pieces = [[NSMutableArray alloc] initWithCapacity:24];
+    zIndex = 400;
     [[director_ touchDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
     [self loadPlistLevel];
     [self initBackground];
