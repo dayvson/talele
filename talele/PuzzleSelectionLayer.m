@@ -9,7 +9,6 @@
 #import "GameConstants.h"
 #import "GameManager.h"
 #import "GameHelper.h"
-#import "SlidingPuzzleGrid.h"
 
 @implementation PuzzleSelectionLayer
 
@@ -33,16 +32,16 @@
 }
 
 -(void) onClickEasy {
+    [[GameManager sharedGameManager] setCurrentPuzzle:(NSString*)puzzleGrid.getCurrentPageData];
     [[GameManager sharedGameManager] runSceneWithID:kLevelEasy];
 }
 
-
 -(void) onClickPrevPuzzle {
-
+    [puzzleGrid GoToPrevPage];
 }
 
 -(void) onClickNextPuzzle {
-
+    [puzzleGrid GoToNextPage];
 }
 
 -(void) onClickPhotoSelection {
@@ -53,8 +52,6 @@
     CCSprite *itemSprite = [[CCSprite alloc] initWithSpriteFrame:[[CCSpriteFrameCache
                                                                          sharedSpriteFrameCache]
                                                                         spriteFrameByName:name]];
-    
-    [itemSprite.texture setAliasTexParameters];
     CCMenuItemSprite *itemMenu = [CCMenuItemSprite itemFromNormalSprite:itemSprite
                                 selectedSprite:nil target:self selector:callback];
     return itemMenu;
@@ -69,7 +66,6 @@
     id moveAction = [CCMoveTo actionWithDuration:0.5f 
                                         position:ccp(screenSize.height/2.0f + 140 ,
                                                       100)];
-    
     id moveEffect = [CCEaseIn actionWithAction:moveAction rate:1.0f];
     id sequenceAction = [CCSequence actions:moveEffect,nil];
     [mainMenu runAction:sequenceAction];
@@ -78,7 +74,6 @@
 }
 
 -(void) initNavigationButtons {
-    
     CCMenuItemSprite *prevButton = [self createItemBySprite:@"btn-voltar.png" andCallback:@selector(onClickPrevPuzzle)];
     CCMenuItemSprite *nextButton = [self createItemBySprite:@"btn-proximo.png" andCallback:@selector(onClickNextPuzzle)];
     CCMenu *mainMenu = [CCMenu menuWithItems:prevButton,nextButton, nil];
@@ -87,7 +82,6 @@
     id moveAction = [CCMoveTo actionWithDuration:0.5f 
                                         position:ccp(510 ,
                                         screenSize.height/2.0f )];
-    
     id moveEffect = [CCEaseIn actionWithAction:moveAction rate:1.0f];
     id sequenceAction = [CCSequence actions:moveEffect,nil];
     [mainMenu runAction:sequenceAction];
@@ -113,30 +107,32 @@
     [[GameManager sharedGameManager] setCurrentPuzzle:(NSString*)sender.userData];
 }
 
+-(void) onMoveToCurrentPage:(NSObject*)obj {
+    CCLOG(@"MOVEEEEEEE %@", obj);
+    [[GameManager sharedGameManager] setCurrentPuzzle:(NSString*)obj];
+}
+
 -(void) loadPuzzleImages {
     NSDictionary* puzzlesInfo = [GameHelper getPlist:@"puzzles"];
     NSMutableArray *arrayNames = [[NSMutableArray alloc] initWithObjects:@"arthur.jpg",@"cars2.jpg",@"valente.jpg",@"tangled.jpg", nil];
     NSMutableArray *items = [[NSMutableArray alloc] initWithCapacity:arrayNames.count];
-    CCLOG(@"LOAD PUZZLE IMAGE %d", arrayNames.count);
     for (int i=0; i<arrayNames.count; i++) {
         CCSprite* bg = [CCSprite spriteWithFile:@"photobg.png"];
         CCSprite* img = [CCSprite spriteWithFile:[arrayNames objectAtIndex:i]];
         img.anchorPoint = ccp(0,0);
         img.position = ccp(23,22);
         [img setScale:0.8];
-
         [bg addChild:img];
         CCMenuItemSprite* item = [[CCMenuItemSprite alloc] initWithNormalSprite:bg selectedSprite:nil disabledSprite:nil target:self selector:@selector(updateSelectedImage:)];
         item.userData = [arrayNames objectAtIndex:i];
         [items addObject:item];
     }
-
-    SlidingPuzzleGrid* menuGrid = [SlidingPuzzleGrid menuWithArray:items 
-                                                          cols:1 rows:1
-                                                      position:ccp(screenSize.width/2, screenSize.height/2)
-                                                       padding:CGPointMake(10.f, 0) 
-                                                ];
-    [self addChild:menuGrid];
+    puzzleGrid = [[PuzzleGrid alloc] initWithArray:items
+                                           position:ccp(screenSize.width/2, screenSize.height/2)
+                                            padding:CGPointZero];
+    [puzzleGrid setSwipeInMenu:YES];
+    [puzzleGrid setDelegate:self];
+    [self addChild:puzzleGrid];
 
 }
 

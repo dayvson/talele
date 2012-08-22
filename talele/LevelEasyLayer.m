@@ -23,7 +23,6 @@
 
 -(void) onClickBack {
     [[GameManager sharedGameManager] runSceneWithID:kPuzzleSelection];
-    CCLOG(@"CLICKKKKKK BACK");
 }
 
 -(void) loadPuzzleImage:(NSString*)name {
@@ -74,15 +73,15 @@
     float posInitialY = puzzleImage.position.y;
     float deltaX = 0;
     float deltaY = 0;   
-    int i = 0;
     int totalPieces = 24;
+    int i = 0;
     float randX;
     float randY;
     float wlimit;
     float hlimit;
     NSDictionary* levelInfo = [GameHelper getPlist:@"levelEasy"];
     UIImage* tempPuzzle = [ImageHelper convertSpriteToImage:[CCSprite spriteWithTexture:[puzzleImage texture]]];
-    for (int c = 1; c<=totalPieces; c++,i++) {        
+    for (int c = 1; c<=totalPieces; c++, i++) {        
         NSString *pName = [NSString stringWithFormat:@"p%d.png", c];
         Piece* item = [[Piece alloc] initWithName:pName andMetadata:[levelInfo objectForKey:pName]];  
         deltaX = [self getDeltaX:item.hAlign withIndex:i andPieceWidth:item.width];
@@ -94,7 +93,7 @@
         item.yTarget = posInitialY + tempPuzzle.size.height + deltaY;
         [item setScale:0.8f];
         wlimit = screenSize.width-item.width-30;
-        hlimit = screenSize.height-item.height-30;        
+        hlimit = screenSize.height-item.height-50;        
         if (c % 2 == 0){
             randX = [GameHelper randomFloatBetween:item.width and:wlimit];
             randY = [GameHelper randomFloatBetween:item.height and: 150];
@@ -102,7 +101,6 @@
             randX = [GameHelper randomFloatBetween:10 and:90];
             randY = [GameHelper randomFloatBetween:item.height and: hlimit];
         }
-
         [item setPosition:ccp(randX, randY)];
         [self addChild:item];
         [pieces addObject:item];

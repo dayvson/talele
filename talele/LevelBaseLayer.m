@@ -1,4 +1,5 @@
 #import "LevelBaseLayer.h"
+#import "GameManager.h"
 
 @implementation LevelBaseLayer
 
@@ -54,7 +55,6 @@
         }
     }    
     if (newSelection != selectedPiece) {
-                        CCLOG(@"DIFERENTE");
         selectedPiece = newSelection;
     }
 }
@@ -82,6 +82,34 @@
     [self addChild:mainMenu];
 }
 
+-(void) onClickNewGame {
+    [[GameManager sharedGameManager] runSceneWithID:kPuzzleSelection];
+}
+-(void) showPuzzleComplete{
+    for (Piece *piece in pieces) {
+        [self removeChild:piece cleanup:YES];
+    }
+    [puzzleImage setOpacity:100];
+    [CCSpriteFrameCache sharedSpriteFrameCache ];
+    CCSprite *congrats = [[CCSprite alloc] initWithSpriteFrame:[[CCSpriteFrameCache
+                                                                   sharedSpriteFrameCache]
+                                                                  spriteFrameByName:@"congrats.png"]];
+    
+    [congrats setPosition:ccp(100, 50)];
+    congrats.anchorPoint = ccp(0,0);
+    CCSprite *newGame = [[CCSprite alloc] initWithSpriteFrame:[[CCSpriteFrameCache
+                                                                   sharedSpriteFrameCache]
+                                                                  spriteFrameByName:@"btn-newgame.png"]];
+    [newGame.texture setAliasTexParameters];
+    CCMenuItemSprite *newGameButton = [CCMenuItemSprite itemFromNormalSprite:newGame
+                                                           selectedSprite:nil target:self selector:@selector(onClickNewGame)];
+    CCMenu *mainMenu = [CCMenu menuWithItems:newGameButton,nil];
+    
+    [mainMenu setPosition:ccp(congrats.contentSize.width + 20, screenSize.height - 240.0f)];
+    [self addChild:congrats];
+    [self addChild:mainMenu];
+}
+
 - (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {    
     CGPoint touchLocation = [self convertTouchToNodeSpace:touch];
     [self selectPieceForTouch:touchLocation];
@@ -105,7 +133,7 @@
     if([self isPieceInRightPlace:selectedPiece]){
         [self movePieceToFinalPosition:selectedPiece];
         if(self.isPuzzleComplete){
-            CCLOG(@" ########################### PUZZLE COMPLETE ########################### ");
+            [self showPuzzleComplete];
         }
     }
 }

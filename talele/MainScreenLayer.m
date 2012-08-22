@@ -26,11 +26,9 @@
     
 }
 
-
 -(void) onClickPlay {
     [[GameManager sharedGameManager] runSceneWithID:kPuzzleSelection];
 }
-
 
 -(void) initMenu {
     [CCSpriteFrameCache sharedSpriteFrameCache ];

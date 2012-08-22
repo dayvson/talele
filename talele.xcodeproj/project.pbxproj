@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		97A1ED1A15E4C3FD00019A8F /* GameHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 97A1ED1415E4C3FD00019A8F /* GameHelper.m */; };
+		97A1ED1B15E4C3FD00019A8F /* LevelBaseLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 97A1ED1615E4C3FD00019A8F /* LevelBaseLayer.m */; };
+		97A1ED1C15E4C3FD00019A8F /* puzzles.plist in Resources */ = {isa = PBXBuildFile; fileRef = 97A1ED1715E4C3FD00019A8F /* puzzles.plist */; };
+		97A1ED1D15E4C3FD00019A8F /* PuzzleGrid.m in Sources */ = {isa = PBXBuildFile; fileRef = 97A1ED1915E4C3FD00019A8F /* PuzzleGrid.m */; };
+		97A1ED3415E4C5E100019A8F /* background-gameplay-hard.png in Resources */ = {isa = PBXBuildFile; fileRef = 97A1ED3115E4C5E100019A8F /* background-gameplay-hard.png */; };
 		97F9A94F15E1D3D900C17D90 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97F9A94E15E1D3D900C17D90 /* QuartzCore.framework */; };
 		97F9A95115E1D3D900C17D90 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97F9A95015E1D3D900C17D90 /* OpenGLES.framework */; };
 		97F9A95315E1D3D900C17D90 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97F9A95215E1D3D900C17D90 /* OpenAL.framework */; };
@@ -154,6 +159,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		97A1ED1215E4C3FD00019A8F /* GameConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameConfig.h; sourceTree = "<group>"; };
+		97A1ED1315E4C3FD00019A8F /* GameHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameHelper.h; sourceTree = "<group>"; };
+		97A1ED1415E4C3FD00019A8F /* GameHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameHelper.m; sourceTree = "<group>"; };
+		97A1ED1515E4C3FD00019A8F /* LevelBaseLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelBaseLayer.h; sourceTree = "<group>"; };
+		97A1ED1615E4C3FD00019A8F /* LevelBaseLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LevelBaseLayer.m; sourceTree = "<group>"; };
+		97A1ED1715E4C3FD00019A8F /* puzzles.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = puzzles.plist; path = Resources/puzzles.plist; sourceTree = "<group>"; };
+		97A1ED1815E4C3FD00019A8F /* PuzzleGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; path = PuzzleGrid.h; sourceTree = "<group>"; };
+		97A1ED1915E4C3FD00019A8F /* PuzzleGrid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PuzzleGrid.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		97A1ED3115E4C5E100019A8F /* background-gameplay-hard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "background-gameplay-hard.png"; path = "Resources/background-gameplay-hard.png"; sourceTree = "<group>"; };
 		97F9A94A15E1D3D900C17D90 /* talele.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = talele.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		97F9A94E15E1D3D900C17D90 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		97F9A95015E1D3D900C17D90 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -463,6 +477,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		97A1ED1F15E4C41500019A8F /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				97A1ED1315E4C3FD00019A8F /* GameHelper.h */,
+				97A1ED1415E4C3FD00019A8F /* GameHelper.m */,
+				97F9AB3215E240FB00C17D90 /* ImageHelper.h */,
+				97F9AB3315E240FC00C17D90 /* ImageHelper.m */,
+			);
+			name = Helpers;
+			sourceTree = "<group>";
+		};
 		97F9A93F15E1D3D900C17D90 = {
 			isa = PBXGroup;
 			children = (
@@ -513,10 +538,12 @@
 		97F9A96115E1D3D900C17D90 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				97A1ED3115E4C5E100019A8F /* background-gameplay-hard.png */,
 				97F9AB3015E23A6000C17D90 /* levelEasy.plist */,
 				97F9AB2615E2031300C17D90 /* puzzles */,
 				97F9AB1A15E1F5AA00C17D90 /* background-gameplay.png */,
 				97F9AB1B15E1F5AA00C17D90 /* background-homescreen.png */,
+				97A1ED1715E4C3FD00019A8F /* puzzles.plist */,
 				97F9AB1C15E1F5AA00C17D90 /* background-puzzle-selection.png */,
 				97F9AB1D15E1F5AA00C17D90 /* Default-Landscape~ipad.png */,
 				97F9AB1E15E1F5AA00C17D90 /* pieces.plist */,
@@ -886,12 +913,11 @@
 		97F9AAED15E1D60E00C17D90 /* source */ = {
 			isa = PBXGroup;
 			children = (
+				97A1ED1F15E4C41500019A8F /* Helpers */,
 				97F9AAF615E1DD4200C17D90 /* Screens */,
 				97F9AAF015E1D66C00C17D90 /* Game Objects */,
 				97F9AAEF15E1D63D00C17D90 /* Singletons */,
 				97F9AAEE15E1D62A00C17D90 /* Constants */,
-				97F9AB3215E240FB00C17D90 /* ImageHelper.h */,
-				97F9AB3315E240FC00C17D90 /* ImageHelper.m */,
 			);
 			name = source;
 			sourceTree = "<group>";
@@ -899,6 +925,7 @@
 		97F9AAEE15E1D62A00C17D90 /* Constants */ = {
 			isa = PBXGroup;
 			children = (
+				97A1ED1215E4C3FD00019A8F /* GameConfig.h */,
 				97F9AAF415E1D7CC00C17D90 /* GameConstants.h */,
 			);
 			name = Constants;
@@ -918,6 +945,10 @@
 		97F9AAF015E1D66C00C17D90 /* Game Objects */ = {
 			isa = PBXGroup;
 			children = (
+				97A1ED1815E4C3FD00019A8F /* PuzzleGrid.h */,
+				97A1ED1915E4C3FD00019A8F /* PuzzleGrid.m */,
+				97A1ED1515E4C3FD00019A8F /* LevelBaseLayer.h */,
+				97A1ED1615E4C3FD00019A8F /* LevelBaseLayer.m */,
 				97F9AB2D15E2109C00C17D90 /* Piece.h */,
 				97F9AB2E15E2109C00C17D90 /* Piece.m */,
 			);
@@ -1043,6 +1074,8 @@
 				97F9AB2C15E2031300C17D90 /* valente.jpg in Resources */,
 				97F9AB3115E23A6000C17D90 /* levelEasy.plist in Resources */,
 				97F9ACF215E2E7A600C17D90 /* arthur.jpg in Resources */,
+				97A1ED1C15E4C3FD00019A8F /* puzzles.plist in Resources */,
+				97A1ED3415E4C5E100019A8F /* background-gameplay-hard.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1163,6 +1196,9 @@
 				97F9AB0B15E1E1F800C17D90 /* LevelEasyLayer.m in Sources */,
 				97F9AB2F15E2109C00C17D90 /* Piece.m in Sources */,
 				97F9AB3415E240FE00C17D90 /* ImageHelper.m in Sources */,
+				97A1ED1A15E4C3FD00019A8F /* GameHelper.m in Sources */,
+				97A1ED1B15E4C3FD00019A8F /* LevelBaseLayer.m in Sources */,
+				97A1ED1D15E4C3FD00019A8F /* PuzzleGrid.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

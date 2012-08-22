@@ -13,9 +13,21 @@
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "77"
-         endingLineNumber = "77"
-         landmarkName = "-initWithName:andImage:"
-         landmarkType = "5">
+         endingLineNumber = "77">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "talele/SlidingPuzzleGrid.h"
+         timestampString = "367335935.811175"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "4"
+         endingLineNumber = "4"
+         landmarkName = "@interface PuzzleGrid"
+         landmarkType = "2">
       </FileBreakpoint>
    </FileBreakpoints>
 </Bucket>
