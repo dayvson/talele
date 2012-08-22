@@ -31,7 +31,6 @@
 @property (readwrite, retain) NSString* name;
 
 -(CGRect)getRealBoundingBox;
--(Piece*) initWithName:(NSString*)pName;
--(Piece*) initWithName:(NSString*)pName andImage:(UIImage*)image;
 -(void) createMaskWithPuzzle:(UIImage*)mainPuzzle andOffset:(CGPoint)offset;
+-(Piece*) initWithName:(NSString*)pName andMetadata:(NSDictionary*)metadata;
 @end

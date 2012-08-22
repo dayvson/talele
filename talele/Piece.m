@@ -26,35 +26,18 @@
     return result;
 }
 
--(NSDictionary *) getPieceMetadata:(NSString*)key{
-    NSString *className = @"levelEasy";
-    NSString *fullFileName = 
-    [NSString stringWithFormat:@"%@.plist",className];
-    NSString *plistPath;
-    NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    plistPath = [rootPath stringByAppendingPathComponent:fullFileName];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:plistPath]) {
-        plistPath = [[NSBundle mainBundle] pathForResource:className ofType:@"plist"];
-    }
-    NSDictionary *plistDictionary = [NSDictionary dictionaryWithContentsOfFile:plistPath];
-    NSDictionary *result = [plistDictionary objectForKey:key];
-    return result;
-}
-
--(Piece*) initWithName:(NSString*)pName{
+-(Piece*) initWithName:(NSString*)pName andMetadata:(NSDictionary*)metadata{
     if(self = [super init]){
-        NSDictionary *pieceMetadata = [self getPieceMetadata:pName];
-        order= [[pieceMetadata objectForKey:@"order"] intValue];
-        vAlign= [[pieceMetadata objectForKey:@"vAlign"] intValue]; 
-        hAlign= [[pieceMetadata objectForKey:@"hAlign"] intValue];
+        order= [[metadata objectForKey:@"order"] intValue];
+        vAlign= [[metadata objectForKey:@"vAlign"] intValue]; 
+        hAlign= [[metadata objectForKey:@"hAlign"] intValue];
+        width = newPiece.size.width;
+        height = newPiece.size.height;
         name = pName;
         fixed = NO;
         CCSprite* pieceSprite = [[CCSprite alloc] 
                                  initWithSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:pName]];
-
         newPiece = [ImageHelper convertSpriteToImage:pieceSprite];
-        width = newPiece.size.width;
-        height = newPiece.size.height;
         [self addChild:pieceSprite z:1 tag:10];
     }
     return self;
@@ -70,13 +53,4 @@
     [self addChild:pieceFinal z:1 tag:10];
 }
 
--(Piece*) initWithName:(NSString*)pName andImage:(UIImage*)image{
-    if (self = [super initWithCGImage:image.CGImage key:pName]) {
-        NSDictionary *pieceMetadata = [self getPieceMetadata:pName];
-        order= [[pieceMetadata objectForKey:@"order"] intValue];
-        vAlign= [[pieceMetadata objectForKey:@"vAlign"] intValue]; 
-        hAlign= [[pieceMetadata objectForKey:@"hAlign"] intValue]; 
-    }
-    return self;
-}
 @end
