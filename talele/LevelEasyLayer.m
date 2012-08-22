@@ -133,34 +133,14 @@
     return result;
 }
 
-- (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {    
-    CGPoint touchLocation = [self convertTouchToNodeSpace:touch];
-    [self selectPieceForTouch:touchLocation];
-    if( selectedPiece && selectedPiece.fixed == NO){
-        [selectedPiece setScale:1.0f];
-        zIndex += 1;
-        [selectedPiece setZOrder:zIndex];
+-(BOOL) isPuzzleComplete {
+    for (Piece *piece in pieces) {
+        if(piece.fixed == NO){
+            return NO;
+        }
     }
-    return TRUE;
+    return YES;
 }
-
-
-- (void)ccTouchMoved:(UITouch *)touch withEvent:(UIEvent *)event {       
-    CGPoint touchLocation = [self convertTouchToNodeSpace:touch];
-    if (selectedPiece && selectedPiece.fixed == NO) {
-        selectedPiece.position = ccp(touchLocation.x - (selectedPiece.width/2), 
-                                     touchLocation.y + (selectedPiece.height/2));
-    }
-}
-
-
-- (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event{
-    if([self isPieceInRightPlace:selectedPiece]){
-        [self movePieceToFinalPosition:selectedPiece];
-    }
-}
-
-
 
 -(void) loadPieces {
     float posInitialX = puzzleImage.position.x;
@@ -207,6 +187,36 @@
     background = [CCSprite spriteWithFile:@"background-gameplay.png"];
 	background.position = ccp(screenSize.width/2, screenSize.height/2);
 	[self addChild: background];    
+}
+
+- (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {    
+    CGPoint touchLocation = [self convertTouchToNodeSpace:touch];
+    [self selectPieceForTouch:touchLocation];
+    if( selectedPiece && selectedPiece.fixed == NO){
+        [selectedPiece setScale:1.0f];
+        zIndex += 1;
+        [selectedPiece setZOrder:zIndex];
+    }
+    return TRUE;
+}
+
+
+- (void)ccTouchMoved:(UITouch *)touch withEvent:(UIEvent *)event {       
+    CGPoint touchLocation = [self convertTouchToNodeSpace:touch];
+    if (selectedPiece && selectedPiece.fixed == NO) {
+        selectedPiece.position = ccp(touchLocation.x - (selectedPiece.width/2), 
+                                     touchLocation.y + (selectedPiece.height/2));
+    }
+}
+
+
+- (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event{
+    if([self isPieceInRightPlace:selectedPiece]){
+        [self movePieceToFinalPosition:selectedPiece];
+        if(self.isPuzzleComplete){
+            CCLOG(@" ########################### PUZZLE COMPLETE ########################### ");
+        }
+    }
 }
 
 -(void) onEnter
