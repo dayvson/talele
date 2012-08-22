@@ -33,7 +33,7 @@
             <key>btn-facil.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,125},{221,106}}</string>
+                <string>{{508,2},{221,106}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -46,7 +46,7 @@
             <key>btn-foto.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{225,125},{130,99}}</string>
+                <string>{{731,2},{130,99}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -56,10 +56,23 @@
                 <key>sourceSize</key>
                 <string>{130,99}</string>
             </dict>
+            <key>btn-newgame.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{2,125},{284,105}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{284,105}}</string>
+                <key>sourceSize</key>
+                <string>{284,105}</string>
+            </dict>
             <key>btn-proximo.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{357,125},{130,133}}</string>
+                <string>{{288,125},{130,133}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -72,7 +85,7 @@
             <key>btn-som-off.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,260},{80,72}}</string>
+                <string>{{420,125},{80,72}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -85,7 +98,7 @@
             <key>btn-som.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{84,260},{80,72}}</string>
+                <string>{{502,125},{80,72}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -98,7 +111,7 @@
             <key>btn-voltar-mini.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{166,260},{71,72}}</string>
+                <string>{{584,125},{71,72}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -111,7 +124,7 @@
             <key>btn-voltar.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{239,260},{130,133}}</string>
+                <string>{{657,125},{130,133}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -121,6 +134,45 @@
                 <key>sourceSize</key>
                 <string>{130,133}</string>
             </dict>
+            <key>congrats.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{2,260},{666,320}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{666,320}}</string>
+                <key>sourceSize</key>
+                <string>{666,320}</string>
+            </dict>
+            <key>photobg.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{2,582},{602,429}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{602,429}}</string>
+                <key>sourceSize</key>
+                <string>{602,429}</string>
+            </dict>
+            <key>photoempty.jpg</key>
+            <dict>
+                <key>frame</key>
+                <string>{{2,1013},{557,384}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{557,384}}</string>
+                <key>sourceSize</key>
+                <string>{557,384}</string>
+            </dict>
         </dict>
         <key>metadata</key>
         <dict>
@@ -129,9 +181,9 @@
             <key>realTextureFileName</key>
             <string>buttons.png</string>
             <key>size</key>
-            <string>{512,512}</string>
+            <string>{1024,2048}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:265230ffaa4d2ed7c5ae0b89dd62ddb8$</string>
+            <string>$TexturePacker:SmartUpdate:86f8e0795f75d516639cf0353380351c$</string>
             <key>textureFileName</key>
             <string>buttons.png</string>
         </dict>
