@@ -59,6 +59,7 @@
 	[sharedFileUtils setiPadRetinaDisplaySuffix:@"-ipadhd"];	// Default on iPad RetinaDisplay is "-ipadhd"
 
 	[CCTexture2D PVRImagesHavePremultipliedAlpha:YES];
+    [[GameManager sharedGameManager] setupAudioEngine];
 	[[GameManager sharedGameManager] runSceneWithID: kMainMenu];
 
 

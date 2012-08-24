@@ -7,14 +7,26 @@
 
 #import <Foundation/Foundation.h>
 #import "GameConstants.h"
+#import "SimpleAudioEngine.h"
 
 @interface GameManager : NSObject {
     BOOL isMusicON;
     SceneTypes currentScene;
     NSString* currentPuzzle;
+    BOOL audioInitialized;
+    GameManagerSoundState managerSoundState;
+    SimpleAudioEngine *soundEngine;
+    NSMutableDictionary *listOfSoundEffectFiles;
+    NSMutableDictionary *soundEffectsState;
 }
 @property (readwrite) BOOL isMusicON;
 @property (readwrite,retain) NSString* currentPuzzle;
+@property (readwrite) GameManagerSoundState managerSoundState; 
+@property (nonatomic, retain) NSMutableDictionary *listOfSoundEffectFiles;
+@property (nonatomic, retain) NSMutableDictionary *soundEffectsState;
+
+-(void)setupAudioEngine; 
+-(ALuint)playSoundEffect:(NSString*)soundEffectKey; 
 -(void)runSceneWithID:(SceneTypes)sceneID;
 +(GameManager*)sharedGameManager;                                  
 

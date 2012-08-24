@@ -10,6 +10,7 @@
 #import "PuzzleSelectionLayer.h"
 #import "LevelEasyLayer.h"
 #import "LevelHardLayer.h"
+#import "GameConstants.h"
 
 @implementation GameManager
 
@@ -46,6 +47,9 @@ static GameManager* _sharedGameManager = nil;
         CCLOG(@"Game Manager Singleton, init");
         isMusicON = YES;
         currentScene = kNoSceneUninitialized;
+        audioInitialized = NO;
+        soundEngine = nil;
+        managerSoundState = kAudioManagerUninitialized;
     }
     return self;
 }
@@ -84,5 +88,60 @@ static GameManager* _sharedGameManager = nil;
         [[CCDirector sharedDirector] replaceScene:sceneToRun];
     }   
 }
+
+-(void)initAudioAsync {
+    managerSoundState = kAudioManagerInitializing;
+    CCLOG(@"INIT AUDIO ASYNC ##########################");
+    [CDSoundEngine setMixerSampleRate:CD_SAMPLE_RATE_MID];
+    [CDAudioManager initAsynchronously:kAMM_FxPlusMusicIfNoOtherAudio];
+    while ([CDAudioManager sharedManagerState] != kAMStateInitialised)
+    {
+        [NSThread sleepForTimeInterval:0.1];
+    }
+    CDAudioManager *audioManager = [CDAudioManager sharedManager];
+    if (audioManager.soundEngine == nil ||
+        audioManager.soundEngine.functioning == NO) {
+        CCLOG(@"CocosDenshion failed to init, no audio will play.");
+        managerSoundState = kAudioManagerFailed;
+    } else {
+        [audioManager setResignBehavior:kAMRBStopPlay autoHandle:YES];
+        soundEngine = [SimpleAudioEngine sharedEngine];
+        managerSoundState = kAudioManagerReady;
+        CCLOG(@"CocosDenshion is Ready");
+    } 
+    
+}
+
+-(void)setupAudioEngine {
+    CCLOG(@"AUDIO ENGINE");
+    if (audioInitialized == YES) {
+        CCLOG(@"AUDIO ENGINE WAS INIT");
+        return;
+    } else {
+        audioInitialized = YES;
+        NSOperationQueue *queue = [[NSOperationQueue new] autorelease];
+        NSInvocationOperation *asyncSetupOperation =
+        [[NSInvocationOperation alloc] initWithTarget:self
+                                             selector:@selector(initAudioAsync)
+                                               object:nil];
+        [queue addOperation:asyncSetupOperation];
+        [asyncSetupOperation autorelease];
+                CCLOG(@"AUDIO ENGINE INIT COMPLETE");
+    }
+}
+
+-(ALuint)playSoundEffect:(NSString*)soundEffectKey {
+    ALuint soundID = 0;
+    
+    if (managerSoundState == kAudioManagerReady) {
+        soundID = [soundEngine playEffect:soundEffectKey];
+        CCLOG(@"PLAY EFFECT %@", soundEffectKey);
+    } else {
+        CCLOG(@"GameMgr: Sound Manager is not ready, cannot play %@",
+              soundEffectKey);
+    }
+    return soundID;
+}
+
 @end
 
