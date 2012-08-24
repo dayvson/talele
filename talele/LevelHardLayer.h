@@ -7,8 +7,8 @@
 
 #import <Foundation/Foundation.h>
 #import "cocos2d.h"
-
-@interface LevelHardLayer : CCLayer {
+#import "LevelBaseLayer.h"
+@interface LevelHardLayer : LevelBaseLayer {
     
 }
 

@@ -53,4 +53,9 @@
     [self addChild:pieceFinal z:1 tag:10];
 }
 
+-(void) dealloc{
+    [newPiece release];
+    [self removeAllChildrenWithCleanup:YES];
+    [super dealloc];
+}
 @end

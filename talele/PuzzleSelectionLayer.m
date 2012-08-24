@@ -28,6 +28,7 @@
 }
 
 -(void) onClickHard {
+    [[GameManager sharedGameManager] setCurrentPuzzle:(NSString*)puzzleGrid.getCurrentPageData];
     [[GameManager sharedGameManager] runSceneWithID:kLevelHard];
 }
 

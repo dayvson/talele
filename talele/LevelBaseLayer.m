@@ -1,6 +1,6 @@
 #import "LevelBaseLayer.h"
 #import "GameManager.h"
-
+#import "GameHelper.h"
 @implementation LevelBaseLayer
 
 -(void) movePieceToFinalPosition:(Piece*)piece{
@@ -10,8 +10,21 @@
                                     position:CGPointMake(piece.xTarget, 
                                                          piece.yTarget)];
     id ease = [CCEaseIn actionWithAction:action rate:2];
+
+    totalPieceFixed++;
+
     [piece runAction:ease];
     
+}
+-(void) playingPiecematch{
+    NSString * sound;
+    int tsound = [GameHelper randomFloatBetween:1 and:3];
+    if(totalPieceFixed % 3 == 0){
+        sound = [NSString stringWithFormat:@"match%d.wav" , tsound];
+    }else{
+        sound = @"plin.wav";
+    }
+    [[GameManager sharedGameManager] playSoundEffect:sound];
 }
 
 - (BOOL) isPieceInRightPlace:(Piece*)piece {
@@ -40,7 +53,7 @@
 -(void) loadPuzzleImage:(NSString*)name {
     puzzleImage = [CCSprite spriteWithFile:name];
     puzzleImage.anchorPoint = ccp(0,0);
-    [puzzleImage setOpacity:30];
+    [puzzleImage setOpacity:40];
 	puzzleImage.position = ccp(screenSize.width - puzzleImage.contentSize.width - 28,
                                screenSize.height - puzzleImage.contentSize.height - 20);
 	[self addChild: puzzleImage];
@@ -59,13 +72,47 @@
     }
 }
 
--(void) loadPlistLevel {
+-(void) loadPlistLevel:(NSString*)plistName andSpriteName:(NSString*)spriteName {
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"buttons.plist"];
     sceneSpriteBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"buttons.png"];    
     [self addChild:sceneSpriteBatchNode z:1];
-    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"pieces.plist"];
-    piecesSpriteBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"pieces.png"];    
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:plistName];
+    piecesSpriteBatchNode = [CCSpriteBatchNode batchNodeWithFile:spriteName];    
     [self addChild:piecesSpriteBatchNode z:2];    
+}
+
+-(float) getDeltaX:(int)hAlign withIndex:(int)index andPieceWidth:(float)pieceWidth andCols:(int)cols andRows:(int)rows{
+    float qWidth = puzzleImage.contentSize.width/cols;
+    float deltaX = 0;
+    switch (hAlign) {
+        case kHAlignCENTER:
+            deltaX = (ceil(index%cols) * qWidth) - pieceWidth/2 + qWidth/2;//center
+            break;
+        case kHAlignLEFT:
+            deltaX = ceil(index%cols) * qWidth;
+            break;
+        case kHAlignRIGHT:
+            deltaX = (ceil(index%cols) * qWidth) - pieceWidth + qWidth;
+            break;
+    }
+    return deltaX;    
+}
+
+-(float) getDeltaY:(int)vAlign withIndex:(int)index andPieceHeight:(float)pieceHeight andCols:(int)cols andRows:(int)rows{
+    float qHeight = puzzleImage.contentSize.height/rows;
+    float deltaY = 0;
+    switch (vAlign) {
+        case kVAlignCENTER:
+            deltaY = -(floor(index/cols) * qHeight) + pieceHeight/2 - qHeight/2;
+            break;
+        case kVAlignTOP:
+            deltaY = -(floor(index/cols) * qHeight);
+            break;
+        case kVAlignBOTTOM:
+            deltaY = -(floor(index/cols) * qHeight) + pieceHeight - qHeight;
+            break;
+    }
+    return deltaY;    
 }
 
 -(void) initMenu {
@@ -85,11 +132,17 @@
 -(void) onClickNewGame {
     [[GameManager sharedGameManager] runSceneWithID:kPuzzleSelection];
 }
--(void) showPuzzleComplete{
+
+-(void) removeAllPieces{
     for (Piece *piece in pieces) {
         [self removeChild:piece cleanup:YES];
     }
-    [puzzleImage setOpacity:100];
+    [pieces removeAllObjects];
+}
+
+-(void) showPuzzleComplete{
+    [self removeAllPieces];
+    [puzzleImage setOpacity:100.f];
     [CCSpriteFrameCache sharedSpriteFrameCache ];
     CCSprite *congrats = [[CCSprite alloc] initWithSpriteFrame:[[CCSpriteFrameCache
                                                                    sharedSpriteFrameCache]
@@ -101,14 +154,21 @@
                                                                    sharedSpriteFrameCache]
                                                                   spriteFrameByName:@"btn-newgame.png"]];
     [newGame.texture setAliasTexParameters];
-    CCMenuItemSprite *newGameButton = [CCMenuItemSprite itemFromNormalSprite:newGame
-                                                           selectedSprite:nil target:self selector:@selector(onClickNewGame)];
+    CCMenuItemSprite *newGameButton = [CCMenuItemSprite 
+                                       itemFromNormalSprite:newGame
+                                       selectedSprite:nil
+                                       target:self 
+                                       selector:@selector(onClickNewGame)];
     CCMenu *mainMenu = [CCMenu menuWithItems:newGameButton,nil];
     
-    [mainMenu setPosition:ccp(congrats.contentSize.width + 20, screenSize.height - 240.0f)];
+    [mainMenu setPosition:ccp(150, screenSize.height - 240.0f)];
     [self addChild:congrats];
     [self addChild:mainMenu];
 }
+
+
+
+
 
 - (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {    
     CGPoint touchLocation = [self convertTouchToNodeSpace:touch];
