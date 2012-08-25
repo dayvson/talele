@@ -44,7 +44,8 @@
                            [CCSprite spriteWithTexture:[puzzleImage texture]]];
     for (int c = 1; c<=totalPieces; c++, i++) {        
         NSString *pName = [NSString stringWithFormat:@"p%d.png", c];
-        Piece* item = [[Piece alloc] initWithName:pName andMetadata:[levelInfo objectForKey:pName]];  
+        Piece* item = [[Piece alloc] initWithName:pName andMetadata:[levelInfo objectForKey:pName]];
+        [item setName:[NSString stringWithFormat:@"%@_puzzle_%@", pName,[GameManager sharedGameManager].currentPuzzle]];
         deltaX = [self getDeltaX:item.hAlign withIndex:i andPieceWidth:item.width andCols:cols andRows:rows];
         deltaY = [self getDeltaY:item.vAlign withIndex:i andPieceHeight:item.height andCols:cols andRows:rows];
         [item createMaskWithPuzzle:tempPuzzle 
@@ -109,20 +110,12 @@
     [self initBackground];
     [self initMenu];
     NSString* puzz = [GameManager sharedGameManager].currentPuzzle;
-    CCLOG(@"IMAGEEEEEEEMMM %@", puzz );
-    puzzleImage = [CCSprite spriteWithFile:puzz];
-    puzzleImage.anchorPoint = ccp(0,0);
-	puzzleImage.position = ccp(screenSize.width - puzzleImage.contentSize.width - 28,
-                               screenSize.height - puzzleImage.contentSize.height - 20);
-	[self addChild: puzzleImage];
-
-//    [self loadPieces];
-    [self performSelector:@selector(loadPieces) withObject:nil afterDelay:3];
+    [self loadPuzzleImage:puzz];
+    [self loadPieces];
 }
 
 -(void)dealloc {
     [self resetScreen];
-
     [puzzleImage release];
     [super dealloc];
     

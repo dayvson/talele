@@ -36,26 +36,27 @@
         hAlign= [[metadata objectForKey:@"hAlign"] intValue];
         width = newPiece.size.width;
         height = newPiece.size.height;
-        name = pName;
         fixed = NO;
         [self addChild:pieceSprite z:1 tag:10];
     }
     return self;
 }
 -(void) createMaskWithPuzzle:(UIImage*)mainPuzzle andOffset:(CGPoint)offset{
+    CCLOG(name);
     UIImage* newImageMask = [ImageHelper maskImage:mainPuzzle 
                                             withMask:newPiece 
                                             withOffset:offset];
     CCSprite *pieceFinal = [[CCSprite alloc] initWithCGImage:newImageMask.CGImage 
-                                                         key:[NSString stringWithFormat:@"MASK%@", name]];
+                                                         key:[NSString stringWithFormat:@"MASK_%@", name]];
     pieceFinal.anchorPoint = ccp(0,1);
     [self removeChildByTag:10 cleanup:YES];
     [self addChild:pieceFinal z:1 tag:10];
+    [pieceFinal release];
 }
 
 -(void) dealloc{
-    [newPiece release];
     [self removeAllChildrenWithCleanup:YES];
+    [self removeFromParentAndCleanup:YES];
     [super dealloc];
 }
 @end

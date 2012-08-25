@@ -118,13 +118,13 @@
                                   initWithObjects:@"batman.jpg",@"cars2.jpg",@"valente.jpg",@"tangled.jpg", @"arthur.jpg", @"aranha.jpg", @"bob.jpg", nil];
     NSMutableArray *items = [[NSMutableArray alloc] initWithCapacity:arrayNames.count];
     for (int i=0; i<arrayNames.count; i++) {
-        CCSprite* bg = [CCSprite spriteWithFile:@"photobg.png"];
+      //  CCSprite* bg = [CCSprite spriteWithFile:@"photobg.png"];
         CCSprite* img = [CCSprite spriteWithFile:[arrayNames objectAtIndex:i]];
         img.anchorPoint = ccp(0,0);
         img.position = ccp(23,22);
         [img setScale:0.8];
-        [bg addChild:img];
-        CCMenuItemSprite* item = [[CCMenuItemSprite alloc] initWithNormalSprite:bg selectedSprite:nil disabledSprite:nil target:self selector:@selector(updateSelectedImage:)];
+        //[bg addChild:img];
+        CCMenuItemSprite* item = [[CCMenuItemSprite alloc] initWithNormalSprite:img selectedSprite:nil disabledSprite:nil target:self selector:@selector(updateSelectedImage:)];
         item.userData = [arrayNames objectAtIndex:i];
         [items addObject:item];
     }

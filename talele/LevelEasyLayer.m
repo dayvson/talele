@@ -25,7 +25,6 @@
     [[GameManager sharedGameManager] runSceneWithID:kPuzzleSelection];
 }
 
-
 -(void) loadPieces {
     float posInitialX = puzzleImage.position.x;
     float posInitialY = puzzleImage.position.y;
@@ -39,13 +38,13 @@
     float randY;
     float wlimit;
     float hlimit;
-    
     NSDictionary* levelInfo = [GameHelper getPlist:@"levelEasy"];
     UIImage* tempPuzzle = [ImageHelper convertSpriteToImage:
                            [CCSprite spriteWithTexture:[puzzleImage texture]]];
     for (int c = 1; c<=totalPieces; c++, i++) {        
         NSString *pName = [NSString stringWithFormat:@"p%d.png", c];
-        Piece* item = [[Piece alloc] initWithName:pName andMetadata:[levelInfo objectForKey:pName]];  
+        Piece* item = [[Piece alloc] initWithName:pName andMetadata:[levelInfo objectForKey:pName]];
+        [item setName:[NSString stringWithFormat:@"%@_puzzle_%@", pName,[GameManager sharedGameManager].currentPuzzle]];
         deltaX = [self getDeltaX:item.hAlign withIndex:i andPieceWidth:item.width andCols:cols andRows:rows];
         deltaY = [self getDeltaY:item.vAlign withIndex:i andPieceHeight:item.height andCols:cols andRows:rows];
         [item createMaskWithPuzzle:tempPuzzle 
@@ -53,7 +52,6 @@
         item.anchorPoint = ccp(0,1);
         item.xTarget = posInitialX + deltaX;
         item.yTarget = posInitialY + tempPuzzle.size.height + deltaY;
-        [item setScale:0.8f];
         wlimit = screenSize.width-item.width-30;
         hlimit = screenSize.height-item.height-50;        
         if (c % 2 == 0){
@@ -67,7 +65,6 @@
         [self addChild:item];
         [pieces addObject:item];
     }
-    CCLOG(@"DRAW PIECESSSSSSSSSSSSSS");
 }
 
 -(void) initBackground {
@@ -83,11 +80,9 @@
     if(pieces){
         [pieces release];
     }
-    
 }
 -(void) onExit{
     [self resetScreen];
-    CCLOG(@"EXIIIIIIIIIIITTTTTTT");
 }
 
 -(void) onEnter
@@ -109,8 +104,7 @@
 -(void)dealloc {
     [self resetScreen];
     [puzzleImage release];
-    [super dealloc];
-    
+    [super dealloc];    
 }
 
 @end

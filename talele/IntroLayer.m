@@ -26,7 +26,6 @@
 	CCSprite *background;
     background = [CCSprite spriteWithFile:@"Default-Landscape~ipad.png"];
 	background.position = ccp(size.width/2, size.height/2);
-    
 	[self addChild: background];
 	[self scheduleOnce:@selector(makeTransition:) delay:2];
 }

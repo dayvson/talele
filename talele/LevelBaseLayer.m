@@ -5,9 +5,9 @@
 
 -(void) playingPiecematch{
     NSString * sound;
-    int tsound = [GameHelper randomFloatBetween:10 and:39];
+    int tsound = [GameHelper randomFloatBetween:1 and:3];
     if(totalPieceFixed % 2 == 0){
-        sound = [NSString stringWithFormat:@"match%d.wav" , tsound/10];
+        sound = [NSString stringWithFormat:@"match%d.wav" , tsound];
     }else{
         sound = @"plin.wav";
     }
@@ -52,11 +52,13 @@
 }
 
 -(void) loadPuzzleImage:(NSString*)name {
-    puzzleImage = [CCSprite spriteWithFile:name];
+    puzzleImage = [[CCSprite alloc] initWithFile:name];
     puzzleImage.anchorPoint = ccp(0,0);
+    puzzleImage.opacity = 40;
 	puzzleImage.position = ccp(screenSize.width - puzzleImage.contentSize.width - 28,
                                screenSize.height - puzzleImage.contentSize.height - 20);
 	[self addChild: puzzleImage];
+    [puzzleImage release];
 }
 
 - (void) selectPieceForTouch:(CGPoint)touchLocation {
@@ -143,7 +145,7 @@
 -(void) showPuzzleComplete{
     [self removeAllPieces];
     [piecesSpriteBatchNode release];
-    [puzzleImage setOpacity:100];
+    puzzleImage.opacity = 100;
     [CCSpriteFrameCache sharedSpriteFrameCache ];
     CCSprite *congrats = [[CCSprite alloc] initWithSpriteFrame:[[CCSpriteFrameCache
                                                                    sharedSpriteFrameCache]

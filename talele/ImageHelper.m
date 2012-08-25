@@ -17,10 +17,11 @@
     CCRenderTexture *renderer = [[CCRenderTexture alloc] initWithWidth:sprite.contentSize.width 
                                                                 height:sprite.contentSize.height 
                                                            pixelFormat:kCCTexture2DPixelFormat_RGBA8888];
-    [sprite setAnchorPoint:p];
     [renderer begin];
     [sprite visit];
     [renderer end];
+    [sprite setAnchorPoint:p];
+
     return [renderer getUIImage];
 }
 
