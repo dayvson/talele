@@ -83,6 +83,13 @@
     }
     
 }
+-(void) onExit{
+
+    [self resetScreen];
+    [self removeAllChildrenWithCleanup:YES];
+    [self removeFromParentAndCleanup:YES];
+    CCLOG(@"EXIIIIIIIIIIITTTTTTT");
+}
 
 -(void) onEnter
 {
@@ -90,18 +97,32 @@
     CCDirector * director_ = [CCDirector sharedDirector];
     screenSize = [director_ winSize];
     [self resetScreen];
+    if(puzzleImage){
+        [puzzleImage removeAllChildrenWithCleanup:YES];
+        [puzzleImage release];
+        puzzleImage = nil;
+    }
     pieces = [[NSMutableArray alloc] initWithCapacity:24];
     zIndex = 400;
     [[director_ touchDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
     [self loadPlistLevel:@"pieces_6x4.plist" andSpriteName:@"pieces_6x4.png"];
     [self initBackground];
     [self initMenu];
-    [self loadPuzzleImage:[GameManager sharedGameManager].currentPuzzle];
-    [self loadPieces];
+    NSString* puzz = [GameManager sharedGameManager].currentPuzzle;
+    CCLOG(@"IMAGEEEEEEEMMM %@", puzz );
+    puzzleImage = [CCSprite spriteWithFile:puzz];
+    puzzleImage.anchorPoint = ccp(0,0);
+	puzzleImage.position = ccp(screenSize.width - puzzleImage.contentSize.width - 28,
+                               screenSize.height - puzzleImage.contentSize.height - 20);
+	[self addChild: puzzleImage];
+
+//    [self loadPieces];
+    [self performSelector:@selector(loadPieces) withObject:nil afterDelay:3];
 }
 
 -(void)dealloc {
     [self resetScreen];
+
     [puzzleImage release];
     [super dealloc];
     

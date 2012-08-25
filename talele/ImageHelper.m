@@ -12,13 +12,15 @@
 +(UIImage *) convertSpriteToImage:(CCSprite *)sprite {
     CGPoint p = sprite.anchorPoint;
     [sprite setAnchorPoint:ccp(0,0)];
-    CCRenderTexture *renderer = [CCRenderTexture 
-                                 renderTextureWithWidth:sprite.contentSize.width height:sprite.contentSize.height];
-    
+//    CCRenderTexture *renderer = [CCRenderTexture 
+//                                renderTextureWithWidth:sprite.contentSize.width height:sprite.contentSize.height];
+    CCRenderTexture *renderer = [[CCRenderTexture alloc] initWithWidth:sprite.contentSize.width 
+                                                                height:sprite.contentSize.height 
+                                                           pixelFormat:kCCTexture2DPixelFormat_RGBA8888];
+    [sprite setAnchorPoint:p];
     [renderer begin];
     [sprite visit];
     [renderer end];
-    [sprite setAnchorPoint:p];
     return [renderer getUIImage];
 }
 

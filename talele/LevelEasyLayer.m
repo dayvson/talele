@@ -39,6 +39,7 @@
     float randY;
     float wlimit;
     float hlimit;
+    
     NSDictionary* levelInfo = [GameHelper getPlist:@"levelEasy"];
     UIImage* tempPuzzle = [ImageHelper convertSpriteToImage:
                            [CCSprite spriteWithTexture:[puzzleImage texture]]];
@@ -66,6 +67,7 @@
         [self addChild:item];
         [pieces addObject:item];
     }
+    CCLOG(@"DRAW PIECESSSSSSSSSSSSSS");
 }
 
 -(void) initBackground {
@@ -82,6 +84,10 @@
         [pieces release];
     }
     
+}
+-(void) onExit{
+    [self resetScreen];
+    CCLOG(@"EXIIIIIIIIIIITTTTTTT");
 }
 
 -(void) onEnter

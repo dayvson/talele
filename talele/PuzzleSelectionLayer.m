@@ -109,13 +109,13 @@
 }
 
 -(void) onMoveToCurrentPage:(NSObject*)obj {
-    CCLOG(@"MOVEEEEEEE %@", obj);
     [[GameManager sharedGameManager] setCurrentPuzzle:(NSString*)obj];
 }
 
 -(void) loadPuzzleImages {
     NSDictionary* puzzlesInfo = [GameHelper getPlist:@"puzzles"];
-    NSMutableArray *arrayNames = [[NSMutableArray alloc] initWithObjects:@"arthur.jpg",@"cars2.jpg",@"valente.jpg",@"tangled.jpg", nil];
+    NSMutableArray *arrayNames = [[NSMutableArray alloc] 
+                                  initWithObjects:@"batman.jpg",@"cars2.jpg",@"valente.jpg",@"tangled.jpg", @"arthur.jpg", @"aranha.jpg", @"bob.jpg", nil];
     NSMutableArray *items = [[NSMutableArray alloc] initWithCapacity:arrayNames.count];
     for (int i=0; i<arrayNames.count; i++) {
         CCSprite* bg = [CCSprite spriteWithFile:@"photobg.png"];
