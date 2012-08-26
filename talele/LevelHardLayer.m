@@ -76,18 +76,13 @@
 }
 
 -(void) resetScreen {
-    [self removeAllPieces];
     [self removeAllChildrenWithCleanup:TRUE];
     if(pieces){
         [pieces release];
     }
     
 }
--(void) onExit{
-    [self resetScreen];
-    [self removeAllChildrenWithCleanup:YES];
-    [self removeFromParentAndCleanup:YES];
-}
+
 
 -(void) onEnter
 {
@@ -112,10 +107,7 @@
 }
 
 -(void)dealloc {
-    [self resetScreen];
-    [puzzleImage release];
     [super dealloc];
-    
 }
 
 @end

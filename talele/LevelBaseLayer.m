@@ -4,14 +4,7 @@
 @implementation LevelBaseLayer
 
 -(void) playingPiecematch{
-    NSString * sound;
-    int tsound = [GameHelper randomFloatBetween:1 and:3];
-    if(totalPieceFixed % 2 == 0){
-        sound = [NSString stringWithFormat:@"match%d.wav" , tsound];
-    }else{
-        sound = @"plin.wav";
-    }
-    [[GameManager sharedGameManager] playSoundEffect:sound];
+    [[GameManager sharedGameManager] playSoundEffect:@"plin.wav"];
 }
 
 -(void) movePieceToFinalPosition:(Piece*)piece{
@@ -135,10 +128,12 @@
 }
 
 -(void) removeAllPieces{
-    for (Piece *piece in pieces) {
-        [self removeChild:piece cleanup:YES];
+    if(pieces){
+        for (Piece *piece in pieces) {
+            [self removeChild:piece cleanup:YES];
+        }
+        [pieces removeAllObjects];
     }
-    [pieces removeAllObjects];
 }
 
 -(void) showPuzzleComplete{
@@ -164,8 +159,8 @@
     CCMenu *mainMenu = [CCMenu menuWithItems:newGameButton,nil];
     [[GameManager sharedGameManager] playSoundEffect:@"gamecomplete.wav"];
     [mainMenu setPosition:ccp(150, screenSize.height - 240.0f)];
-    [self addChild:congrats z:4 tag:400];
-    [self addChild:mainMenu z:5 tag:500];
+    [self addChild:congrats z:40 tag:400];
+    [self addChild:mainMenu z:50 tag:500];
 }
 
 - (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {    
@@ -176,7 +171,7 @@
         zIndex += 1;
         [selectedPiece setZOrder:zIndex];
     }else{
-        [selectedPiece setScale:0.8f];
+        return NO;
     }
     return TRUE;
 }
@@ -190,6 +185,7 @@
 }
 
 - (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event{
+    if(selectedPiece && selectedPiece.fixed) return;
     if([self isPieceInRightPlace:selectedPiece]){
         [self movePieceToFinalPosition:selectedPiece];
         if(self.isPuzzleComplete){

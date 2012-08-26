@@ -48,10 +48,7 @@
 }
 
 -(void) onClickPhotoSelection {
-    CCLOG(@"SHOOOWWWWW PICKRE");
-    [self removeChildByTag:1000 cleanup:YES];
     [self showPhotoLibrary];
-
 }
 
 -(CCMenuItemSprite *) createItemBySprite:(NSString *)name andCallback:(SEL)callback{
@@ -169,17 +166,15 @@
 	_picker.wantsFullScreenLayout = YES;
     _picker.allowsEditing = YES;
     _picker.modalInPopover = YES;
-
     _picker.modalPresentationStyle = UIModalPresentationCurrentContext;
 	_popover = [[[UIPopoverController alloc] initWithContentViewController:_picker] retain];
     _popover.delegate = self;
-	CGRect r = CGRectMake(0,0,screenSize.width,screenSize.height);
+	CGRect r = CGRectMake(0,0,400,300);
 	r.origin = [director convertToGL:r.origin];
 	[_popover presentPopoverFromRect:r inView:[director view]
             permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
-    director.contentSizeForViewInPopover = CGSizeMake(screenSize.width, screenSize.height);
-    [_popover setPopoverContentSize:director.contentSizeForViewInPopover];
-    [_picker.view setFrame:r];
+    [_popover setPopoverContentSize:CGSizeMake(500, screenSize.height)];
+
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {

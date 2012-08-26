@@ -81,9 +81,7 @@
         [pieces release];
     }
 }
--(void) onExit{
-    [self resetScreen];
-}
+
 
 -(void) onEnter
 {
@@ -102,8 +100,6 @@
 }
 
 -(void)dealloc {
-    [self resetScreen];
-    [puzzleImage release];
     [super dealloc];    
 }
 
