@@ -62,7 +62,7 @@
             randY = [GameHelper randomFloatBetween:item.height and: hlimit];
         }
         [item setPosition:ccp(randX, randY)];
-        [self addChild:item];
+        [self addChild:item z:100+c tag:100+c];
         [pieces addObject:item];
     }
 }

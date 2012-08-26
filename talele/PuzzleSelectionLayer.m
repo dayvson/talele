@@ -49,7 +49,8 @@
 
 -(void) onClickPhotoSelection {
     CCLOG(@"SHOOOWWWWW PICKRE");
-    [self showPhotoLibrary];    
+    [self removeChildByTag:1000 cleanup:YES];
+    [self showPhotoLibrary];
 
 }
 
@@ -120,9 +121,14 @@
 }
 
 -(void) loadPuzzleImages {
+    if(puzzleGrid){
+        [self removeChild:puzzleGrid cleanup:YES];
+        puzzleGrid = nil;
+    }
     NSDictionary* puzzlesInfo = [GameHelper getPlist:@"puzzles"];
     NSMutableArray *arrayNames = [[NSMutableArray alloc] 
-                                  initWithObjects:@"batman.jpg",@"cars2.jpg",@"valente.jpg",@"tangled.jpg", @"arthur.jpg", @"aranha.jpg", @"bob.jpg", nil];
+                                  initWithArray:[puzzlesInfo objectForKey:@"puzzles"]];
+    
     NSMutableArray *items = [[NSMutableArray alloc] initWithCapacity:arrayNames.count];
     for (int i=0; i<arrayNames.count; i++) {
       //  CCSprite* bg = [CCSprite spriteWithFile:@"photobg.png"];
@@ -155,21 +161,22 @@
 		[_popover dismissPopoverAnimated:NO];
 		[_popover release];
 	}
-    [[CCDirector sharedDirector] pause];
-	[[CCDirector sharedDirector] stopAnimation];
+    CCDirector * director =[CCDirector sharedDirector];
+    director.contentSizeForViewInPopover = CGSizeMake(500.f, 500.f);
+	[director stopAnimation];
 	_picker = [[[UIImagePickerController alloc] init] retain];
 	_picker.delegate = self;
 	_picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
 	_picker.wantsFullScreenLayout = YES;
-    _picker.allowsEditing = YES;
+    _picker.allowsEditing = NO;
+    _picker.contentSizeForViewInPopover = CGSizeMake(500.f, 500.f);
 	_popover = [[[UIPopoverController alloc] initWithContentViewController:_picker] retain];
-	[_popover setDelegate:self];
-	[_popover setPopoverContentSize:CGSizeMake(200, 1000) animated:NO];
-	CGRect r = CGRectMake(0,0,100,100);
-	r.origin = [[CCDirector sharedDirector] convertToGL:r.origin];
-
-	[_popover presentPopoverFromRect:r inView:[[CCDirector sharedDirector] view]
-            permittedArrowDirections:UIPopoverArrowDirectionUp animated:NO];
+    _popover.delegate = self;
+    [_popover setPopoverContentSize:CGSizeMake(500, 500)];
+	CGRect r = CGRectMake(0,0,100,30);
+	r.origin = [director convertToGL:r.origin];
+	[_popover presentPopoverFromRect:r inView:[director view]
+            permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
@@ -179,18 +186,17 @@
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
-	[_picker dismissModalViewControllerAnimated:YES];
+	[_picker dismissModalViewControllerAnimated:NO];
 	[_picker.view removeFromSuperview];
 	[_picker release];
 	_picker = nil;
-	[_popover dismissPopoverAnimated:YES];
+	[_popover dismissPopoverAnimated:NO];
 	[_popover release];
 }
 
-//for Ipad UIPopoverController if there is a cancel when the user click outside the popover
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
 {
-	[_picker dismissModalViewControllerAnimated:YES];
+	[_picker dismissModalViewControllerAnimated:NO];
 	[_picker.view removeFromSuperview];
 	[_picker release];
 	_picker = nil;
@@ -198,49 +204,19 @@
 
 - (void) imagePickerController: (UIImagePickerController *) picker
  didFinishPickingMediaWithInfo: (NSDictionary *) info {
-    
-    NSString *mediaType = [info objectForKey: UIImagePickerControllerMediaType];
-    UIImage *originalImage, *editedImage, *imageToUse;
-    
-    // Handle a still image picked from a photo album
-        editedImage = (UIImage *) [info objectForKey: UIImagePickerControllerEditedImage];
-        originalImage = (UIImage *) [info objectForKey: UIImagePickerControllerOriginalImage];
-        
-        if (editedImage) {
-            imageToUse = editedImage;
-        } else {
-            imageToUse = originalImage;
-        }
-        // Do something with imageToUse, apparently you cannot pass nil as the key
-		//eg. mySprite = ;
-        [self addChild: [CCSprite spriteWithCGImage:imageToUse.CGImage key:@"someKey"]];
-    CCLOG(@"IMAGEMMMMMMM SELECIONADAAAAA");
+    UIImage *originalImage;
+    originalImage = (UIImage *) [info objectForKey: UIImagePickerControllerOriginalImage];
+    originalImage = [ImageHelper imageWithImage:originalImage scaledToSize:CGSizeMake(693, 480)];
+    [[CCDirector sharedDirector] purgeCachedData];
     [picker dismissModalViewControllerAnimated: YES];
     [picker release];
-
+    [_popover dismissPopoverAnimated:YES];
+	[[CCDirector sharedDirector] startAnimation];
+    [ImageHelper saveImageFromLibraryIntoPuzzlePlist:originalImage];
+    [self loadPuzzleImages];
 }
 
-//-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
-//    
-//    CCDirector *director = [CCDirector sharedDirector];
-////    [director purgeCachedData];
-//	// newImage is a UIImage do not try to use a UIImageView
-//	newImage = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
-//    
-//	// Dismiss UIImagePickerController and release it
-//	[picker dismissModalViewControllerAnimated:YES];
-//	[picker.view removeFromSuperview];
-//	[picker	release];
-//    
-//	// Restart Director after image is selected
-//	[director startAnimation];
-//	[director resume];
-//
-//	CCSprite *imageFromPicker = [CCSprite spriteWithCGImage: newImage.CGImage
-//														key:@"Teste.aaa"];
-//	[imageFromPicker setPosition:ccp(self.contentSize.width/2, self.contentSize.height/2-30)];
-//	[self addChild: imageFromPicker];
-//}
+
 
 -(void) onEnter
 {

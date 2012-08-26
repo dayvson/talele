@@ -36,8 +36,11 @@
                                                                    sharedSpriteFrameCache]
                                                                   spriteFrameByName:@"btn-comecar.png"]];
     [playSprite.texture setAliasTexParameters];
-    CCMenuItemSprite *playButton = [CCMenuItemSprite itemFromNormalSprite:playSprite
-                                    selectedSprite:nil target:self selector:@selector(onClickPlay)];
+    CCMenuItemSprite *playButton = [CCMenuItemSprite
+                                    itemFromNormalSprite:playSprite
+                                    selectedSprite:nil
+                                    target:self
+                                    selector:@selector(onClickPlay)];
     CCMenu *mainMenu = [CCMenu menuWithItems:playButton,nil];
     [mainMenu alignItemsVerticallyWithPadding:screenSize.height * 0.059f];
     [mainMenu setPosition: ccp(screenSize.width * 2.0f, screenSize.height / 2.0f)];
