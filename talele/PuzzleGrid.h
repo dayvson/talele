@@ -40,8 +40,9 @@
 
 -(id) initWithArray:(NSMutableArray*)items position:(CGPoint)pos padding:(CGPoint)pad;
 -(void) adjustItems;
--(void) GoToNextPage;
--(void) GoToPrevPage;
+-(void) gotoNextPage;
+-(void) gotoPrevPage;
+-(void) gotoPage:(int)pageId;
 -(NSObject*) getCurrentPageData;
 -(CGPoint) getCurrentPagePosition;
 -(CGPoint) getCurrentPagePositionWithOffset:(float)offset;

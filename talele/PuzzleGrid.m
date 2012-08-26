@@ -117,20 +117,23 @@
 }
 
 
--(void) GoToNextPage{
+-(void) gotoNextPage{
     if ((currentPage+1) < totalPages){
         currentPage +=1;
     }
     [self moveToCurrentPage];
 }
 
--(void) GoToPrevPage{
+-(void) gotoPrevPage{
     if (currentPage > 0){
         currentPage -=1;
     }
-    [self moveToCurrentPage];    
+    [self moveToCurrentPage];
 }
-
+-(void) gotoPage:(int)pageId{
+    currentPage = pageId;
+    [self moveToCurrentPage];
+}
 -(NSObject*) getCurrentPageData{
     CCMenuItem* itemPage = [self.children objectAtIndex:currentPage];
     return itemPage.userData;
