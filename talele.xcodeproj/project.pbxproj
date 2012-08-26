@@ -1308,7 +1308,7 @@
 				GCC_PREFIX_HEADER = talele/Prefix.pch;
 				HEADER_SEARCH_PATHS = "\"talele/libs/kazmath/include\"";
 				INFOPLIST_FILE = talele/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-ObjC",
@@ -1328,7 +1328,7 @@
 				GCC_PREFIX_HEADER = talele/Prefix.pch;
 				HEADER_SEARCH_PATHS = "\"talele/libs/kazmath/include\"";
 				INFOPLIST_FILE = talele/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-ObjC",

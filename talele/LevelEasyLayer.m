@@ -34,7 +34,7 @@
     int cols = 4;
     int totalPieces = cols*rows;
     int i = 0;
-    float randX;
+    float randX = 0;
     float randY;
     float wlimit;
     float hlimit;

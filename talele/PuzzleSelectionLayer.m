@@ -9,6 +9,8 @@
 #import "GameConstants.h"
 #import "GameManager.h"
 #import "GameHelper.h"
+#import "ImageHelper.h"
+#import <MobileCoreServices/UTCoreTypes.h>
 
 @implementation PuzzleSelectionLayer
 
@@ -46,7 +48,9 @@
 }
 
 -(void) onClickPhotoSelection {
-    
+    CCLOG(@"SHOOOWWWWW PICKRE");
+    [self showPhotoLibrary];    
+
 }
 
 -(CCMenuItemSprite *) createItemBySprite:(NSString *)name andCallback:(SEL)callback{
@@ -71,7 +75,7 @@
     id sequenceAction = [CCSequence actions:moveEffect,nil];
     [mainMenu runAction:sequenceAction];
     mainMenu.anchorPoint = ccp(0,0);
-    [self addChild:mainMenu z:0 tag:100];
+    [self addChild:mainMenu z:7 tag:7];
 }
 
 -(void) initNavigationButtons {
@@ -86,14 +90,17 @@
     id moveEffect = [CCEaseIn actionWithAction:moveAction rate:1.0f];
     id sequenceAction = [CCSequence actions:moveEffect,nil];
     [mainMenu runAction:sequenceAction];
-    mainMenu.anchorPoint = ccp(0,0);
-    [self addChild:mainMenu z:0 tag:101];
+    
+    [self addChild:mainMenu z:5 tag:5];
 }
 
 -(void) initPhotoButton {
     CCMenuItemSprite *pickbutton = [self createItemBySprite:@"btn-foto.png" andCallback:@selector(onClickPhotoSelection)];
-    [pickbutton setPosition:ccp(screenSize.width - 150 , screenSize.height - 100 )];
-    [self addChild:pickbutton];
+    CCMenu *mainMenu = [CCMenu menuWithItems:pickbutton, nil];
+    mainMenu.anchorPoint = ccp(0,0);
+    mainMenu.position = ccp(screenSize.width - 150 , screenSize.height - 100 );
+    [self addChild:mainMenu z:3 tag:3];
+
     
 }
 
@@ -102,7 +109,7 @@
     background = [CCSprite spriteWithFile:@"background-puzzle-selection.png"];
 	background.position = ccp(screenSize.width/2, screenSize.height/2);
     
-	[self addChild: background];    
+	[self addChild: background z:1 tag:1];
 }
 -(void) updateSelectedImage:(CCMenuItemSprite*)sender{
     [[GameManager sharedGameManager] setCurrentPuzzle:(NSString*)sender.userData];
@@ -133,9 +140,107 @@
                                             padding:CGPointZero];
     [puzzleGrid setSwipeInMenu:YES];
     [puzzleGrid setDelegate:self];
-    [self addChild:puzzleGrid];
+    [self addChild:puzzleGrid z:2 tag:2];
 
 }
+
+-(void) showPhotoLibrary
+{
+	if (_picker) {
+		[_picker dismissModalViewControllerAnimated:NO];
+		[_picker.view removeFromSuperview];
+		[_picker release];
+	}
+	if (_popover) {
+		[_popover dismissPopoverAnimated:NO];
+		[_popover release];
+	}
+    [[CCDirector sharedDirector] pause];
+	[[CCDirector sharedDirector] stopAnimation];
+	_picker = [[[UIImagePickerController alloc] init] retain];
+	_picker.delegate = self;
+	_picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+	_picker.wantsFullScreenLayout = YES;
+    _picker.allowsEditing = YES;
+	_popover = [[[UIPopoverController alloc] initWithContentViewController:_picker] retain];
+	[_popover setDelegate:self];
+	[_popover setPopoverContentSize:CGSizeMake(200, 1000) animated:NO];
+	CGRect r = CGRectMake(0,0,100,100);
+	r.origin = [[CCDirector sharedDirector] convertToGL:r.origin];
+
+	[_popover presentPopoverFromRect:r inView:[[CCDirector sharedDirector] view]
+            permittedArrowDirections:UIPopoverArrowDirectionUp animated:NO];
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    
+    [_picker.view setFrame:_picker.view.superview.frame];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+	[_picker dismissModalViewControllerAnimated:YES];
+	[_picker.view removeFromSuperview];
+	[_picker release];
+	_picker = nil;
+	[_popover dismissPopoverAnimated:YES];
+	[_popover release];
+}
+
+//for Ipad UIPopoverController if there is a cancel when the user click outside the popover
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
+{
+	[_picker dismissModalViewControllerAnimated:YES];
+	[_picker.view removeFromSuperview];
+	[_picker release];
+	_picker = nil;
+}
+
+- (void) imagePickerController: (UIImagePickerController *) picker
+ didFinishPickingMediaWithInfo: (NSDictionary *) info {
+    
+    NSString *mediaType = [info objectForKey: UIImagePickerControllerMediaType];
+    UIImage *originalImage, *editedImage, *imageToUse;
+    
+    // Handle a still image picked from a photo album
+        editedImage = (UIImage *) [info objectForKey: UIImagePickerControllerEditedImage];
+        originalImage = (UIImage *) [info objectForKey: UIImagePickerControllerOriginalImage];
+        
+        if (editedImage) {
+            imageToUse = editedImage;
+        } else {
+            imageToUse = originalImage;
+        }
+        // Do something with imageToUse, apparently you cannot pass nil as the key
+		//eg. mySprite = ;
+        [self addChild: [CCSprite spriteWithCGImage:imageToUse.CGImage key:@"someKey"]];
+    CCLOG(@"IMAGEMMMMMMM SELECIONADAAAAA");
+    [picker dismissModalViewControllerAnimated: YES];
+    [picker release];
+
+}
+
+//-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
+//    
+//    CCDirector *director = [CCDirector sharedDirector];
+////    [director purgeCachedData];
+//	// newImage is a UIImage do not try to use a UIImageView
+//	newImage = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
+//    
+//	// Dismiss UIImagePickerController and release it
+//	[picker dismissModalViewControllerAnimated:YES];
+//	[picker.view removeFromSuperview];
+//	[picker	release];
+//    
+//	// Restart Director after image is selected
+//	[director startAnimation];
+//	[director resume];
+//
+//	CCSprite *imageFromPicker = [CCSprite spriteWithCGImage: newImage.CGImage
+//														key:@"Teste.aaa"];
+//	[imageFromPicker setPosition:ccp(self.contentSize.width/2, self.contentSize.height/2-30)];
+//	[self addChild: imageFromPicker];
+//}
 
 -(void) onEnter
 {
@@ -148,6 +253,9 @@
     [self initNavigationButtons];
     [self initPhotoButton];
     [self loadPuzzleImages];
+
+
+    
 }
 
 

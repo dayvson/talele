@@ -6,12 +6,19 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import <MobileCoreServices/MobileCoreServices.h>
 #import "cocos2d.h"
 #import "PuzzleGrid.h"
-@interface PuzzleSelectionLayer : CCLayer {
+@interface PuzzleSelectionLayer : CCLayer <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverControllerDelegate>{
     CGSize screenSize;    
     CCSpriteFrameCache* sceneSpriteBatchNode;
     PuzzleGrid* puzzleGrid;
+    UIImagePickerController *_picker;
+    UIPopoverController *_popover;
+    UIWindow *window;
+	UIImage *newImage;
+
 }
 
 +(CCScene *) scene;
