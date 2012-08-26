@@ -6,14 +6,12 @@
  */
 
 #import "ImageHelper.h"
-
+#import "GameHelper.h"
 @implementation ImageHelper
 
 +(UIImage *) convertSpriteToImage:(CCSprite *)sprite {
     CGPoint p = sprite.anchorPoint;
     [sprite setAnchorPoint:ccp(0,0)];
-//    CCRenderTexture *renderer = [CCRenderTexture 
-//                                renderTextureWithWidth:sprite.contentSize.width height:sprite.contentSize.height];
     CCRenderTexture *renderer = [[CCRenderTexture alloc] initWithWidth:sprite.contentSize.width 
                                                                 height:sprite.contentSize.height 
                                                            pixelFormat:kCCTexture2DPixelFormat_RGBA8888];
@@ -21,10 +19,25 @@
     [sprite visit];
     [renderer end];
     [sprite setAnchorPoint:p];
-
     return [renderer getUIImage];
 }
 
++(void)saveImageFromLibraryIntoPuzzlePlist:(UIImage*)image{
+    NSMutableDictionary* dict = [GameHelper getPlist:@"puzzles"];
+    NSMutableArray *arrayNames = [[NSMutableArray alloc]
+                                  initWithArray:[dict objectForKey:@"puzzles"]];
+    NSString* newPuzzleName = [NSString stringWithFormat:@"newPuzzle_%d", arrayNames.count];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *imagePath = [documentsDirectory stringByAppendingPathComponent:newPuzzleName];
+    NSData *webData = UIImageJPEGRepresentation(image, 0.8);
+    [webData writeToFile:imagePath atomically:YES];
+    NSString *plistpath = [documentsDirectory stringByAppendingPathComponent:@"puzzles.plist"];
+    [arrayNames addObject:imagePath];
+    [dict setValue:arrayNames forKey:@"puzzles"];
+    [dict writeToFile:plistpath atomically:YES];
+
+}
 
 + (UIImage*)imageWithImage:(UIImage*)image scaledToSize:(CGSize)newSize {
     UIGraphicsBeginImageContext(newSize);    

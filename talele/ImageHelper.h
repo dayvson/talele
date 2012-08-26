@@ -14,4 +14,5 @@
 + (UIImage*) convertSpriteToImage:(CCSprite *)sprite;
 + (UIImage*) imageWithImage:(UIImage*)image scaledToSize:(CGSize)newSize;
 + (UIImage*) maskImage:(UIImage *)image withMask:(UIImage *)maskImage withOffset:(CGPoint)offset;
++(void)saveImageFromLibraryIntoPuzzlePlist:(UIImage*)image;
 @end

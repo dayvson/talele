@@ -8,7 +8,7 @@
 #import "GameHelper.h"
 
 @implementation GameHelper
-+(NSDictionary *) getPlist:(NSString*)plist{
++(NSMutableDictionary *) getPlist:(NSString*)plist{
     NSString *fullFileName = [NSString stringWithFormat:@"%@.plist",plist];
     NSString *plistPath;
     NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
@@ -16,7 +16,8 @@
     if (![[NSFileManager defaultManager] fileExistsAtPath:plistPath]) {
         plistPath = [[NSBundle mainBundle] pathForResource:plist ofType:@"plist"];
     }
-    NSDictionary *plistDictionary = [NSDictionary dictionaryWithContentsOfFile:plistPath];
+    NSMutableDictionary *plistDictionary = [NSMutableDictionary
+                                            dictionaryWithContentsOfFile:plistPath];
     return plistDictionary;
 }
 + (float)randomFloatBetween:(float)smallNumber and:(float)bigNumber{
