@@ -38,14 +38,33 @@
     [dict writeToFile:plistpath atomically:YES];
 
 }
-
 + (UIImage*)imageWithImage:(UIImage*)image scaledToSize:(CGSize)newSize {
-    UIGraphicsBeginImageContext(newSize);    
+    UIGraphicsBeginImageContext(newSize);
     [image drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
     UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return newImage;
 }
+
++ (UIImage*) cropImage:(UIImage*)image toSize:(CGSize)crop
+{
+    CGSize imgSize = [image size];
+    float nWidth, nHeight;
+    if(imgSize.width/crop.width < imgSize.height/crop.height){
+        nHeight= imgSize.height/imgSize.width*crop.width;
+        nWidth= crop.width;
+    }else if(imgSize.width/crop.width > imgSize.height/crop.height){
+        nWidth = imgSize.width/imgSize.height*crop.height;
+        nHeight = crop.height;
+    }
+    UIImage *img = [ImageHelper imageWithImage:image scaledToSize:CGSizeMake(nWidth, nHeight)];
+    CGRect newRect = CGRectMake((nWidth/2)-(crop.width/2), (nHeight/2)-(crop.height/2), crop.width, crop.height);
+    CGImageRef imageRef = CGImageCreateWithImageInRect([img CGImage], newRect);
+    img = [UIImage imageWithCGImage:imageRef];
+    CGImageRelease(imageRef);
+    return img;
+}
+
 
 +(UIImage*)maskImage:(UIImage *)image withMask:(UIImage *)maskImage withOffset:(CGPoint)offset
 {
