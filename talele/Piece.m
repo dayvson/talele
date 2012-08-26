@@ -42,7 +42,6 @@
     return self;
 }
 -(void) createMaskWithPuzzle:(UIImage*)mainPuzzle andOffset:(CGPoint)offset{
-    CCLOG(name);
     UIImage* newImageMask = [ImageHelper maskImage:mainPuzzle 
                                             withMask:newPiece 
                                             withOffset:offset];

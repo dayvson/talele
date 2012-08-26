@@ -25,7 +25,6 @@
     [[GameManager sharedGameManager] runSceneWithID:kPuzzleSelection];
 }
 
-
 -(void) loadPieces {
     float posInitialX = puzzleImage.position.x;
     float posInitialY = puzzleImage.position.y;
@@ -85,11 +84,9 @@
     
 }
 -(void) onExit{
-
     [self resetScreen];
     [self removeAllChildrenWithCleanup:YES];
     [self removeFromParentAndCleanup:YES];
-    CCLOG(@"EXIIIIIIIIIIITTTTTTT");
 }
 
 -(void) onEnter

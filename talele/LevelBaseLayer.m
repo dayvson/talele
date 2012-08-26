@@ -20,8 +20,7 @@
     id action = [CCMoveTo actionWithDuration:0.5f 
                                     position:CGPointMake(piece.xTarget, 
                                                          piece.yTarget)];
-    id ease = [CCEaseIn actionWithAction:action rate:2];
-
+    id ease = [CCEaseIn actionWithAction:action rate:1.0f];
     totalPieceFixed++;
     [self playingPiecematch];
     [piece runAction:ease];
@@ -57,7 +56,7 @@
     puzzleImage.opacity = 40;
 	puzzleImage.position = ccp(screenSize.width - puzzleImage.contentSize.width - 28,
                                screenSize.height - puzzleImage.contentSize.height - 20);
-	[self addChild: puzzleImage];
+	[self addChild: puzzleImage z:1 tag:100];
     [puzzleImage release];
 }
 
@@ -125,10 +124,10 @@
     [backSprite.texture setAliasTexParameters];
     CCMenuItemSprite *backButton = [CCMenuItemSprite itemFromNormalSprite:backSprite
                                                            selectedSprite:nil target:self selector:@selector(onClickBack)];
-    CCMenu *mainMenu = [CCMenu menuWithItems:backButton,nil];
+    CCMenu *backMenu = [CCMenu menuWithItems:backButton,nil];
     
-    [mainMenu setPosition:ccp(40, screenSize.height - 40.0f)];
-    [self addChild:mainMenu];
+    [backMenu setPosition:ccp(40, screenSize.height - 40.0f)];
+    [self addChild:backMenu z:7 tag:700];
 }
 
 -(void) onClickNewGame {
@@ -143,9 +142,10 @@
 }
 
 -(void) showPuzzleComplete{
-    [self removeAllPieces];
+    [self performSelector:@selector(removeAllPieces) withObject:nil afterDelay:2];
     [piecesSpriteBatchNode release];
-    puzzleImage.opacity = 100;
+    id action = [CCFadeIn actionWithDuration:1];
+    [[self getChildByTag:100] runAction:action];
     [CCSpriteFrameCache sharedSpriteFrameCache ];
     CCSprite *congrats = [[CCSprite alloc] initWithSpriteFrame:[[CCSpriteFrameCache
                                                                    sharedSpriteFrameCache]
@@ -156,7 +156,6 @@
     CCSprite *newGame = [[CCSprite alloc] initWithSpriteFrame:[[CCSpriteFrameCache
                                                                    sharedSpriteFrameCache]
                                                                   spriteFrameByName:@"btn-newgame.png"]];
-    [newGame.texture setAliasTexParameters];
     CCMenuItemSprite *newGameButton = [CCMenuItemSprite 
                                        itemFromNormalSprite:newGame
                                        selectedSprite:nil
@@ -165,13 +164,9 @@
     CCMenu *mainMenu = [CCMenu menuWithItems:newGameButton,nil];
     [[GameManager sharedGameManager] playSoundEffect:@"gamecomplete.wav"];
     [mainMenu setPosition:ccp(150, screenSize.height - 240.0f)];
-    [self addChild:congrats];
-    [self addChild:mainMenu];
+    [self addChild:congrats z:4 tag:400];
+    [self addChild:mainMenu z:5 tag:500];
 }
-
-
-
-
 
 - (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {    
     CGPoint touchLocation = [self convertTouchToNodeSpace:touch];
@@ -180,6 +175,8 @@
         [selectedPiece setScale:1.0f];
         zIndex += 1;
         [selectedPiece setZOrder:zIndex];
+    }else{
+        [selectedPiece setScale:0.8f];
     }
     return TRUE;
 }

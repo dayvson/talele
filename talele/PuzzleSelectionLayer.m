@@ -40,11 +40,11 @@
 }
 
 -(void) onClickPrevPuzzle {
-    [puzzleGrid GoToPrevPage];
+    [puzzleGrid gotoPrevPage];
 }
 
 -(void) onClickNextPuzzle {
-    [puzzleGrid GoToNextPage];
+    [puzzleGrid gotoNextPage];
 }
 
 -(void) onClickPhotoSelection {
@@ -91,7 +91,6 @@
     id moveEffect = [CCEaseIn actionWithAction:moveAction rate:1.0f];
     id sequenceAction = [CCSequence actions:moveEffect,nil];
     [mainMenu runAction:sequenceAction];
-    
     [self addChild:mainMenu z:5 tag:5];
 }
 
@@ -101,8 +100,6 @@
     mainMenu.anchorPoint = ccp(0,0);
     mainMenu.position = ccp(screenSize.width - 150 , screenSize.height - 100 );
     [self addChild:mainMenu z:3 tag:3];
-
-    
 }
 
 -(void) initBackground {
@@ -131,13 +128,16 @@
     
     NSMutableArray *items = [[NSMutableArray alloc] initWithCapacity:arrayNames.count];
     for (int i=0; i<arrayNames.count; i++) {
-      //  CCSprite* bg = [CCSprite spriteWithFile:@"photobg.png"];
+        CCSprite* bg = [[CCSprite alloc]
+                        initWithSpriteFrame:[
+                            [CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"photobg.png"]
+                        ];
         CCSprite* img = [CCSprite spriteWithFile:[arrayNames objectAtIndex:i]];
         img.anchorPoint = ccp(0,0);
         img.position = ccp(23,22);
         [img setScale:0.8];
-        //[bg addChild:img];
-        CCMenuItemSprite* item = [[CCMenuItemSprite alloc] initWithNormalSprite:img selectedSprite:nil disabledSprite:nil target:self selector:@selector(updateSelectedImage:)];
+        [bg addChild:img];
+        CCMenuItemSprite* item = [[CCMenuItemSprite alloc] initWithNormalSprite:bg selectedSprite:nil disabledSprite:nil target:self selector:@selector(updateSelectedImage:)];
         item.userData = [arrayNames objectAtIndex:i];
         [items addObject:item];
     }
@@ -162,25 +162,27 @@
 		[_popover release];
 	}
     CCDirector * director =[CCDirector sharedDirector];
-    director.contentSizeForViewInPopover = CGSizeMake(500.f, 500.f);
 	[director stopAnimation];
 	_picker = [[[UIImagePickerController alloc] init] retain];
 	_picker.delegate = self;
 	_picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
 	_picker.wantsFullScreenLayout = YES;
-    _picker.allowsEditing = NO;
-    _picker.contentSizeForViewInPopover = CGSizeMake(500.f, 500.f);
+    _picker.allowsEditing = YES;
+    _picker.modalInPopover = YES;
+
+    _picker.modalPresentationStyle = UIModalPresentationCurrentContext;
 	_popover = [[[UIPopoverController alloc] initWithContentViewController:_picker] retain];
     _popover.delegate = self;
-    [_popover setPopoverContentSize:CGSizeMake(500, 500)];
-	CGRect r = CGRectMake(0,0,100,30);
+	CGRect r = CGRectMake(0,0,screenSize.width,screenSize.height);
 	r.origin = [director convertToGL:r.origin];
 	[_popover presentPopoverFromRect:r inView:[director view]
             permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
+    director.contentSizeForViewInPopover = CGSizeMake(screenSize.width, screenSize.height);
+    [_popover setPopoverContentSize:director.contentSizeForViewInPopover];
+    [_picker.view setFrame:r];
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-    
     [_picker.view setFrame:_picker.view.superview.frame];
 }
 
@@ -206,7 +208,7 @@
  didFinishPickingMediaWithInfo: (NSDictionary *) info {
     UIImage *originalImage;
     originalImage = (UIImage *) [info objectForKey: UIImagePickerControllerOriginalImage];
-    originalImage = [ImageHelper imageWithImage:originalImage scaledToSize:CGSizeMake(693, 480)];
+    originalImage = [ImageHelper cropImage:originalImage toSize:CGSizeMake(693, 480)];
     [[CCDirector sharedDirector] purgeCachedData];
     [picker dismissModalViewControllerAnimated: YES];
     [picker release];
@@ -214,9 +216,8 @@
 	[[CCDirector sharedDirector] startAnimation];
     [ImageHelper saveImageFromLibraryIntoPuzzlePlist:originalImage];
     [self loadPuzzleImages];
+    [puzzleGrid gotoPage:puzzleGrid.totalPages-1];
 }
-
-
 
 -(void) onEnter
 {
@@ -229,11 +230,7 @@
     [self initNavigationButtons];
     [self initPhotoButton];
     [self loadPuzzleImages];
-
-
-    
 }
-
 
 -(void)dealloc {
     [self removeAllChildrenWithCleanup:TRUE];
