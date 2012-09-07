@@ -1,6 +1,7 @@
 #import "LevelBaseLayer.h"
 #import "GameManager.h"
 #import "GameHelper.h"
+#import "ImageHelper.h"
 @implementation LevelBaseLayer
 
 -(void) playingPiecematch{
@@ -13,7 +14,7 @@
     id action = [CCMoveTo actionWithDuration:0.5f 
                                     position:CGPointMake(piece.xTarget, 
                                                          piece.yTarget)];
-    id ease = [CCEaseIn actionWithAction:action rate:1.0f];
+    id ease = [CCEaseIn actionWithAction:action rate:0.7f];
     totalPieceFixed++;
     [self playingPiecematch];
     [piece runAction:ease];
@@ -56,7 +57,8 @@
 - (void) selectPieceForTouch:(CGPoint)touchLocation {
     Piece * newSelection = nil;
     for (Piece *piece in pieces) {
-        if (CGRectContainsPoint(piece.getRealBoundingBox, touchLocation)) {            
+        if (CGRectContainsPoint(piece.getRealBoundingBox, touchLocation) &&
+            piece.fixed == NO) {
             newSelection = piece;
             break;
         }
@@ -65,11 +67,15 @@
         selectedPiece = newSelection;
     }
 }
-
--(void) loadPlistLevel:(NSString*)plistName andSpriteName:(NSString*)spriteName {
-    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:plistName];
-    piecesSpriteBatchNode = [CCSpriteBatchNode batchNodeWithFile:spriteName];    
-    [self addChild:piecesSpriteBatchNode z:2];    
+-(void) loadLevelSprites:(NSString*)dimension{
+    NSString *plistPuzzle = [NSString stringWithFormat:@"pieces_%@.plist", dimension];
+    NSString *plistBevel = [NSString stringWithFormat:@"pieces_%@_bevel.plist", dimension];
+    NSString *spritePuzzle = [NSString stringWithFormat:@"pieces_%@.png", dimension];
+    NSString *spriteBevel = [NSString stringWithFormat:@"pieces_%@_bevel.png", dimension];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:plistPuzzle];
+    piecesSpriteBatchNode = [CCSpriteBatchNode batchNodeWithFile:spritePuzzle];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:plistBevel];
+    bevelSpriteBatchNode = [CCSpriteBatchNode batchNodeWithFile:spriteBevel];
 }
 
 -(float) getDeltaX:(int)hAlign withIndex:(int)index andPieceWidth:(float)pieceWidth andCols:(int)cols andRows:(int)rows{
@@ -109,7 +115,6 @@
 -(void) initMenu {
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"buttons.plist"];
     sceneSpriteBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"buttons.png"];    
-    [self addChild:sceneSpriteBatchNode z:1];
     [CCSpriteFrameCache sharedSpriteFrameCache ];
     CCSprite *backSprite = [[CCSprite alloc] initWithSpriteFrame:[[CCSpriteFrameCache
                                                                    sharedSpriteFrameCache]
@@ -136,21 +141,17 @@
     }
 }
 
+
 -(void) showPuzzleComplete{
-    [self performSelector:@selector(removeAllPieces) withObject:nil afterDelay:2];
-    [piecesSpriteBatchNode release];
+    [self performSelector:@selector(removeAllPieces) withObject:nil afterDelay:1];
     id action = [CCFadeIn actionWithDuration:1];
     [[self getChildByTag:100] runAction:action];
-    [CCSpriteFrameCache sharedSpriteFrameCache ];
-    CCSprite *congrats = [[CCSprite alloc] initWithSpriteFrame:[[CCSpriteFrameCache
-                                                                   sharedSpriteFrameCache]
-                                                                  spriteFrameByName:@"congrats.png"]];
-    
+    CCSprite *congrats = [[CCSprite alloc] initWithFile:@"congrats.png"];
     [congrats setPosition:ccp(100, 50)];
     congrats.anchorPoint = ccp(0,0);
     CCSprite *newGame = [[CCSprite alloc] initWithSpriteFrame:[[CCSpriteFrameCache
                                                                    sharedSpriteFrameCache]
-                                                                  spriteFrameByName:@"btn-newgame.png"]];
+                                                                  spriteFrameByName:@"btn-novo-jogo.png"]];
     CCMenuItemSprite *newGameButton = [CCMenuItemSprite 
                                        itemFromNormalSprite:newGame
                                        selectedSprite:nil
@@ -159,14 +160,55 @@
     CCMenu *mainMenu = [CCMenu menuWithItems:newGameButton,nil];
     [[GameManager sharedGameManager] playSoundEffect:@"gamecomplete.wav"];
     [mainMenu setPosition:ccp(150, screenSize.height - 240.0f)];
-    [self addChild:congrats z:40 tag:400];
-    [self addChild:mainMenu z:50 tag:500];
+    [self addChild:congrats z:4 tag:4];
+    [self addChild:mainMenu z:4 tag:5];
+}
+
+-(void) loadPieces:(NSString*)level withCols:(int)cols andRols:(int)rows {
+    float posInitialX = puzzleImage.position.x;
+    float posInitialY = puzzleImage.position.y;
+    float deltaX = 0;
+    float deltaY = 0;
+    int totalPieces = cols*rows;
+    int i = 0;
+    float randX, randY, wlimit, hlimit;
+    NSDictionary* levelInfo = [GameHelper getPlist:level];
+    UIImage* tempPuzzle = [ImageHelper convertSpriteToImage:
+                           [CCSprite spriteWithTexture:[puzzleImage texture]]];
+    for (int c = 1; c<=totalPieces; c++, i++) {
+        NSString *pName = [NSString stringWithFormat:@"p%d.png", c];
+        NSString *sName = [NSString stringWithFormat:@"s%d.png", c];
+        NSString *fullName = [NSString stringWithFormat:@"Piece:%@-Puzzle:%@-D:%d", pName,[GameManager sharedGameManager].currentPuzzle, totalPieces];
+        Piece* item = [[Piece alloc] initWithName:pName andMetadata:[levelInfo objectForKey:pName]];
+        [item setName: fullName];
+        deltaX = [self getDeltaX:item.hAlign withIndex:i andPieceWidth:item.width andCols:cols andRows:rows];
+        deltaY = [self getDeltaY:item.vAlign withIndex:i andPieceHeight:item.height andCols:cols andRows:rows];
+        [item createMaskWithPuzzle:tempPuzzle
+                         andOffset:ccp(deltaX, tempPuzzle.size.height + deltaY - item.height)];
+        item.anchorPoint = ccp(0,1);
+        [item setScale:0.8f];
+        item.xTarget = posInitialX + deltaX;
+        item.yTarget = posInitialY + tempPuzzle.size.height + deltaY;
+        [item addBevel:sName];
+        wlimit = screenSize.width-item.width-30;
+        hlimit = screenSize.height-item.height-50;
+        if (c % 2 == 0){
+            randX = [GameHelper randomFloatBetween:item.width and:wlimit];
+            randY = [GameHelper randomFloatBetween:item.height and: 150];
+        }else{
+            randX = [GameHelper randomFloatBetween:10 and:90];
+            randY = [GameHelper randomFloatBetween:item.height and: hlimit];
+        }
+        [item setPosition:ccp(randX, randY)];
+        [self addChild:item z:100+c tag:100+c];
+        [pieces addObject:item];
+    }
 }
 
 - (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {    
     CGPoint touchLocation = [self convertTouchToNodeSpace:touch];
     [self selectPieceForTouch:touchLocation];
-    if( selectedPiece && selectedPiece.fixed == NO){
+    if( selectedPiece){
         [selectedPiece setScale:1.0f];
         zIndex += 1;
         [selectedPiece setZOrder:zIndex];
@@ -190,6 +232,10 @@
         [self movePieceToFinalPosition:selectedPiece];
         if(self.isPuzzleComplete){
             [self showPuzzleComplete];
+        }
+    }else{
+        if((selectedPiece.position.x-30) < puzzleImage.position.x || (selectedPiece.position.y-30) < puzzleImage.position.y){
+            [selectedPiece setScale:0.8f];
         }
     }
 }

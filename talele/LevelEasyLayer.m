@@ -25,47 +25,6 @@
     [[GameManager sharedGameManager] runSceneWithID:kPuzzleSelection];
 }
 
--(void) loadPieces {
-    float posInitialX = puzzleImage.position.x;
-    float posInitialY = puzzleImage.position.y;
-    float deltaX = 0;
-    float deltaY = 0;
-    int rows = 3;
-    int cols = 4;
-    int totalPieces = cols*rows;
-    int i = 0;
-    float randX = 0;
-    float randY;
-    float wlimit;
-    float hlimit;
-    NSDictionary* levelInfo = [GameHelper getPlist:@"levelEasy"];
-    UIImage* tempPuzzle = [ImageHelper convertSpriteToImage:
-                           [CCSprite spriteWithTexture:[puzzleImage texture]]];
-    for (int c = 1; c<=totalPieces; c++, i++) {        
-        NSString *pName = [NSString stringWithFormat:@"p%d.png", c];
-        Piece* item = [[Piece alloc] initWithName:pName andMetadata:[levelInfo objectForKey:pName]];
-        [item setName:[NSString stringWithFormat:@"%@_puzzle_%@", pName,[GameManager sharedGameManager].currentPuzzle]];
-        deltaX = [self getDeltaX:item.hAlign withIndex:i andPieceWidth:item.width andCols:cols andRows:rows];
-        deltaY = [self getDeltaY:item.vAlign withIndex:i andPieceHeight:item.height andCols:cols andRows:rows];
-        [item createMaskWithPuzzle:tempPuzzle 
-                          andOffset:ccp(deltaX, tempPuzzle.size.height + deltaY - item.height)];
-        item.anchorPoint = ccp(0,1);
-        item.xTarget = posInitialX + deltaX;
-        item.yTarget = posInitialY + tempPuzzle.size.height + deltaY;
-        wlimit = screenSize.width-item.width-30;
-        hlimit = screenSize.height-item.height-50;        
-        if (c % 2 == 0){
-            randX = [GameHelper randomFloatBetween:item.width and:wlimit];
-            randY = [GameHelper randomFloatBetween:item.height and: 150];
-        }else{
-            randX = [GameHelper randomFloatBetween:10 and:90];
-            randY = [GameHelper randomFloatBetween:item.height and: hlimit];
-        }
-        [item setPosition:ccp(randX, randY)];
-        [self addChild:item z:100+c tag:100+c];
-        [pieces addObject:item];
-    }
-}
 
 -(void) initBackground {
 	CCSprite *background;
@@ -82,6 +41,12 @@
     }
 }
 
+-(void)onExit{
+    [[CCSpriteFrameCache sharedSpriteFrameCache] removeSpriteFramesFromFile:@"pieces_4x3.plist"];
+    [[CCTextureCache sharedTextureCache] removeTextureForKey:@"pieces_4x3.png"];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] removeSpriteFramesFromFile:@"pieces_4x3_bevel.plist"];
+    [[CCTextureCache sharedTextureCache] removeTextureForKey:@"pieces_4x3_bevel.png"];
+}
 
 -(void) onEnter
 {
@@ -89,14 +54,16 @@
     CCDirector * director_ = [CCDirector sharedDirector];
     screenSize = [director_ winSize];
     [self resetScreen];
-    pieces = [[NSMutableArray alloc] initWithCapacity:12];
+    int cols = 4;
+    int rows = 3;
     zIndex = 400;
+    pieces = [[NSMutableArray alloc] initWithCapacity:cols*rows];
     [[director_ touchDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
-    [self loadPlistLevel:@"pieces_4x3.plist" andSpriteName:@"pieces_4x3.png"];
+    [self loadLevelSprites:@"4x3"];
     [self initBackground];
     [self initMenu];
     [self loadPuzzleImage:[GameManager sharedGameManager].currentPuzzle];
-    [self loadPieces];
+    [self loadPieces:@"levelEasy" withCols:cols andRols:rows];
 }
 
 -(void)dealloc {

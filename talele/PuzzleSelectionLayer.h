@@ -18,7 +18,8 @@
     UIPopoverController *_popover;
     UIWindow *window;
 	UIImage *newImage;
-
+    CCMenuItemSprite *prevButton;
+    CCMenuItemSprite *nextButton;
 }
 
 +(CCScene *) scene;

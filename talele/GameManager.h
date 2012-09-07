@@ -12,6 +12,7 @@
 @interface GameManager : NSObject {
     BOOL isMusicON;
     SceneTypes currentScene;
+    int currentPage;
     NSString* currentPuzzle;
     BOOL audioInitialized;
     GameManagerSoundState managerSoundState;
@@ -20,6 +21,7 @@
     NSMutableDictionary *soundEffectsState;
 }
 @property (readwrite) BOOL isMusicON;
+@property (readwrite) int currentPage;
 @property (readwrite,retain) NSString* currentPuzzle;
 @property (readwrite) GameManagerSoundState managerSoundState; 
 @property (nonatomic, retain) NSMutableDictionary *listOfSoundEffectFiles;

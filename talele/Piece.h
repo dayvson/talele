@@ -31,6 +31,7 @@
 @property (readwrite, retain) NSString* name;
 
 -(CGRect)getRealBoundingBox;
+-(void) addBevel:(NSString*)pName;
 -(void) createMaskWithPuzzle:(UIImage*)mainPuzzle andOffset:(CGPoint)offset;
 -(Piece*) initWithName:(NSString*)pName andMetadata:(NSDictionary*)metadata;
 @end

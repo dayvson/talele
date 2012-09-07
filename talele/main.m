@@ -1,10 +1,9 @@
-//
-//  main.m
-//  talele
-//
-//  Created by Maxwell Dayvson da Silva on 8/19/12.
-//  Copyright Terra 2012. All rights reserved.
-//
+/*
+ * Copyright (c) Maxwell Dayvson <dayvson@gmail.com>
+ * Copyright (c) Luiz Adolpho <luiz.adolpho@gmail.com>
+ * Created 08/2012
+ * All rights reserved.
+ */
 
 #import <UIKit/UIKit.h>
 

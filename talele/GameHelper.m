@@ -24,4 +24,8 @@
     float diff = bigNumber - smallNumber;
     return (((float) (arc4random() % ((unsigned)RAND_MAX + 1)) / RAND_MAX) * diff) + smallNumber;
 }
+
++ (BOOL) isRetinaIpad {
+    return CC_CONTENT_SCALE_FACTOR() == 2;
+}
 @end

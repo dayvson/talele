@@ -11,6 +11,7 @@
 @interface GameHelper : NSObject {
     
 }
-+(NSMutableDictionary *) getPlist:(NSString*)plist;
++ (NSMutableDictionary *) getPlist:(NSString*)plist;
 + (float)randomFloatBetween:(float)smallNumber and:(float)bigNumber;
++ (BOOL) isRetinaIpad;
 @end

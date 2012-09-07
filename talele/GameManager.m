@@ -17,6 +17,7 @@
 static GameManager* _sharedGameManager = nil;
 @synthesize isMusicON;
 @synthesize currentPuzzle;
+@synthesize currentPage;
 
 +(GameManager*)sharedGameManager {
     @synchronized([GameManager class])
@@ -91,7 +92,6 @@ static GameManager* _sharedGameManager = nil;
 
 -(void)initAudioAsync {
     managerSoundState = kAudioManagerInitializing;
-    CCLOG(@"INIT AUDIO ASYNC ##########################");
     [CDSoundEngine setMixerSampleRate:CD_SAMPLE_RATE_MID];
     [CDAudioManager initAsynchronously:kAMM_FxPlusMusicIfNoOtherAudio];
     while ([CDAudioManager sharedManagerState] != kAMStateInitialised)
@@ -113,7 +113,6 @@ static GameManager* _sharedGameManager = nil;
 }
 
 -(void)setupAudioEngine {
-    CCLOG(@"AUDIO ENGINE");
     if (audioInitialized == YES) {
         CCLOG(@"AUDIO ENGINE WAS INIT");
         return;
@@ -126,16 +125,13 @@ static GameManager* _sharedGameManager = nil;
                                                object:nil];
         [queue addOperation:asyncSetupOperation];
         [asyncSetupOperation autorelease];
-                CCLOG(@"AUDIO ENGINE INIT COMPLETE");
     }
 }
 
 -(ALuint)playSoundEffect:(NSString*)soundEffectKey {
-    ALuint soundID = 0;
-    
+    ALuint soundID = 0;    
     if (managerSoundState == kAudioManagerReady) {
         soundID = [soundEngine playEffect:soundEffectKey];
-        CCLOG(@"PLAY EFFECT %@", soundEffectKey);
     } else {
         CCLOG(@"GameMgr: Sound Manager is not ready, cannot play %@",
               soundEffectKey);

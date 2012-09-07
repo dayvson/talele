@@ -28,8 +28,7 @@
 
 -(Piece*) initWithName:(NSString*)pName andMetadata:(NSDictionary*)metadata{
     if(self = [super init]){
-        CCSprite* pieceSprite = [[CCSprite alloc] 
-                                 initWithSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:pName]];
+        CCSprite* pieceSprite = [CCSprite spriteWithSpriteFrameName:pName];
         newPiece = [ImageHelper convertSpriteToImage:pieceSprite];
         order= [[metadata objectForKey:@"order"] intValue];
         vAlign= [[metadata objectForKey:@"vAlign"] intValue]; 
@@ -37,20 +36,31 @@
         width = newPiece.size.width;
         height = newPiece.size.height;
         fixed = NO;
+        
         [self addChild:pieceSprite z:1 tag:10];
     }
     return self;
 }
+
 -(void) createMaskWithPuzzle:(UIImage*)mainPuzzle andOffset:(CGPoint)offset{
     UIImage* newImageMask = [ImageHelper maskImage:mainPuzzle 
                                             withMask:newPiece 
                                             withOffset:offset];
     CCSprite *pieceFinal = [[CCSprite alloc] initWithCGImage:newImageMask.CGImage 
-                                                         key:[NSString stringWithFormat:@"MASK_%@", name]];
+                                                         key:[NSString stringWithFormat:@"SPRITE_MASK_%@", name]];
+    
     pieceFinal.anchorPoint = ccp(0,1);
+    [pieceFinal setScale:mainPuzzle.scale];
     [self removeChildByTag:10 cleanup:YES];
     [self addChild:pieceFinal z:1 tag:10];
+
     [pieceFinal release];
+}
+
+-(void) addBevel:(NSString*)pName{
+    CCSprite* bevelSprite = [CCSprite spriteWithSpriteFrameName:pName];
+    bevelSprite.anchorPoint = ccp(0,1);
+    [self addChild:bevelSprite z:2 tag:20];
 }
 
 -(void) dealloc{

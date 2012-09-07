@@ -10,15 +10,16 @@
     CCSprite* puzzleImage;
     CCSpriteFrameCache* sceneSpriteBatchNode;
     CCSpriteFrameCache* piecesSpriteBatchNode;
-
+    CCSpriteFrameCache* bevelSpriteBatchNode;
 }
 -(BOOL) isPieceInRightPlace:(Piece*)piece;
 -(BOOL) isPuzzleComplete;
 -(void) selectPieceForTouch:(CGPoint)touchLocation;
 -(void) movePieceToFinalPosition:(Piece*)piece;
--(void) loadPlistLevel:(NSString*)plistName andSpriteName:(NSString*)spriteName;
+-(void) loadLevelSprites:(NSString*)dimension;
 -(void) initMenu;
 -(void) removeAllPieces;
+-(void) loadPieces:(NSString*)level withCols:(int)cols andRols:(int)rows;
 -(float) getDeltaX:(int)hAlign withIndex:(int)index andPieceWidth:(float)pieceWidth andCols:(int)cols andRows:(int)rows;
 -(float) getDeltaY:(int)vAlign withIndex:(int)index andPieceHeight:(float)pieceHeight andCols:(int)cols andRows:(int)rows;
 -(void) loadPuzzleImage:(NSString*)name;
