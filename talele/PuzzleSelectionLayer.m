@@ -51,54 +51,50 @@
     CCSprite *itemSprite = [[CCSprite alloc] initWithSpriteFrame:[[CCSpriteFrameCache
                                                                          sharedSpriteFrameCache]
                                                                         spriteFrameByName:name]];
-    CCSprite *itemSpriteUp = [[CCSprite alloc] initWithSpriteFrame:[[CCSpriteFrameCache
-                                                                   sharedSpriteFrameCache]
-                                                                  spriteFrameByName:name]];
-    [itemSpriteUp setScale:1.2];
     CCMenuItemSprite *itemMenu = [CCMenuItemSprite itemWithNormalSprite:itemSprite
-                                                         selectedSprite:itemSpriteUp target:self selector:callback];
+                                                         selectedSprite:nil target:self selector:callback];
     return itemMenu;
 }
 -(void) initStartGameButtons {
 
-    CCMenuItemSprite *easyButton = [self createItemBySprite:@"btn-facil.png" andCallback:@selector(onClickEasy)];
-    CCMenuItemSprite *hardButton = [self createItemBySprite:@"btn-dificil.png" andCallback:@selector(onClickHard)];
-    CCMenu *mainMenu = [CCMenu menuWithItems:easyButton,hardButton, nil];
-    [mainMenu alignItemsHorizontallyWithPadding:screenSize.height * 0.059f];
-    [mainMenu setPosition: ccp(screenSize.width * 2.0f, screenSize.height / 2.0f)];
-    id moveAction = [CCMoveTo actionWithDuration:0.5f 
-                                        position:ccp(screenSize.height/2.0f + 140,100)];
-    id moveEffect = [CCEaseIn actionWithAction:moveAction rate:1.0f];
-    id sequenceAction = [CCSequence actions:moveEffect,nil];
-    [mainMenu runAction:sequenceAction];
-
-    mainMenu.anchorPoint = ccp(0,0);
-    [self addChild:mainMenu z:7 tag:7];
+    easyButton = [self createItemBySprite:@"btn-facil.png" andCallback:@selector(onClickEasy)];
+    hardButton = [self createItemBySprite:@"btn-dificil.png" andCallback:@selector(onClickHard)];
+    CCMenu *levelMenu = [CCMenu menuWithItems:easyButton,hardButton, nil];
+    [levelMenu alignItemsHorizontallyWithPadding:screenSize.height * 0.059f];
+    [levelMenu setPosition: ccp(screenSize.height/2.0f + 140,100)];
+    [levelMenu runAction:[CCFadeIn actionWithDuration:1.0f]];
+    levelMenu.anchorPoint = ccp(0,0);
+    [self addChild:levelMenu z:7 tag:7];
 }
 
 -(void) initNavigationButtons {
     prevButton = [self createItemBySprite:@"btn-voltar.png" andCallback:@selector(onClickPrevPuzzle)];
     nextButton = [self createItemBySprite:@"btn-proximo.png" andCallback:@selector(onClickNextPuzzle)];
-    CCMenu *mainMenu = [CCMenu menuWithItems:prevButton,nextButton, nil];
-    [mainMenu alignItemsHorizontallyWithPadding:680];
-    [mainMenu setPosition: ccp(screenSize.width * 2.0f, screenSize.height / 2.0f)];
-    id moveAction = [CCMoveTo actionWithDuration:0.5f 
-                                        position:ccp(510 ,
-                                        screenSize.height/2.0f )];
-    id moveEffect = [CCEaseIn actionWithAction:moveAction rate:1.0f];
-    id sequenceAction = [CCSequence actions:moveEffect,nil];
-    [mainMenu runAction:sequenceAction];
-    [self addChild:mainMenu z:5 tag:5];
+    CCMenu *navArrowMenu = [CCMenu menuWithItems:prevButton,nextButton, nil];
+    [navArrowMenu alignItemsHorizontallyWithPadding:680];
+    [navArrowMenu setPosition: ccp(510,screenSize.height/2.0f )];
+    [navArrowMenu runAction:[CCFadeIn actionWithDuration:1.0f]];
+    [self addChild:navArrowMenu z:5 tag:5];
 }
 
 -(void) initPhotoButton {
     CCMenuItemSprite *pickbutton = [self createItemBySprite:@"btn-foto.png" andCallback:@selector(onClickPhotoSelection)];
-    CCMenu *mainMenu = [CCMenu menuWithItems:pickbutton, nil];
-    mainMenu.anchorPoint = ccp(0,0);
-    mainMenu.position = ccp(screenSize.width - 150 , screenSize.height - 100 );
-    [self addChild:mainMenu z:3 tag:3];
+    CCMenu *photoMenu = [CCMenu menuWithItems:pickbutton, nil];
+    photoMenu.anchorPoint = ccp(0,0);
+    photoMenu.position = ccp(screenSize.width - 150 , screenSize.height - 100 );
+    [self addChild:photoMenu z:3 tag:3];
 }
 
+-(void) checkPuzzleGridForEnableButtons{
+    [prevButton setOpacity:(puzzleGrid.currentPage >= 1)? 255 : 30];
+    [prevButton setIsEnabled:(puzzleGrid.currentPage >= 1)? YES : NO];
+    [nextButton setOpacity:(puzzleGrid.currentPage < puzzleGrid.totalPages-1)? 255 : 30];
+    [nextButton setIsEnabled:(puzzleGrid.currentPage < puzzleGrid.totalPages-1)? YES : NO];
+    [hardButton setIsEnabled:(puzzleGrid.totalPages > 0)];
+    [hardButton setOpacity:(puzzleGrid.totalPages > 0)? 255 : 30];
+    [easyButton setIsEnabled:(puzzleGrid.totalPages > 0)];
+    [easyButton setOpacity:(puzzleGrid.totalPages > 0)? 255 : 30];
+}
 -(void) initBackground {
 	CCSprite *background;
     background = [CCSprite spriteWithFile:@"background-puzzle-selection.png"];
@@ -110,13 +106,10 @@
 }
 
 -(void) onMoveToCurrentPage:(NSObject*)obj {
-    [prevButton setOpacity:(puzzleGrid.currentPage >= 1)? 255 : 30];
-    [nextButton setOpacity:(puzzleGrid.currentPage < puzzleGrid.totalPages-1)? 255 : 30];
-    [prevButton setIsEnabled:(puzzleGrid.currentPage >= 1)? YES : NO];
-    [nextButton setIsEnabled:(puzzleGrid.currentPage < puzzleGrid.totalPages-1)? YES : NO];
 
     [[GameManager sharedGameManager] setCurrentPuzzle:(NSString*)obj];
     [[GameManager sharedGameManager] setCurrentPage:puzzleGrid.currentPage];
+    [self checkPuzzleGridForEnableButtons];
     if([self getChildByTag:40]){
         [self removeChildByTag:40 cleanup:YES];
     }
@@ -130,8 +123,7 @@
     emptyMenu.anchorPoint = ccp(0,0);
     emptyMenu.position = ccp(screenSize.width/2 , screenSize.height/2 );
     [self addChild:emptyMenu z:40 tag:40];    
-    [prevButton setIsEnabled:NO];
-    [nextButton setIsEnabled:NO];
+    [self checkPuzzleGridForEnableButtons];
 }
 
 -(void) loadPuzzleImages {

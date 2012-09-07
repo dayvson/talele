@@ -20,6 +20,8 @@
 	UIImage *newImage;
     CCMenuItemSprite *prevButton;
     CCMenuItemSprite *nextButton;
+    CCMenuItemSprite *easyButton;
+    CCMenuItemSprite *hardButton;
 }
 
 +(CCScene *) scene;
