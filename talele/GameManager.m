@@ -61,17 +61,18 @@ static GameManager* _sharedGameManager = nil;
     id sceneToRun = nil;
 
     switch (sceneID) {
+            
         case kMainMenu: 
-            sceneToRun = [CCTransitionFade transitionWithDuration:1.0 scene:[MainScreenLayer scene] withColor:ccWHITE];
+            sceneToRun = [CCTransitionFade transitionWithDuration:1.0 scene:[MainScreenLayer scene] ];
             break;
         case kPuzzleSelection:
-            sceneToRun = [CCTransitionFade transitionWithDuration:1.0 scene:[PuzzleSelectionLayer scene] withColor:ccWHITE];
+            sceneToRun = [CCTransitionSlideInL transitionWithDuration:0.5 scene:[PuzzleSelectionLayer scene]];
             break;
         case kLevelEasy:
-            sceneToRun = [CCTransitionFade transitionWithDuration:1.0 scene:[LevelEasyLayer scene] withColor:ccWHITE];
+            sceneToRun = [CCTransitionSlideInR transitionWithDuration:0.5 scene:[LevelEasyLayer scene]];
             break;
         case kLevelHard: 
-            sceneToRun = [CCTransitionFade transitionWithDuration:1.0 scene:[LevelHardLayer scene] withColor:ccWHITE];
+            sceneToRun = [CCTransitionSlideInR transitionWithDuration:0.5 scene:[LevelHardLayer scene]];
             break;
         default:
             CCLOG(@"Unknown ID, cannot switch scenes");
