@@ -3,12 +3,6 @@
 <plist version="1.0">
 <dict>
 	<key>puzzles</key>
-	<array>
-		<string>batman.jpg</string>
-		<string>arthur.jpg</string>
-		<string>valente.jpg</string>
-		<string>tangled.jpg</string>
-		<string>cars2.jpg</string>
-	</array>
+	<array/>
 </dict>
 </plist>

@@ -33,7 +33,7 @@
             <key>btn-facil.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{508,2},{221,106}}</string>
+                <string>{{2,125},{221,106}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -46,7 +46,7 @@
             <key>btn-foto.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{731,2},{130,99}}</string>
+                <string>{{225,125},{130,99}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -56,23 +56,23 @@
                 <key>sourceSize</key>
                 <string>{130,99}</string>
             </dict>
-            <key>btn-newgame.png</key>
+            <key>btn-novo-jogo.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,125},{284,105}}</string>
+                <string>{{2,233},{271,94}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{284,105}}</string>
+                <string>{{0,0},{271,94}}</string>
                 <key>sourceSize</key>
-                <string>{284,105}</string>
+                <string>{271,94}</string>
             </dict>
             <key>btn-proximo.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{288,125},{130,133}}</string>
+                <string>{{275,233},{130,133}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -85,7 +85,7 @@
             <key>btn-som-off.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{420,125},{80,72}}</string>
+                <string>{{407,233},{80,72}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -98,7 +98,7 @@
             <key>btn-som.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{502,125},{80,72}}</string>
+                <string>{{2,368},{80,72}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -111,7 +111,7 @@
             <key>btn-voltar-mini.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{584,125},{71,72}}</string>
+                <string>{{84,368},{71,72}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -124,7 +124,7 @@
             <key>btn-voltar.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{657,125},{130,133}}</string>
+                <string>{{157,368},{130,133}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -134,45 +134,6 @@
                 <key>sourceSize</key>
                 <string>{130,133}</string>
             </dict>
-            <key>congrats.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,260},{666,320}}</string>
-                <key>offset</key>
-                <string>{0,0}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{0,0},{666,320}}</string>
-                <key>sourceSize</key>
-                <string>{666,320}</string>
-            </dict>
-            <key>photobg.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,582},{602,429}}</string>
-                <key>offset</key>
-                <string>{0,0}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{0,0},{602,429}}</string>
-                <key>sourceSize</key>
-                <string>{602,429}</string>
-            </dict>
-            <key>photoempty.jpg</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,1013},{557,384}}</string>
-                <key>offset</key>
-                <string>{0,0}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{0,0},{557,384}}</string>
-                <key>sourceSize</key>
-                <string>{557,384}</string>
-            </dict>
         </dict>
         <key>metadata</key>
         <dict>
@@ -181,9 +142,9 @@
             <key>realTextureFileName</key>
             <string>buttons.png</string>
             <key>size</key>
-            <string>{1024,2048}</string>
+            <string>{512,512}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:86f8e0795f75d516639cf0353380351c$</string>
+            <string>$TexturePacker:SmartUpdate:1ae3997c2b7748099a1b19dec193dc81$</string>
             <key>textureFileName</key>
             <string>buttons.png</string>
         </dict>
