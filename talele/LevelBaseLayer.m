@@ -112,16 +112,20 @@
     return deltaY;    
 }
 
+-(void) resetScreen {
+    [self removeAllPieces];
+    [self removeAllChildrenWithCleanup:TRUE];
+    if(pieces){
+        [pieces release];
+    }
+}
+
 -(void) initMenu {
-    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"buttons.plist"];
-    sceneSpriteBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"buttons.png"];    
-    [CCSpriteFrameCache sharedSpriteFrameCache ];
     CCSprite *backSprite = [[CCSprite alloc] initWithSpriteFrame:[[CCSpriteFrameCache
                                                                    sharedSpriteFrameCache]
                                                                   spriteFrameByName:@"btn-voltar-mini.png"]];
     [backSprite.texture setAliasTexParameters];
-    CCMenuItemSprite *backButton = [CCMenuItemSprite itemFromNormalSprite:backSprite
-                                                           selectedSprite:nil target:self selector:@selector(onClickBack)];
+    CCMenuItemSprite *backButton = [CCMenuItemSprite itemWithNormalSprite:backSprite selectedSprite:nil target:self selector:@selector(onClickBack)];
     CCMenu *backMenu = [CCMenu menuWithItems:backButton,nil];
     
     [backMenu setPosition:ccp(40, screenSize.height - 40.0f)];
@@ -152,11 +156,8 @@
     CCSprite *newGame = [[CCSprite alloc] initWithSpriteFrame:[[CCSpriteFrameCache
                                                                    sharedSpriteFrameCache]
                                                                   spriteFrameByName:@"btn-novo-jogo.png"]];
-    CCMenuItemSprite *newGameButton = [CCMenuItemSprite 
-                                       itemFromNormalSprite:newGame
-                                       selectedSprite:nil
-                                       target:self 
-                                       selector:@selector(onClickNewGame)];
+    CCMenuItemSprite *newGameButton = [CCMenuItemSprite itemWithNormalSprite:newGame selectedSprite:nil
+                                                                      target:self selector:@selector(onClickNewGame)];
     CCMenu *mainMenu = [CCMenu menuWithItems:newGameButton,nil];
     [[GameManager sharedGameManager] playSoundEffect:@"gamecomplete.wav"];
     [mainMenu setPosition:ccp(150, screenSize.height - 240.0f)];
@@ -205,17 +206,15 @@
     }
 }
 
-- (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {    
+- (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
     CGPoint touchLocation = [self convertTouchToNodeSpace:touch];
     [self selectPieceForTouch:touchLocation];
-    if( selectedPiece){
+    if(selectedPiece){
         [selectedPiece setScale:1.0f];
         zIndex += 1;
         [selectedPiece setZOrder:zIndex];
-    }else{
-        return NO;
     }
-    return TRUE;
+    return YES;
 }
 
 - (void)ccTouchMoved:(UITouch *)touch withEvent:(UIEvent *)event {       
@@ -227,14 +226,15 @@
 }
 
 - (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event{
-    if(selectedPiece && selectedPiece.fixed) return;
+    if(!selectedPiece || (selectedPiece && selectedPiece.fixed)) return;
     if([self isPieceInRightPlace:selectedPiece]){
         [self movePieceToFinalPosition:selectedPiece];
         if(self.isPuzzleComplete){
             [self showPuzzleComplete];
         }
     }else{
-        if((selectedPiece.position.x-30) < puzzleImage.position.x || (selectedPiece.position.y-30) < puzzleImage.position.y){
+        if(selectedPiece && (selectedPiece.position.x < puzzleImage.position.x ||
+                             selectedPiece.position.y < puzzleImage.position.y)){
             [selectedPiece setScale:0.8f];
         }
     }

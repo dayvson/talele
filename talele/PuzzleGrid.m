@@ -40,7 +40,6 @@
         director = [CCDirector sharedDirector];
         screenSize = [director winSize];
 		[self adjustItems];
-        self.position = menuPosition;
 
 	}
 	return self;
@@ -51,10 +50,10 @@
     int c = 0;
     totalPages = self.children.count;
     for (CCMenuItem* item in self.children){
-		item.position = CGPointMake(self.position.x + padding.x + (c * screenSize.width), 
-                                    self.position.y - padding.y);
+		item.position = CGPointMake((c * screenSize.width), 0);
         c++;
 	}
+    self.position = menuPosition;
 }
 
 -(void) addChild:(CCMenuItem*)child z:(int)z tag:(int)aTag
@@ -78,7 +77,7 @@
 
 -(void) registerWithTouchDispatcher
 {
-	[[CCTouchDispatcher sharedDispatcher] addTargetedDelegate:self priority:INT_MIN+1 swallowsTouches:YES];
+    [[[CCDirector sharedDirector] touchDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
 }
 
 -(BOOL) ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event
@@ -96,7 +95,6 @@
 	return NO;
 }
 
-
 - (CGPoint) getCurrentPagePosition
 {
 	return CGPointMake(menuPosition.x - (currentPage * screenSize.width),
@@ -108,14 +106,17 @@
 	return CGPointMake(menuPosition.x-(currentPage * screenSize.width)+offset, menuPosition.y);
 }
 
-
-- (void) moveToCurrentPage
-{
-	id action = [CCMoveTo actionWithDuration:(animationSpeed*0.5) position:[self getCurrentPagePosition]];
-	[self runAction:action];
+-(void) onAnimationComplete{
     [delegate onMoveToCurrentPage:[self getCurrentPageData]];
 }
-
+- (void) moveToCurrentPage{
+	id action = [CCMoveTo actionWithDuration:(animationSpeed*0.5) position:[self getCurrentPagePosition]];
+	[self runAction:[CCSequence actions:action,
+                    [CCCallFunc actionWithTarget:self selector:@selector(onAnimationComplete)],
+                     nil]];
+     
+;
+}
 
 -(void) gotoNextPage{
     if ((currentPage+1) < totalPages){
@@ -130,10 +131,12 @@
     }
     [self moveToCurrentPage];
 }
+
 -(void) gotoPage:(int)pageId{
     currentPage = pageId;
     [self moveToCurrentPage];
 }
+
 -(NSObject*) getCurrentPageData{
     CCMenuItem* itemPage = [self.children objectAtIndex:currentPage];
     return itemPage.userData;

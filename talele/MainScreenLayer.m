@@ -36,7 +36,7 @@
                                                                   spriteFrameByName:@"btn-comecar.png"]];
     [playSprite.texture setAliasTexParameters];
     CCMenuItemSprite *playButton = [CCMenuItemSprite
-                                    itemFromNormalSprite:playSprite
+                                    itemWithNormalSprite:playSprite
                                     selectedSprite:nil
                                     target:self
                                     selector:@selector(onClickPlay)];
@@ -53,13 +53,18 @@
     [reviewAlert show];
 */
     [self addChild:mainMenu];
+    
+}
+
+-(void) onExit{
+    [self removeAllChildrenWithCleanup:YES];
 }
 
 -(void) initBackground {
 	CCSprite *background;
     background = [CCSprite spriteWithFile:@"background-homescreen.png"];
 	background.position = ccp(screenSize.width/2, screenSize.height/2);
-	[self addChild: background];    
+	[self addChild: background];
 }
 
 -(void) onEnter
@@ -69,7 +74,6 @@
     [self loadPlistLevel];
     [self initBackground];
     [self initMenu];
-
 }
 
 

@@ -62,7 +62,6 @@
     CCMenu *levelMenu = [CCMenu menuWithItems:easyButton,hardButton, nil];
     [levelMenu alignItemsHorizontallyWithPadding:screenSize.height * 0.059f];
     [levelMenu setPosition: ccp(screenSize.height/2.0f + 140,100)];
-    [levelMenu runAction:[CCFadeIn actionWithDuration:1.0f]];
     levelMenu.anchorPoint = ccp(0,0);
     [self addChild:levelMenu z:7 tag:7];
 }
@@ -73,7 +72,6 @@
     CCMenu *navArrowMenu = [CCMenu menuWithItems:prevButton,nextButton, nil];
     [navArrowMenu alignItemsHorizontallyWithPadding:680];
     [navArrowMenu setPosition: ccp(510,screenSize.height/2.0f )];
-    [navArrowMenu runAction:[CCFadeIn actionWithDuration:1.0f]];
     [self addChild:navArrowMenu z:5 tag:5];
 }
 
@@ -86,8 +84,8 @@
 }
 
 -(void) checkPuzzleGridForEnableButtons{
-    [prevButton setOpacity:(puzzleGrid.currentPage >= 1)? 255 : 30];
-    [prevButton setIsEnabled:(puzzleGrid.currentPage >= 1)? YES : NO];
+    [prevButton setOpacity:(puzzleGrid.currentPage > 0)? 255 : 30];
+    [prevButton setIsEnabled:(puzzleGrid.currentPage > 0)? YES : NO];
     [nextButton setOpacity:(puzzleGrid.currentPage < puzzleGrid.totalPages-1)? 255 : 30];
     [nextButton setIsEnabled:(puzzleGrid.currentPage < puzzleGrid.totalPages-1)? YES : NO];
     [hardButton setIsEnabled:(puzzleGrid.totalPages > 0)];
@@ -102,12 +100,20 @@
 	[self addChild: background z:1 tag:1];
 }
 -(void) updateSelectedImage:(CCMenuItemSprite*)sender{
-    [[GameManager sharedGameManager] setCurrentPuzzle:(NSString*)sender.userData];
+    //[[GameManager sharedGameManager] setCurrentPuzzle:(NSString*)sender.userData];
 }
 
 -(void) onMoveToCurrentPage:(NSObject*)obj {
-
-    [[GameManager sharedGameManager] setCurrentPuzzle:(NSString*)obj];
+    NSDictionary* puzzleInfo = (NSDictionary*)obj;
+    NSString* puzzleName = [puzzleInfo objectForKey:@"name"];
+    if([[puzzleInfo objectForKey:@"isLazy"] boolValue]){
+        CCMenuItem * atualItem = (CCMenuItem*)[puzzleGrid getChildByTag:puzzleGrid.currentPage+1];
+        CCMenuItemSprite * item = [self createPuzzleSprite:puzzleName withLazyLoad:NO];
+        item.position = CGPointMake(atualItem.position.x,0);
+        [puzzleGrid removeChildByTag:puzzleGrid.currentPage+1 cleanup:YES];
+        [puzzleGrid addChild:item z:puzzleGrid.currentPage+1 tag:puzzleGrid.currentPage+1];
+    }
+    [[GameManager sharedGameManager] setCurrentPuzzle:puzzleName];
     [[GameManager sharedGameManager] setCurrentPage:puzzleGrid.currentPage];
     [self checkPuzzleGridForEnableButtons];
     if([self getChildByTag:40]){
@@ -126,6 +132,37 @@
     [self checkPuzzleGridForEnableButtons];
 }
 
+
+-(CCMenuItemSprite*) createPuzzleSprite:(NSString*)imageName withLazyLoad:(BOOL)lazyload{
+    CCSprite* bg = [[CCSprite alloc] initWithFile:@"photobg.png"];
+    if(!lazyload){
+        CCSprite* img = [CCSprite spriteWithFile:imageName];
+        img.anchorPoint = ccp(0,0);
+        img.position = ccp(23,22);
+        [img setScale:0.8];
+        [bg addChild:img];
+    }
+    CCMenuItemSprite* item = [[CCMenuItemSprite alloc] initWithNormalSprite:bg
+                                                             selectedSprite:nil
+                                                             disabledSprite:nil
+                                                                     target:self
+                                                                   selector:@selector(updateSelectedImage:)];
+    NSMutableDictionary* puzzleInfo = [[NSMutableDictionary alloc] init];
+    [puzzleInfo setValue:imageName forKey:@"name"];
+    [puzzleInfo setValue:[NSNumber numberWithBool:lazyload] forKey:@"isLazy"];
+    item.userData = puzzleInfo;
+    return item;
+   
+}
+
+-(void) addNewPuzzleToGrid:(NSString*)puzzleName{
+    CCMenuItemSprite * item = [self createPuzzleSprite:puzzleName withLazyLoad:NO];
+    puzzleGrid.totalPages += 1;
+    item.position = CGPointMake(screenSize.width * puzzleGrid.totalPages,0);
+    [puzzleGrid addChild:item z:puzzleGrid.totalPages tag:puzzleGrid.totalPages];
+    [puzzleGrid gotoPage:puzzleGrid.totalPages-1];
+}
+
 -(void) loadPuzzleImages {
     if(puzzleGrid){
         [self removeChild:puzzleGrid cleanup:YES];
@@ -135,20 +172,11 @@
     NSMutableArray *arrayNames = [[NSMutableArray alloc] 
                                   initWithArray:[puzzlesInfo objectForKey:@"puzzles"]];
     NSMutableArray *items = [[NSMutableArray alloc] initWithCapacity:arrayNames.count];
+    int totalLoadEagleMode = [GameManager sharedGameManager].currentPage+1;
     for (int i=0; i<arrayNames.count; i++) {
-        CCSprite* bg = [[CCSprite alloc] initWithFile:@"photobg.png"];
-        CCSprite* img = [CCSprite spriteWithFile:[arrayNames objectAtIndex:i]];
-        img.anchorPoint = ccp(0,0);
-        img.position = ccp(23,22);
-        [img setScale:0.8];
-        [bg addChild:img];
-        CCMenuItemSprite* item = [[CCMenuItemSprite alloc] initWithNormalSprite:bg
-                                                                 selectedSprite:nil
-                                                                 disabledSprite:nil
-                                                                         target:self
-                                                                       selector:@selector(updateSelectedImage:)];
-        item.userData = [arrayNames objectAtIndex:i];
-        [items addObject:item];
+        
+        [items addObject:[self createPuzzleSprite:[arrayNames objectAtIndex:i]
+                                     withLazyLoad:(i > totalLoadEagleMode)]];
     }
     puzzleGrid = [[PuzzleGrid alloc] initWithArray:items
                                            position:ccp(screenSize.width/2, screenSize.height/2)
@@ -215,14 +243,12 @@
     UIImage *originalImage;
     originalImage = (UIImage *) [info objectForKey: UIImagePickerControllerOriginalImage];
     originalImage = [ImageHelper cropImage:originalImage toSize:imageSize];
-    [[CCDirector sharedDirector] purgeCachedData];
     [picker dismissModalViewControllerAnimated: YES];
     [picker release];
     [_popover dismissPopoverAnimated:YES];
 	[[CCDirector sharedDirector] startAnimation];
-    [ImageHelper saveImageFromLibraryIntoPuzzlePlist:originalImage];
-    [self loadPuzzleImages];
-    [puzzleGrid gotoPage:puzzleGrid.totalPages-1];
+    NSString* newPuzzleName = [ImageHelper saveImageFromLibraryIntoPuzzlePlist:originalImage];
+    [self addNewPuzzleToGrid:newPuzzleName];
 }
 
 -(void) onEnter{
@@ -231,14 +257,17 @@
     [CCSpriteFrameCache sharedSpriteFrameCache];
     [self loadPlistLevel];
     [self initBackground];
+}
+
+-(void)onEnterTransitionDidFinish{
+    [self loadPuzzleImages];
     [self initStartGameButtons];
     [self initNavigationButtons];
     [self initPhotoButton];
-    [self loadPuzzleImages];
 }
-
+-(void) onExit{
+}
 -(void)dealloc {
-    [self removeAllChildrenWithCleanup:TRUE];
     [super dealloc];
 }
 

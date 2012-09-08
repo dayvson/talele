@@ -25,7 +25,6 @@
     [[GameManager sharedGameManager] runSceneWithID:kPuzzleSelection];
 }
 
-
 -(void) initBackground {
 	CCSprite *background;
     background = [CCSprite spriteWithFile:@"background-gameplay.png"];
@@ -33,39 +32,33 @@
 	[self addChild: background];    
 }
 
--(void) resetScreen {
-    [self removeAllPieces];
-    [self removeAllChildrenWithCleanup:TRUE];
-    if(pieces){
-        [pieces release];
-    }
-}
-
 -(void)onExit{
     [[CCSpriteFrameCache sharedSpriteFrameCache] removeSpriteFramesFromFile:@"pieces_4x3.plist"];
     [[CCTextureCache sharedTextureCache] removeTextureForKey:@"pieces_4x3.png"];
     [[CCSpriteFrameCache sharedSpriteFrameCache] removeSpriteFramesFromFile:@"pieces_4x3_bevel.plist"];
     [[CCTextureCache sharedTextureCache] removeTextureForKey:@"pieces_4x3_bevel.png"];
+    [self removeAllChildrenWithCleanup:YES];
 }
 
 -(void) onEnter
 {
 	[super onEnter];
+    [self resetScreen];
     CCDirector * director_ = [CCDirector sharedDirector];
     screenSize = [director_ winSize];
-    [self resetScreen];
+    zIndex = 400;
+    [[director_ touchDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
+    [self initBackground];
+    [self loadPuzzleImage:[GameManager sharedGameManager].currentPuzzle];
+    [self loadLevelSprites:@"4x3"];
+}
+-(void)onEnterTransitionDidFinish{
     int cols = 4;
     int rows = 3;
-    zIndex = 400;
     pieces = [[NSMutableArray alloc] initWithCapacity:cols*rows];
-    [[director_ touchDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
-    [self loadLevelSprites:@"4x3"];
-    [self initBackground];
-    [self initMenu];
-    [self loadPuzzleImage:[GameManager sharedGameManager].currentPuzzle];
     [self loadPieces:@"levelEasy" withCols:cols andRols:rows];
+    [self initMenu];
 }
-
 -(void)dealloc {
     [super dealloc];    
 }

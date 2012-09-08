@@ -22,7 +22,7 @@
     return [renderer getUIImage];
 }
 
-+(void)saveImageFromLibraryIntoPuzzlePlist:(UIImage*)image{
++(NSString*)saveImageFromLibraryIntoPuzzlePlist:(UIImage*)image{
     NSMutableDictionary* dict = [GameHelper getPlist:@"puzzles"];
     NSMutableArray *arrayNames = [[NSMutableArray alloc]
                                   initWithArray:[dict objectForKey:@"puzzles"]];
@@ -30,12 +30,13 @@
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *imagePath = [documentsDirectory stringByAppendingPathComponent:newPuzzleName];
-    NSData *webData = UIImageJPEGRepresentation(image, 0.8);
+    NSData *webData = UIImagePNGRepresentation(image);
     [webData writeToFile:imagePath atomically:YES];
     NSString *plistpath = [documentsDirectory stringByAppendingPathComponent:@"puzzles.plist"];
     [arrayNames addObject:imagePath];
     [dict setValue:arrayNames forKey:@"puzzles"];
     [dict writeToFile:plistpath atomically:YES];
+    return imagePath;
 
 }
 + (UIImage*)imageWithImage:(UIImage*)image scaledToSize:(CGSize)newSize {

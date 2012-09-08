@@ -23,4 +23,5 @@
 -(float) getDeltaX:(int)hAlign withIndex:(int)index andPieceWidth:(float)pieceWidth andCols:(int)cols andRows:(int)rows;
 -(float) getDeltaY:(int)vAlign withIndex:(int)index andPieceHeight:(float)pieceHeight andCols:(int)cols andRows:(int)rows;
 -(void) loadPuzzleImage:(NSString*)name;
+-(void) resetScreen;
 @end
