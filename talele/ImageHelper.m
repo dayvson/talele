@@ -26,11 +26,11 @@
     NSMutableDictionary* dict = [GameHelper getPlist:@"puzzles"];
     NSMutableArray *arrayNames = [[NSMutableArray alloc]
                                   initWithArray:[dict objectForKey:@"puzzles"]];
-    NSString* newPuzzleName = [NSString stringWithFormat:@"newPuzzle_%d", arrayNames.count];
+    NSString* newPuzzleName = [NSString stringWithFormat:@"newPuzzle_%@", [GameHelper generateUUID]];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *imagePath = [documentsDirectory stringByAppendingPathComponent:newPuzzleName];
-    NSData *webData = UIImagePNGRepresentation(image);
+    NSData *webData = UIImageJPEGRepresentation(image, 0.8);
     [webData writeToFile:imagePath atomically:YES];
     NSString *plistpath = [documentsDirectory stringByAppendingPathComponent:@"puzzles.plist"];
     [arrayNames addObject:imagePath];
