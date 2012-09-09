@@ -15,6 +15,8 @@
 		97462EE215EDBC46003AEF98 /* pieces_6x4-ipadhd.png in Resources */ = {isa = PBXBuildFile; fileRef = 97462EDB15EDBC46003AEF98 /* pieces_6x4-ipadhd.png */; };
 		97462EEC15EDC144003AEF98 /* buttons-ipadhd.plist in Resources */ = {isa = PBXBuildFile; fileRef = 97462EE915EDC144003AEF98 /* buttons-ipadhd.plist */; };
 		97462EED15EDC144003AEF98 /* buttons-ipadhd.png in Resources */ = {isa = PBXBuildFile; fileRef = 97462EEA15EDC144003AEF98 /* buttons-ipadhd.png */; };
+		974F2C2815FC723B001D3399 /* empty-ipadhd.png in Resources */ = {isa = PBXBuildFile; fileRef = 974F2C2615FC723B001D3399 /* empty-ipadhd.png */; };
+		974F2C2915FC723B001D3399 /* empty.png in Resources */ = {isa = PBXBuildFile; fileRef = 974F2C2715FC723B001D3399 /* empty.png */; };
 		977950B115F4BCCA00E8AB2E /* pieces_4x3_bevel-ipadhd.plist in Resources */ = {isa = PBXBuildFile; fileRef = 977950AD15F4BCCA00E8AB2E /* pieces_4x3_bevel-ipadhd.plist */; };
 		977950B215F4BCCA00E8AB2E /* pieces_4x3_bevel-ipadhd.png in Resources */ = {isa = PBXBuildFile; fileRef = 977950AE15F4BCCA00E8AB2E /* pieces_4x3_bevel-ipadhd.png */; };
 		977950B315F4BCCA00E8AB2E /* pieces_4x3_bevel.plist in Resources */ = {isa = PBXBuildFile; fileRef = 977950AF15F4BCCA00E8AB2E /* pieces_4x3_bevel.plist */; };
@@ -189,6 +191,8 @@
 		97462EDB15EDBC46003AEF98 /* pieces_6x4-ipadhd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "pieces_6x4-ipadhd.png"; path = "Resources/pieces_6x4-ipadhd.png"; sourceTree = "<group>"; };
 		97462EE915EDC144003AEF98 /* buttons-ipadhd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "buttons-ipadhd.plist"; path = "Resources/buttons-ipadhd.plist"; sourceTree = "<group>"; };
 		97462EEA15EDC144003AEF98 /* buttons-ipadhd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "buttons-ipadhd.png"; path = "Resources/buttons-ipadhd.png"; sourceTree = "<group>"; };
+		974F2C2615FC723B001D3399 /* empty-ipadhd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "empty-ipadhd.png"; path = "Resources/empty-ipadhd.png"; sourceTree = "<group>"; };
+		974F2C2715FC723B001D3399 /* empty.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = empty.png; path = Resources/empty.png; sourceTree = "<group>"; };
 		977950AD15F4BCCA00E8AB2E /* pieces_4x3_bevel-ipadhd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "pieces_4x3_bevel-ipadhd.plist"; path = "Resources/pieces_4x3_bevel-ipadhd.plist"; sourceTree = "<group>"; };
 		977950AE15F4BCCA00E8AB2E /* pieces_4x3_bevel-ipadhd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "pieces_4x3_bevel-ipadhd.png"; path = "Resources/pieces_4x3_bevel-ipadhd.png"; sourceTree = "<group>"; };
 		977950AF15F4BCCA00E8AB2E /* pieces_4x3_bevel.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = pieces_4x3_bevel.plist; path = Resources/pieces_4x3_bevel.plist; sourceTree = "<group>"; };
@@ -582,6 +586,8 @@
 		97F9A96115E1D3D900C17D90 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				974F2C2615FC723B001D3399 /* empty-ipadhd.png */,
+				974F2C2715FC723B001D3399 /* empty.png */,
 				977CCB7E15F9B7BE00FF758A /* congrats-ipadhd.png */,
 				977CCB7F15F9B7BE00FF758A /* congrats.png */,
 				977CCB7915F9B4FC00FF758A /* Icon-144.png */,
@@ -1164,6 +1170,8 @@
 				977CCB7A15F9B4FC00FF758A /* Icon-144.png in Resources */,
 				977CCB8015F9B7BE00FF758A /* congrats-ipadhd.png in Resources */,
 				977CCB8115F9B7BE00FF758A /* congrats.png in Resources */,
+				974F2C2815FC723B001D3399 /* empty-ipadhd.png in Resources */,
+				974F2C2915FC723B001D3399 /* empty.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1346,7 +1354,7 @@
 				GCC_VERSION = "";
 				HEADER_SEARCH_PATHS = "\"talele/libs/kazmath/include\"";
 				INFOPLIST_FILE = talele/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-ObjC",
@@ -1370,7 +1378,7 @@
 				GCC_VERSION = "";
 				HEADER_SEARCH_PATHS = "\"talele/libs/kazmath/include\"";
 				INFOPLIST_FILE = talele/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-ObjC",

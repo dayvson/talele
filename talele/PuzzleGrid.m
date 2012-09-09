@@ -40,7 +40,6 @@
         director = [CCDirector sharedDirector];
         screenSize = [director winSize];
 		[self adjustItems];
-
 	}
 	return self;
 }
@@ -78,21 +77,6 @@
 -(void) registerWithTouchDispatcher
 {
     [[[CCDirector sharedDirector] touchDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
-}
-
--(BOOL) ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event
-{
-	touchStarted = [director convertToGL:[touch locationInView:[touch view]]];
-	if (state != kCCMenuStateWaiting){
-		return NO;
-	}
-	selectedItem = [self getItemInTouch:touch];
-	[selectedItem selected];
-	if (!swipeInMenu || (swipeInMenu && selectedItem)){
-		state = kCCMenuStateTrackingTouch;
-		return YES;
-	}
-	return NO;
 }
 
 - (CGPoint) getCurrentPagePosition
@@ -144,6 +128,21 @@
 
 - (void)setDelegate:(id)aDelegate {
     delegate = aDelegate;
+}
+
+-(BOOL) ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event
+{
+	touchStarted = [director convertToGL:[touch locationInView:[touch view]]];
+	if (state != kCCMenuStateWaiting){
+		return NO;
+	}
+	selectedItem = [self getItemInTouch:touch];
+	[selectedItem selected];
+	if (!swipeInMenu || (swipeInMenu && selectedItem)){
+		state = kCCMenuStateTrackingTouch;
+		return YES;
+	}
+	return NO;
 }
 
 -(void) ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event

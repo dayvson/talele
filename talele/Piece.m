@@ -36,7 +36,6 @@
         width = newPiece.size.width;
         height = newPiece.size.height;
         fixed = NO;
-        
         [self addChild:pieceSprite z:1 tag:10];
     }
     return self;
@@ -48,12 +47,10 @@
                                             withOffset:offset];
     CCSprite *pieceFinal = [[CCSprite alloc] initWithCGImage:newImageMask.CGImage 
                                                          key:[NSString stringWithFormat:@"SPRITE_MASK_%@", name]];
-    
     pieceFinal.anchorPoint = ccp(0,1);
     [pieceFinal setScale:mainPuzzle.scale];
     [self removeChildByTag:10 cleanup:YES];
     [self addChild:pieceFinal z:1 tag:10];
-
     [pieceFinal release];
 }
 

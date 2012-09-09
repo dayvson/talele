@@ -8,7 +8,7 @@
 #import "MainScreenLayer.h"
 #import "GameConfig.h"
 #import "GameManager.h"
-
+#import "GameHelper.h"
 @implementation MainScreenLayer
 
 +(CCScene *) scene
@@ -22,7 +22,6 @@
 -(void) loadPlistLevel {
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"buttons.plist"];
     sceneSpriteBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"buttons.png"];
-    
 }
 
 -(void) onClickPlay {
@@ -30,30 +29,15 @@
 }
 
 -(void) initMenu {
-    [CCSpriteFrameCache sharedSpriteFrameCache ];
-    CCSprite *playSprite = [[CCSprite alloc] initWithSpriteFrame:[[CCSpriteFrameCache
-                                                                   sharedSpriteFrameCache]
-                                                                  spriteFrameByName:@"btn-comecar.png"]];
-    [playSprite.texture setAliasTexParameters];
-    CCMenuItemSprite *playButton = [CCMenuItemSprite
-                                    itemWithNormalSprite:playSprite
-                                    selectedSprite:nil
-                                    target:self
-                                    selector:@selector(onClickPlay)];
+    CCMenuItemSprite *playButton = [GameHelper createMenuItemBySprite:@"btn-comecar.png" target:self selector:@selector(onClickPlay)];
     CCMenu *mainMenu = [CCMenu menuWithItems:playButton,nil];
-    [mainMenu alignItemsVerticallyWithPadding:screenSize.height * 0.059f];
-    [mainMenu setPosition: ccp(screenSize.width * 2.0f, screenSize.height / 2.0f)];
-    id moveAction = [CCMoveTo actionWithDuration:0.5f position:ccp(350.0f, screenSize.height/2.0f)];
-    id moveEffect = [CCEaseIn actionWithAction:moveAction rate:1.0f];
-    id sequenceAction = [CCSequence actions:moveEffect,nil];
-    [mainMenu runAction:sequenceAction];
+    [mainMenu setPosition: ccp(350.0f, screenSize.height/2.0f)];
     mainMenu.anchorPoint = ccp(0,0);
     
 /*    UIAlertView* reviewAlert = [[UIAlertView alloc] initWithTitle:@"Avalie o Talele" message:@"Se você e/ou seu filho(a) gostaram do Talelê quebra-cabeça por favor dê 5(cinco) estrelas e escreva um comentário. O desenvolvedor agradece" delegate:self cancelButtonTitle:@"Avaliar depois" otherButtonTitles:@"Já avaliei", nil ];
     [reviewAlert show];
 */
     [self addChild:mainMenu];
-    
 }
 
 -(void) onExit{

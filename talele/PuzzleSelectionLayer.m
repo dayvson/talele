@@ -47,18 +47,10 @@
     [self showPhotoLibrary];
 }
 
--(CCMenuItemSprite *) createItemBySprite:(NSString *)name andCallback:(SEL)callback{
-    CCSprite *itemSprite = [[CCSprite alloc] initWithSpriteFrame:[[CCSpriteFrameCache
-                                                                         sharedSpriteFrameCache]
-                                                                        spriteFrameByName:name]];
-    CCMenuItemSprite *itemMenu = [CCMenuItemSprite itemWithNormalSprite:itemSprite
-                                                         selectedSprite:nil target:self selector:callback];
-    return itemMenu;
-}
 -(void) initStartGameButtons {
 
-    easyButton = [self createItemBySprite:@"btn-facil.png" andCallback:@selector(onClickEasy)];
-    hardButton = [self createItemBySprite:@"btn-dificil.png" andCallback:@selector(onClickHard)];
+    easyButton = [GameHelper createMenuItemBySprite:@"btn-facil.png" target:self selector:@selector(onClickEasy)];
+    hardButton = [GameHelper createMenuItemBySprite:@"btn-dificil.png" target:self selector:@selector(onClickHard)];
     CCMenu *levelMenu = [CCMenu menuWithItems:easyButton,hardButton, nil];
     [levelMenu alignItemsHorizontallyWithPadding:screenSize.height * 0.059f];
     [levelMenu setPosition: ccp(screenSize.height/2.0f + 140,100)];
@@ -67,8 +59,8 @@
 }
 
 -(void) initNavigationButtons {
-    prevButton = [self createItemBySprite:@"btn-voltar.png" andCallback:@selector(onClickPrevPuzzle)];
-    nextButton = [self createItemBySprite:@"btn-proximo.png" andCallback:@selector(onClickNextPuzzle)];
+    prevButton = [GameHelper createMenuItemBySprite:@"btn-voltar.png" target:self selector:@selector(onClickPrevPuzzle)];
+    nextButton = [GameHelper createMenuItemBySprite:@"btn-proximo.png" target:self selector:@selector(onClickNextPuzzle)];
     CCMenu *navArrowMenu = [CCMenu menuWithItems:prevButton,nextButton, nil];
     [navArrowMenu alignItemsHorizontallyWithPadding:680];
     [navArrowMenu setPosition: ccp(510,screenSize.height/2.0f )];
@@ -76,7 +68,8 @@
 }
 
 -(void) initPhotoButton {
-    CCMenuItemSprite *pickbutton = [self createItemBySprite:@"btn-foto.png" andCallback:@selector(onClickPhotoSelection)];
+    CCMenuItemSprite *pickbutton = [GameHelper createMenuItemBySprite:@"btn-foto.png"
+                                                               target:self selector:@selector(onClickPhotoSelection)];
     CCMenu *photoMenu = [CCMenu menuWithItems:pickbutton, nil];
     photoMenu.anchorPoint = ccp(0,0);
     photoMenu.position = ccp(screenSize.width - 150 , screenSize.height - 100 );
@@ -122,14 +115,13 @@
 }
 
 -(void)showEmptyBox{
-    CCSprite *itemSprite = [[CCSprite alloc] initWithFile:@"photobg.png"];
+    CCSprite *itemSprite = [[CCSprite alloc] initWithFile:@"empty.png"];
     CCMenuItemSprite *itemMenu = [CCMenuItemSprite itemWithNormalSprite:itemSprite selectedSprite:nil
                                                                  target:self selector:@selector(onClickPhotoSelection)];
     CCMenu *emptyMenu = [CCMenu menuWithItems:itemMenu, nil];
     emptyMenu.anchorPoint = ccp(0,0);
     emptyMenu.position = ccp(screenSize.width/2 , screenSize.height/2 );
-    [self addChild:emptyMenu z:40 tag:40];    
-    [self checkPuzzleGridForEnableButtons];
+    [self addChild:emptyMenu z:40 tag:40];
 }
 
 
@@ -173,19 +165,20 @@
                                   initWithArray:[puzzlesInfo objectForKey:@"puzzles"]];
     NSMutableArray *items = [[NSMutableArray alloc] initWithCapacity:arrayNames.count];
     int totalLoadEagleMode = [GameManager sharedGameManager].currentPage+1;
-    for (int i=0; i<arrayNames.count; i++) {
-        
+    int c = 0;
+    for (int i=arrayNames.count; i--; c++) {
         [items addObject:[self createPuzzleSprite:[arrayNames objectAtIndex:i]
-                                     withLazyLoad:(i > totalLoadEagleMode)]];
+                                     withLazyLoad:(c > totalLoadEagleMode)]];
     }
     puzzleGrid = [[PuzzleGrid alloc] initWithArray:items
                                            position:ccp(screenSize.width/2, screenSize.height/2)
                                             padding:CGPointZero];
     [puzzleGrid setSwipeInMenu:YES];
     [puzzleGrid setDelegate:self];
-    [puzzleGrid gotoPage:[GameManager sharedGameManager].currentPage];
     if(puzzleGrid.totalPages == 0){
         [self showEmptyBox];
+    }else{
+        [puzzleGrid gotoPage:[GameManager sharedGameManager].currentPage];
     }
     [self addChild:puzzleGrid z:2 tag:2];
 }
@@ -216,8 +209,7 @@
     _popover.popoverContentSize = CGSizeMake(320, screenSize.width);
 }
 
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
-{
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
 	[_picker dismissModalViewControllerAnimated:NO];
 	[_picker.view removeFromSuperview];
 	[_picker release];
@@ -228,8 +220,7 @@
 	[[CCDirector sharedDirector] startAnimation];
 }
 
-- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
-{
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController{
     [self imagePickerControllerDidCancel:nil];
 }
 
@@ -247,8 +238,8 @@
     [picker release];
     [_popover dismissPopoverAnimated:YES];
 	[[CCDirector sharedDirector] startAnimation];
-    NSString* newPuzzleName = [ImageHelper saveImageFromLibraryIntoPuzzlePlist:originalImage];
-    [self addNewPuzzleToGrid:newPuzzleName];
+    [ImageHelper saveImageFromLibraryIntoPuzzlePlist:originalImage];
+    [self loadPuzzleImages];
 }
 
 -(void) onEnter{
@@ -264,9 +255,14 @@
     [self initStartGameButtons];
     [self initNavigationButtons];
     [self initPhotoButton];
+    [self checkPuzzleGridForEnableButtons];
 }
+
 -(void) onExit{
+    [self removeAllChildrenWithCleanup:YES];
+    [self removeFromParentAndCleanup:YES];
 }
+
 -(void)dealloc {
     [super dealloc];
 }
