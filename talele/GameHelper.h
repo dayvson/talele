@@ -14,4 +14,6 @@
 + (NSMutableDictionary *) getPlist:(NSString*)plist;
 + (float)randomFloatBetween:(float)smallNumber and:(float)bigNumber;
 + (BOOL) isRetinaIpad;
++ (NSString *)generateUUID;
++ (CCMenuItemSprite *) createMenuItemBySprite:(NSString *)name target:(id)target selector:(SEL)selector;
 @end

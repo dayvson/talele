@@ -28,4 +28,24 @@
 + (BOOL) isRetinaIpad {
     return CC_CONTENT_SCALE_FACTOR() == 2;
 }
+
++ (NSString *)generateUUID {
+    CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
+    NSString *uuidStr = (NSString *)CFUUIDCreateString(kCFAllocatorDefault, uuid);
+    CFRelease(uuid);
+    return [uuidStr autorelease];
+}
++(CCMenuItemSprite *) createMenuItemBySprite:(NSString *)name target:(id)target selector:(SEL)selector{
+    CCSprite *itemSprite = [[CCSprite alloc] initWithSpriteFrame:[[CCSpriteFrameCache
+                                                                   sharedSpriteFrameCache]
+                                                                  spriteFrameByName:name]];
+    CCSprite *itemSpriteSel = [[CCSprite alloc] initWithSpriteFrame:[[CCSpriteFrameCache
+                                                                      sharedSpriteFrameCache]
+                                                                     spriteFrameByName:name]];
+    [itemSpriteSel setScale:1.2];
+    CCMenuItemSprite *itemMenu = [CCMenuItemSprite itemWithNormalSprite:itemSprite
+                                                         selectedSprite:itemSpriteSel target:target selector:selector];
+    return itemMenu;
+}
+
 @end
