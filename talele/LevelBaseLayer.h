@@ -14,7 +14,7 @@
 }
 -(BOOL) isPieceInRightPlace:(Piece*)piece;
 -(BOOL) isPuzzleComplete;
--(void) selectPieceForTouch:(CGPoint)touchLocation;
+-(Piece*) selectPieceForTouch:(CGPoint)touchLocation;
 -(void) movePieceToFinalPosition:(Piece*)piece;
 -(void) loadLevelSprites:(NSString*)dimension;
 -(void) initMenu;

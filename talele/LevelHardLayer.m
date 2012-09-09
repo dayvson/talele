@@ -47,17 +47,25 @@
     CCDirector * director_ = [CCDirector sharedDirector];
     [director_ purgeCachedData];
     screenSize = [director_ winSize];
-    [[director_ touchDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
+    [[director_ touchDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:NO];
+    self.isTouchEnabled = YES;
     zIndex = 400;
-    [self loadLevelSprites:@"6x4"];
     [self initBackground];
-    [self loadPuzzleImage:[GameManager sharedGameManager].currentPuzzle];
+    UIActivityIndicatorView *myIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    myIndicator.frame = CGRectMake(139.0f-18.0f, 80.0f, 37.0f, 37.0f);
+	myIndicator.center = CGPointMake(160, 240);
+	myIndicator.hidesWhenStopped = NO;
+    [myIndicator setUserInteractionEnabled:NO];
+    [myIndicator startAnimating];
+    [[director_ view] addSubview:myIndicator];
 
 }
 -(void) onEnterTransitionDidFinish{
     int cols = 6;
     int rows = 4;
     pieces = [[NSMutableArray alloc] initWithCapacity:cols*rows];
+    [self loadPuzzleImage:[GameManager sharedGameManager].currentPuzzle];
+    [self loadLevelSprites:@"6x4"];
     [self loadPieces:@"levelHard" withCols:cols andRols:rows];
     [self initMenu];
     
