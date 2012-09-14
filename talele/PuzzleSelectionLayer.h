@@ -12,7 +12,6 @@
 #import "PuzzleGrid.h"
 @interface PuzzleSelectionLayer : CCLayer <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverControllerDelegate>{
     CGSize screenSize;    
-    CCSpriteFrameCache* sceneSpriteBatchNode;
     PuzzleGrid* puzzleGrid;
     UIImagePickerController *_picker;
     UIPopoverController *_popover;
@@ -22,6 +21,7 @@
     CCMenuItemSprite *nextButton;
     CCMenuItemSprite *easyButton;
     CCMenuItemSprite *hardButton;
+    CCMenuItemSprite *normalButton;
 }
 
 +(CCScene *) scene;

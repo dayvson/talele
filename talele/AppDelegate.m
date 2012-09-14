@@ -60,7 +60,7 @@
 
 	[CCTexture2D PVRImagesHavePremultipliedAlpha:YES];
     [[GameManager sharedGameManager] setupAudioEngine];
-	[[GameManager sharedGameManager] runSceneWithID: kMainMenu];
+	[[GameManager sharedGameManager] runSceneWithID:kHomeScreen ];
 
 
 	// Create a Navigation Controller with the Director

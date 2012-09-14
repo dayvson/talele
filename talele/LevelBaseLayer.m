@@ -24,7 +24,7 @@
 - (BOOL) isPieceInRightPlace:(Piece*)piece {
     BOOL result = NO;
     if(piece && piece.fixed == NO){
-        int radius = 60;
+        int radius = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 50 : 25;
         if(piece.position.x < piece.xTarget + radius &&
            piece.position.x > piece.xTarget - radius &&
            piece.position.y < piece.yTarget + radius &&
@@ -48,9 +48,18 @@
     puzzleImage = [[CCSprite alloc] initWithFile:name];
     puzzleImage.anchorPoint = ccp(0,0);
     puzzleImage.opacity = 40;
-	puzzleImage.position = ccp(screenSize.width - puzzleImage.contentSize.width - 28,
-                               screenSize.height - puzzleImage.contentSize.height - 20);
+    CCSprite* cloud = [CCSprite spriteWithFile:@"cloud-puzzle-support.png"];
+    cloud.anchorPoint = ccp(0,0);
+    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad){
+        puzzleImage.position = ccp(screenSize.width - puzzleImage.contentSize.width - 41,
+                               screenSize.height - puzzleImage.contentSize.height - 39);
+        cloud.position = ccp(puzzleImage.position.x-21, puzzleImage.position.y-50);
+    }else{
+        puzzleImage.position = ccp(screenSize.width - puzzleImage.contentSize.width - 20,
+                                   screenSize.height - puzzleImage.contentSize.height - 15);
+    }
 	[self addChild: puzzleImage z:1 tag:100];
+    [self addChild: cloud  z:100000 tag:200];
     [puzzleImage release];
 }
 
@@ -109,13 +118,16 @@
 }
 
 -(void) initMenu {
-    CCMenuItemSprite *backButton =[GameHelper createMenuItemBySprite:@"btn-voltar-mini.png" target:self selector:@selector(onClickBack)];
+    CCMenuItemSprite *backButton =[GameHelper createMenuItemBySprite:@"btn-voltar-mini.png"
+                                                              target:self selector:@selector(onClickBack)];
     CCMenu *backMenu = [CCMenu menuWithItems:backButton,nil];
-    [backMenu setPosition:ccp(40, screenSize.height - 40.0f)];
+    [backMenu setPosition:ccp(backButton.contentSize.width-15,
+                              screenSize.height - (backButton.contentSize.height-20))];
     [self addChild:backMenu z:7 tag:700];
 }
 
 -(void) onClickNewGame {
+    [[GameManager sharedGameManager] playSoundEffect:@"NovoJogo.mp3"];
     [[GameManager sharedGameManager] runSceneWithID:kPuzzleSelection];
 }
 
@@ -135,15 +147,22 @@
     [[self getChildByTag:100] runAction:action];
     CCSprite *congrats = [[CCSprite alloc] initWithFile:@"congrats.png"];
     [congrats setScale:0.1f];
-    [congrats setPosition:ccp(100, 50)];
-    [congrats runAction:[CCSequence actions:
-    [CCScaleTo actionWithDuration:0.5f scale:1.3f],
-     [CCScaleTo actionWithDuration:0.5f scale:1.0f], nil]];
-    congrats.anchorPoint = ccp(0,0);
+
     CCMenuItemSprite *newGameButton = [GameHelper createMenuItemBySprite:@"btn-novo-jogo.png" target:self selector:@selector(onClickNewGame)];
     CCMenu *mainMenu = [CCMenu menuWithItems:newGameButton,nil];
-    [[GameManager sharedGameManager] playSoundEffect:@"gamecomplete.wav"];
-    [mainMenu setPosition:ccp(150, screenSize.height - 240.0f)];
+    [[GameManager sharedGameManager] playSoundEffect:@"ParabensVamosJogarDeNovo.mp3"];
+    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad){
+        [mainMenu setPosition:ccp(150, screenSize.height - 240.0f)];
+        [congrats setPosition:ccp(100, 50)];
+    }else{
+        [mainMenu setPosition:ccp(70, 200)];
+        [congrats setPosition:ccp(60, 20)];
+    }
+    [congrats runAction:[CCSequence actions:
+                         [CCScaleTo actionWithDuration:0.5f scale:1.3f],
+                         [CCScaleTo actionWithDuration:0.5f scale:1.0f], nil]];
+    congrats.anchorPoint = ccp(0,0);
+
     [self addChild:congrats z:5000 tag:4];
     [self addChild:mainMenu z:4 tag:5];
 }
@@ -155,7 +174,7 @@
     float deltaY = 0;
     int totalPieces = cols*rows;
     int i = 0;
-    float randX, randY, wlimit, hlimit;
+    float randX, randY, wlimit, hlimit, xlimit, ylimit;
     NSDictionary* levelInfo = [GameHelper getPlist:level];
     UIImage* tempPuzzle = [ImageHelper convertSpriteToImage:
                            [CCSprite spriteWithTexture:[puzzleImage texture]]];
@@ -176,11 +195,13 @@
         [item addBevel:sName];
         wlimit = screenSize.width-item.width-30;
         hlimit = screenSize.height-item.height-50;
+        ylimit = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 150 : 60;
+        xlimit = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 90 : 40;
         if (c % 2 == 0){
             randX = [GameHelper randomFloatBetween:item.width and:wlimit];
-            randY = [GameHelper randomFloatBetween:item.height and: 150];
+            randY = [GameHelper randomFloatBetween:item.height and: ylimit];
         }else{
-            randX = [GameHelper randomFloatBetween:10 and:90];
+            randX = [GameHelper randomFloatBetween:10 and:xlimit];
             randY = [GameHelper randomFloatBetween:item.height and: hlimit];
         }
         [item setPosition:ccp(item.xTarget, item.yTarget)];
@@ -198,7 +219,6 @@
         }
     }
     return nil;
-    
 }
 
 - (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {

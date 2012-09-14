@@ -27,16 +27,16 @@
 
 -(void) initBackground {
 	CCSprite *background;
-    background = [CCSprite spriteWithFile:@"background-gameplay.png"];
+    background = [CCSprite spriteWithFile:@"background-gameplay-hard.png"];
 	background.position = ccp(screenSize.width/2, screenSize.height/2);
 	[self addChild: background];    
 }
 
 -(void)onExit{
-    [[CCSpriteFrameCache sharedSpriteFrameCache] removeSpriteFramesFromFile:@"pieces_6x4.plist"];
-    [[CCTextureCache sharedTextureCache] removeTextureForKey:@"pieces_6x4.png"];
-    [[CCSpriteFrameCache sharedSpriteFrameCache] removeSpriteFramesFromFile:@"pieces_6x4_bevel.plist"];
-    [[CCTextureCache sharedTextureCache] removeTextureForKey:@"pieces_6x4_bevel.png"];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] removeSpriteFramesFromFile:@"pieces_8x6.plist"];
+    [[CCTextureCache sharedTextureCache] removeTextureForKey:@"pieces_8x6.png"];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] removeSpriteFramesFromFile:@"pieces_8x6_bevel.plist"];
+    [[CCTextureCache sharedTextureCache] removeTextureForKey:@"pieces_8x6_bevel.png"];
     [self removeAllChildrenWithCleanup:TRUE];    
 }
 
@@ -49,26 +49,17 @@
     screenSize = [director_ winSize];
     [[director_ touchDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:NO];
     self.isTouchEnabled = YES;
+    [self loadPuzzleImage:[GameManager sharedGameManager].currentPuzzle];
+    [self loadLevelSprites:@"8x6"];
     zIndex = 400;
     [self initBackground];
-    UIActivityIndicatorView *myIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    myIndicator.frame = CGRectMake(139.0f-18.0f, 80.0f, 37.0f, 37.0f);
-	myIndicator.center = CGPointMake(160, 240);
-	myIndicator.hidesWhenStopped = NO;
-    [myIndicator setUserInteractionEnabled:NO];
-    [myIndicator startAnimating];
-    [[director_ view] addSubview:myIndicator];
-
 }
 -(void) onEnterTransitionDidFinish{
-    int cols = 6;
-    int rows = 4;
+    int cols = 8;
+    int rows = 6;
     pieces = [[NSMutableArray alloc] initWithCapacity:cols*rows];
-    [self loadPuzzleImage:[GameManager sharedGameManager].currentPuzzle];
-    [self loadLevelSprites:@"6x4"];
     [self loadPieces:@"levelHard" withCols:cols andRols:rows];
     [self initMenu];
-    
 }
 -(void)dealloc {
     [super dealloc];

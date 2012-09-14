@@ -7,10 +7,11 @@
 
 typedef enum {
     kNoSceneUninitialized=0,
-    kMainMenu=1,
+    kHomeScreen=1,
     kPuzzleSelection=2,
     kLevelEasy=3,
-    kLevelHard=4
+    kLevelNormal=4,
+    kLevelHard=5
 } SceneTypes;
 
 typedef enum {

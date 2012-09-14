@@ -37,6 +37,6 @@
 
 -(void) makeTransition:(ccTime)dt
 {
-    [[GameManager sharedGameManager] runSceneWithID:kMainMenu];
+    [[GameManager sharedGameManager] runSceneWithID:kHomeScreen];
 }
 @end

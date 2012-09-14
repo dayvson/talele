@@ -16,4 +16,5 @@
 + (BOOL) isRetinaIpad;
 + (NSString *)generateUUID;
 + (CCMenuItemSprite *) createMenuItemBySprite:(NSString *)name target:(id)target selector:(SEL)selector;
++ (CCParticleFlower*) getParticles;
 @end

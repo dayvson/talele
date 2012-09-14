@@ -6,12 +6,12 @@
  */
 
 #import "GameManager.h"
-#import "MainScreenLayer.h"
 #import "PuzzleSelectionLayer.h"
 #import "LevelEasyLayer.h"
 #import "LevelHardLayer.h"
+#import "LevelNormalLayer.h"
 #import "GameConstants.h"
-
+#import "HomeScreen.h"
 @implementation GameManager
 
 static GameManager* _sharedGameManager = nil;
@@ -61,9 +61,8 @@ static GameManager* _sharedGameManager = nil;
     id sceneToRun = nil;
 
     switch (sceneID) {
-            
-        case kMainMenu: 
-            sceneToRun = [CCTransitionFade transitionWithDuration:1.0 scene:[MainScreenLayer scene] ];
+        case kHomeScreen:
+            sceneToRun = [CCTransitionFade transitionWithDuration:1.0 scene:[HomeScreen scene] ];
             break;
         case kPuzzleSelection:
             sceneToRun = [CCTransitionSlideInL transitionWithDuration:0.5 scene:[PuzzleSelectionLayer scene]];
@@ -71,7 +70,10 @@ static GameManager* _sharedGameManager = nil;
         case kLevelEasy:
             sceneToRun = [CCTransitionSlideInR transitionWithDuration:0.5 scene:[LevelEasyLayer scene]];
             break;
-        case kLevelHard: 
+        case kLevelNormal:
+            sceneToRun = [CCTransitionSlideInR transitionWithDuration:0.5 scene:[LevelNormalLayer scene]];
+            break;
+        case kLevelHard:
             sceneToRun = [CCTransitionSlideInR transitionWithDuration:0.5 scene:[LevelHardLayer scene]];
             break;
         default:
