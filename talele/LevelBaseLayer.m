@@ -153,7 +153,12 @@
                                                               target:self selector:@selector(onClickBack)];
     CCMenu *backMenu = [CCMenu menuWithItems:backButton,nil];
     [backMenu setPosition:ccp(backButton.contentSize.width-15,
-                              screenSize.height - (backButton.contentSize.height-20))];
+                              screenSize.height - (backButton.contentSize.height-15))];
+    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone){
+    [backMenu setPosition:ccp(backButton.contentSize.width-15,
+                                  screenSize.height - (backButton.contentSize.height+20))];
+        
+    }
     [self addChild:backMenu z:7 tag:700];
 }
 
@@ -178,8 +183,13 @@
     [[self getChildByTag:100] runAction:action];
     CCSprite *congrats = [[CCSprite alloc] initWithFile:@"congrats.png"];
     [congrats setScale:0.1f];
+    NSArray* labelsComplete = [[NSArray alloc] initWithObjects:@"NEW GAME",@"NOVO JOGO", @"NUEVO JUEGO", nil ];
+    CCLabelBMFont* newLabel = [GameHelper getLabelFontByLanguage:labelsComplete
+                                                     andLanguage:[GameManager sharedGameManager].language];
 
-    CCMenuItemSprite *newGameButton = [GameHelper createMenuItemBySprite:@"btn-novo-jogo.png" target:self selector:@selector(onClickNewGame)];
+    CCMenuItemSprite *newGameButton = [GameHelper createMenuItemBySprite:@"btn-normal.png" target:self selector:@selector(onClickNewGame)];
+    newLabel.position = ccp(newGameButton.contentSize.width/2, newGameButton.contentSize.height/2);
+    [newGameButton addChild:newLabel];
     CCMenu *mainMenu = [CCMenu menuWithItems:newGameButton,nil];
     [AudioHelper playYouWin];
     [self createExplosionAtPosition:puzzleImage.position];

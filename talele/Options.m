@@ -55,9 +55,12 @@
     [pt setColor:ccBLUE];
     [es setColor:ccBLUE];
     langMenu.position = ccp(400,350);
+    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone){
+        langMenu.position = ccp(240, 170.0f);
+    }
     [langMenu alignItemsVerticallyWithPadding:10.0f];
-    pt.position = ccp(100, pt.position.y);
-
+    pt.position = ccp(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone? 30:100, pt.position.y);
+    
     NSArray *buttons = [[NSArray alloc] initWithObjects:eng,pt,es,nil ];
     [self selectLanguage:[buttons objectAtIndex:[GameManager sharedGameManager].language]];
     [self addChild:langMenu];
@@ -84,6 +87,9 @@
     [btBack addChild:btLabel];
     CCMenu* menuBack = [CCMenu menuWithItems: btBack, nil];
     menuBack.position = ccp(770.0f, 200.0f);
+    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone){
+        menuBack.position = ccp(400.0f, 100.0f);
+    }
     [self addChild:menuBack];
 }
 
@@ -92,6 +98,10 @@
              labelWithString:@"."
              fntFile:@"janda.fnt"];
     languageLabel.position = ccp(350,350);
+    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone){
+        languageLabel.position = ccp(220, 170.0f);
+    }
+
     languageLabel.color = ccBLACK;
     languageLabel.anchorPoint = ccp(1,0);
     [self addChild:languageLabel];

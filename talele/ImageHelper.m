@@ -29,9 +29,7 @@
     NSMutableArray *arrayNames = [[NSMutableArray alloc]
                                   initWithArray:[dict objectForKey:@"puzzles"]];
     for(int i =0; i<arrayNames.count; i++){
-        CCLOG(@" IT > %@ |  %@",[arrayNames objectAtIndex:i],itemPath );
         if([[arrayNames objectAtIndex:i] isEqualToString:itemPath]){
-            CCLOG(@"FINDDED");
             index = i;
         }
     }
