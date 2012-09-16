@@ -13,19 +13,19 @@
 		</dict>
 		<key>p2.png</key>
 		<dict>
+		    <key>order</key>
+			<integer>2</integer>
 			<key>hAlign</key>
-			<integer>4</integer>
+			<integer>3</integer>
 			<key>vAlign</key>
 			<integer>0</integer>
-			<key>order</key>
-			<integer>2</integer>
 		</dict>
 		<key>p3.png</key>
 		<dict>
 			<key>order</key>
 			<integer>3</integer>
 			<key>hAlign</key>
-			<integer>4</integer>
+			<integer>3</integer>
 			<key>vAlign</key>
 			<integer>0</integer>
 		</dict>
@@ -34,7 +34,7 @@
 			<key>order</key>
 			<integer>4</integer>
 			<key>hAlign</key>
-			<integer>4</integer>
+			<integer>3</integer>
 			<key>vAlign</key>
 			<integer>0</integer>
 		</dict>
@@ -52,7 +52,7 @@
 			<key>order</key>
 			<integer>6</integer>
 			<key>hAlign</key>
-			<integer>5</integer>
+			<integer>3</integer>
 			<key>vAlign</key>
 			<integer>0</integer>
 		</dict>
@@ -63,16 +63,16 @@
 			<key>hAlign</key>
 			<integer>3</integer>
 			<key>vAlign</key>
-			<integer>1</integer>
+			<integer>0</integer>
 		</dict>
 		<key>p8.png</key>
 		<dict>
 			<key>order</key>
 			<integer>8</integer>
 			<key>hAlign</key>
-			<integer>4</integer>
+			<integer>5</integer>
 			<key>vAlign</key>
-			<integer>1</integer>
+			<integer>0</integer>
 		</dict>
 		<key>p9.png</key>
 		<dict>
@@ -88,9 +88,9 @@
 			<key>order</key>
 			<integer>10</integer>
 			<key>hAlign</key>
-			<integer>4</integer>
+			<integer>5</integer>
 			<key>vAlign</key>
-			<integer>1</integer>
+			<integer>0</integer>
 		</dict>
 		<key>p11.png</key>
 		<dict>
@@ -99,14 +99,14 @@
 			<key>hAlign</key>
 			<integer>4</integer>
 			<key>vAlign</key>
-			<integer>1</integer>
+			<integer>2</integer>
 		</dict>
 		<key>p12.png</key>
 		<dict>
 			<key>order</key>
 			<integer>12</integer>
 			<key>hAlign</key>
-			<integer>5</integer>
+			<integer>3</integer>
 			<key>vAlign</key>
 			<integer>1</integer>
 		</dict>
@@ -124,9 +124,9 @@
 			<key>order</key>
 			<integer>14</integer>
 			<key>hAlign</key>
-			<integer>4</integer>
+			<integer>3</integer>
 			<key>vAlign</key>
-			<integer>1</integer>
+			<integer>0</integer>
 		</dict>
 		<key>p15.png</key>
 		<dict>
@@ -142,16 +142,16 @@
 			<key>order</key>
 			<integer>16</integer>
 			<key>hAlign</key>
-			<integer>4</integer>
+			<integer>5</integer>
 			<key>vAlign</key>
-			<integer>1</integer>
+			<integer>0</integer>
 		</dict>
 		<key>p17.png</key>
 		<dict>
 			<key>order</key>
 			<integer>17</integer>
 			<key>hAlign</key>
-			<integer>4</integer>
+			<integer>3</integer>
 			<key>vAlign</key>
 			<integer>1</integer>
 		</dict>
@@ -160,16 +160,16 @@
 			<key>order</key>
 			<integer>18</integer>
 			<key>hAlign</key>
-			<integer>5</integer>
+			<integer>3</integer>
 			<key>vAlign</key>
-			<integer>1</integer>
+			<integer>0</integer>
 		</dict>
 		<key>p19.png</key>
 		<dict>
 			<key>order</key>
 			<integer>19</integer>
 			<key>hAlign</key>
-			<integer>3</integer>
+			<integer>4</integer>
 			<key>vAlign</key>
 			<integer>2</integer>
 		</dict>
@@ -180,34 +180,34 @@
 			<key>hAlign</key>
 			<integer>4</integer>
 			<key>vAlign</key>
-			<integer>2</integer>
+			<integer>0</integer>
 		</dict>
 		<key>p21.png</key>
 		<dict>
 			<key>order</key>
 			<integer>21</integer>
 			<key>hAlign</key>
-			<integer>4</integer>
+			<integer>3</integer>
 			<key>vAlign</key>
-			<integer>2</integer>
+			<integer>1</integer>
 		</dict>
 		<key>p22.png</key>
 		<dict>
 			<key>order</key>
 			<integer>22</integer>
 			<key>hAlign</key>
-			<integer>4</integer>
+			<integer>3</integer>
 			<key>vAlign</key>
-			<integer>2</integer>
+			<integer>1</integer>
 		</dict>
 		<key>p23.png</key>
 		<dict>
 			<key>order</key>
 			<integer>22</integer>
 			<key>hAlign</key>
-			<integer>4</integer>
+			<integer>3</integer>
 			<key>vAlign</key>
-			<integer>2</integer>
+			<integer>0</integer>
 		</dict>
 		<key>p24.png</key>
 		<dict>
@@ -216,25 +216,25 @@
 			<key>hAlign</key>
 			<integer>5</integer>
 			<key>vAlign</key>
-			<integer>2</integer>
+			<integer>0</integer>
 		</dict>
 		<key>p25.png</key>
 		<dict>
 			<key>order</key>
 			<integer>25</integer>
 			<key>hAlign</key>
-			<integer>5</integer>
+			<integer>3</integer>
 			<key>vAlign</key>
-			<integer>2</integer>
+			<integer>0</integer>
 		</dict>
 		<key>p26.png</key>
 		<dict>
 			<key>order</key>
 			<integer>26</integer>
 			<key>hAlign</key>
-			<integer>5</integer>
+			<integer>4</integer>
 			<key>vAlign</key>
-			<integer>2</integer>
+			<integer>1</integer>
 		</dict>
 		<key>p27.png</key>
 		<dict>
@@ -243,23 +243,23 @@
 			<key>hAlign</key>
 			<integer>5</integer>
 			<key>vAlign</key>
-			<integer>2</integer>
+			<integer>1</integer>
 		</dict>
 		<key>p28.png</key>
 		<dict>
 			<key>order</key>
 			<integer>28</integer>
 			<key>hAlign</key>
-			<integer>5</integer>
+			<integer>4</integer>
 			<key>vAlign</key>
-			<integer>2</integer>
+			<integer>0</integer>
 		</dict>
 		<key>p29.png</key>
 		<dict>
 			<key>order</key>
 			<integer>29</integer>
 			<key>hAlign</key>
-			<integer>5</integer>
+			<integer>4</integer>
 			<key>vAlign</key>
 			<integer>2</integer>
 		</dict>
@@ -279,7 +279,7 @@
 			<key>hAlign</key>
 			<integer>5</integer>
 			<key>vAlign</key>
-			<integer>2</integer>
+			<integer>0</integer>
 		</dict>
 		<key>p32.png</key>
 		<dict>
@@ -288,43 +288,43 @@
 			<key>hAlign</key>
 			<integer>5</integer>
 			<key>vAlign</key>
-			<integer>2</integer>
+			<integer>0</integer>
 		</dict>
 		<key>p33.png</key>
 		<dict>
 			<key>order</key>
 			<integer>33</integer>
 			<key>hAlign</key>
-			<integer>5</integer>
+			<integer>3</integer>
 			<key>vAlign</key>
-			<integer>2</integer>
+			<integer>0</integer>
 		</dict>
 		<key>p34.png</key>
 		<dict>
 			<key>order</key>
 			<integer>34</integer>
 			<key>hAlign</key>
-			<integer>5</integer>
+			<integer>4</integer>
 			<key>vAlign</key>
-			<integer>2</integer>
+			<integer>1</integer>
 		</dict>
 		<key>p35.png</key>
 		<dict>
 			<key>order</key>
 			<integer>35</integer>
 			<key>hAlign</key>
-			<integer>5</integer>
+			<integer>4</integer>
 			<key>vAlign</key>
-			<integer>2</integer>
+			<integer>1</integer>
 		</dict>
 		<key>p36.png</key>
 		<dict>
 			<key>order</key>
 			<integer>36</integer>
 			<key>hAlign</key>
-			<integer>5</integer>
+			<integer>4</integer>
 			<key>vAlign</key>
-			<integer>2</integer>
+			<integer>1</integer>
 		</dict>
 		<key>p37.png</key>
 		<dict>
@@ -342,41 +342,41 @@
 			<key>hAlign</key>
 			<integer>5</integer>
 			<key>vAlign</key>
-			<integer>2</integer>
+			<integer>1</integer>
 		</dict>
 		<key>p39.png</key>
 		<dict>
 			<key>order</key>
 			<integer>39</integer>
 			<key>hAlign</key>
-			<integer>5</integer>
+			<integer>4</integer>
 			<key>vAlign</key>
-			<integer>2</integer>
+			<integer>1</integer>
 		</dict>
 		<key>p40.png</key>
 		<dict>
 			<key>order</key>
 			<integer>40</integer>
 			<key>hAlign</key>
-			<integer>5</integer>
+			<integer>3</integer>
 			<key>vAlign</key>
-			<integer>2</integer>
+			<integer>0</integer>
 		</dict>
 		<key>p41.png</key>
 		<dict>
 			<key>order</key>
 			<integer>41</integer>
 			<key>hAlign</key>
-			<integer>5</integer>
+			<integer>3</integer>
 			<key>vAlign</key>
-			<integer>2</integer>
+			<integer>0</integer>
 		</dict>
 		<key>p42.png</key>
 		<dict>
 			<key>order</key>
 			<integer>42</integer>
 			<key>hAlign</key>
-			<integer>5</integer>
+			<integer>4</integer>
 			<key>vAlign</key>
 			<integer>2</integer>
 		</dict>
@@ -385,7 +385,7 @@
 			<key>order</key>
 			<integer>43</integer>
 			<key>hAlign</key>
-			<integer>5</integer>
+			<integer>4</integer>
 			<key>vAlign</key>
 			<integer>2</integer>
 		</dict>
@@ -394,7 +394,7 @@
 			<key>order</key>
 			<integer>44</integer>
 			<key>hAlign</key>
-			<integer>5</integer>
+			<integer>4</integer>
 			<key>vAlign</key>
 			<integer>2</integer>
 		</dict>
@@ -403,7 +403,7 @@
 			<key>order</key>
 			<integer>45</integer>
 			<key>hAlign</key>
-			<integer>5</integer>
+			<integer>3</integer>
 			<key>vAlign</key>
 			<integer>2</integer>
 		</dict>
@@ -412,16 +412,16 @@
 			<key>order</key>
 			<integer>46</integer>
 			<key>hAlign</key>
-			<integer>5</integer>
+			<integer>3</integer>
 			<key>vAlign</key>
-			<integer>2</integer>
+			<integer>0</integer>
 		</dict>
 		<key>p47.png</key>
 		<dict>
 			<key>order</key>
 			<integer>47</integer>
 			<key>hAlign</key>
-			<integer>5</integer>
+			<integer>3</integer>
 			<key>vAlign</key>
 			<integer>2</integer>
 		</dict>
