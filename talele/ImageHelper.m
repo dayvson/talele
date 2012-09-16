@@ -22,6 +22,32 @@
     return [renderer getUIImage];
 }
 
++(BOOL)removeImageFromPage:(NSString*)itemPath{
+    int index = -1;
+    NSError *error;
+    NSMutableDictionary* dict = [GameHelper getPlist:@"puzzles"];
+    NSMutableArray *arrayNames = [[NSMutableArray alloc]
+                                  initWithArray:[dict objectForKey:@"puzzles"]];
+    for(int i =0; i<arrayNames.count; i++){
+        CCLOG(@" IT > %@ |  %@",[arrayNames objectAtIndex:i],itemPath );
+        if([[arrayNames objectAtIndex:i] isEqualToString:itemPath]){
+            CCLOG(@"FINDDED");
+            index = i;
+        }
+    }
+    if(index == -1)return NO;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *plistpath = [documentsDirectory stringByAppendingPathComponent:@"puzzles.plist"];
+    NSString *imagePath = [arrayNames objectAtIndex:index];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    [fileManager removeItemAtPath:imagePath error:&error];
+    [arrayNames removeObjectAtIndex:index];
+    [dict setValue:arrayNames forKey:@"puzzles"];    
+    [dict writeToFile:plistpath atomically:YES];
+    return YES;
+}
+
 +(NSString*)saveImageFromLibraryIntoPuzzlePlist:(UIImage*)image{
     NSMutableDictionary* dict = [GameHelper getPlist:@"puzzles"];
     NSMutableArray *arrayNames = [[NSMutableArray alloc]
@@ -39,6 +65,7 @@
     return imagePath;
 
 }
+
 + (UIImage*)imageWithImage:(UIImage*)image scaledToSize:(CGSize)newSize {
     UIGraphicsBeginImageContext(newSize);
     [image drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
@@ -65,7 +92,6 @@
     CGImageRelease(imageRef);
     return img;
 }
-
 
 +(UIImage*)maskImage:(UIImage *)image withMask:(UIImage *)maskImage withOffset:(CGPoint)offset
 {
