@@ -10,7 +10,10 @@
 
 @interface HomeScreen : CCLayer {
    	CGSize screenSize;
- 
+    CCParticleSystem* emitter;
+    NSArray* startLabels;
+    CCLabelBMFont* startLabel;
+    CCMenu *optMenu;
 }
 +(CCScene *) scene;
 @end

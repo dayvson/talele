@@ -8,7 +8,8 @@
 #import "HomeScreen.h"
 #import "GameManager.h"
 #import "GameHelper.h"
-
+#import "Options.h"
+#import "AudioHelper.h"
 @implementation HomeScreen
 +(CCScene *) scene
 {
@@ -54,11 +55,10 @@
     [mush setScale:0.1f];
     mush.anchorPoint = ccp(1,0);
     
-    mush.position = ccp(screenSize.width/2 - 40, 25);
+    mush.position = ccp(screenSize.width-10, 25);
     if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone){
         mush.position = ccp(screenSize.width-10, 10);
     }
-    CCLOG(@"-_-----> %f", screenSize.width);
     [self addChild: mush];
     id action = [CCScaleTo actionWithDuration:0.3f scale:1.0f];
     [mush runAction:[CCEaseOut actionWithAction:action rate:0.7f]];
@@ -175,13 +175,20 @@
 }
 
 -(void) onClickPlay {
-    [[GameManager sharedGameManager] playSoundEffect:@"Comecar.mp3"];
+    [AudioHelper playStart];
     [[GameManager sharedGameManager] runSceneWithID:kPuzzleSelection];
 }
 
 -(void) initMenu :(ccTime)dt{
-    CCMenuItemSprite *playButton = [GameHelper createMenuItemBySprite:@"btn-comecar.png" target:self selector:@selector(onClickPlay)];
+    CCMenuItemSprite *playButton = [GameHelper createMenuItemBySprite:@"btn-comecar.png"
+                                                               target:self selector:@selector(onClickPlay)];
+    startLabel = [CCLabelBMFont
+                            labelWithString:[startLabels objectAtIndex:[GameManager sharedGameManager].language]
+                            fntFile:@"janda.fnt"];
     [playButton setScale:0.8f];
+    startLabel.anchorPoint = ccp(0.5,0.5);
+    startLabel.position = ccp(playButton.contentSize.width/2, playButton.contentSize.height/2);
+    [playButton addChild:startLabel];
     CCMenu *mainMenu = [CCMenu menuWithItems:playButton,nil];
     CGPoint menuPosition = ccp(770.0f, 200.0f);
     if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone){
@@ -197,12 +204,71 @@
      */
     [self addChild:mainMenu z:8 tag:8];
 }
+
 -(void) initParticles:(ccTime)dt {
-    CCParticleFlower* emitter_ = [GameHelper getParticles];
-    [self addChild:emitter_];
+    emitter = [[CCParticleFlower alloc] initWithTotalParticles:200];
+    CGPoint p = emitter.position;
+    emitter.position = ccp( p.x-110, p.y-110);
+    emitter.life = 30;
+    emitter.lifeVar = 20;
+    // gravity
+    emitter.gravity = ccp(20,10);
+    // speed of particles
+    emitter.speed = 150;
+    emitter.speedVar = 120;
+    ccColor4F startColor = emitter.startColor;
+    startColor.r = 1.0f;
+    startColor.g = 1.0f;
+    startColor.b = 1.0f;
+    emitter.startColor = startColor;
+    ccColor4F startColorVar = emitter.startColorVar;
+    startColorVar.b = 0.1f;
+    emitter.startColorVar = startColorVar;
+    emitter.emissionRate = emitter.totalParticles/emitter.life;
+    emitter.texture = [[CCTextureCache sharedTextureCache] addImage: @"snow.png"];
+    [self addChild: emitter];
 }
 
+-(void) configureOptions {
+    [[self getChildByTag:50] setVisible:NO];
+    [[self getChildByTag:8] setVisible:NO];
+    [AudioHelper playOptions];
+    Options* opt = [[Options alloc] init];
+    [opt setDelegate:self];
+    [opt configureOptions];
+    [self addChild:opt z:100 tag:100];
+    opt.opacity = 0;
+    [opt runAction:[CCFadeIn actionWithDuration:1.5f]];
+
+}
+
+-(void)onClickOptions{
+    [optMenu setEnabled:NO];
+    [self configureOptions];
+}
+
+-(void)onCloseOptions{
+    [[self getChildByTag:50] setVisible:YES];
+    [[self getChildByTag:8] setVisible:YES];
+    [optMenu setEnabled:YES];
+    [startLabel setString:[startLabels objectAtIndex:[GameManager sharedGameManager].language]];
+}
+-(void)optionsAnimation:(ccTime)dt{
+    CCMenuItemSprite *optButton = [GameHelper createMenuItemBySprite:@"btn-opcoes.png"
+                                                                  target:self
+                                                            selector:@selector(onClickOptions)];
+    optMenu = [CCMenu menuWithItems:optButton,nil];
+    optMenu.position = ccp(optButton.contentSize.width, screenSize.height-optButton.contentSize.height);
+    optButton.opacity = 0;
+    [optMenu runAction:[CCFadeIn actionWithDuration:0.5]];
+    [self addChild:optMenu z:90 tag:90];
+
+    [GameManager sharedGameManager].language = kPortuguese;
+}
+
+
 -(void)onEnterTransitionDidFinish{
+    startLabels = [[NSArray alloc] initWithObjects:@"START",@"COMEÇAR",@"INICIAR",nil ];
     [self floorAnimation];
     [self cloudTop];
     [self scheduleOnce:@selector(megacloudAnimation:) delay:0.3];
@@ -212,8 +278,10 @@
     [self scheduleOnce:@selector(taleleAnimation:) delay:1.5f];
     [self scheduleOnce:@selector(piecesAroundAnimation:) delay:0.9];
     [self scheduleOnce:@selector(initParticles:) delay:0.9];
+    [self scheduleOnce:@selector(optionsAnimation:) delay:1.5];
 }
 -(void)onExit{
-//    [self removeAllChildrenWithCleanup:YES];
+    [emitter resetSystem];
+    [self removeAllChildrenWithCleanup:YES];
 }
 @end
