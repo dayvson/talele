@@ -18,7 +18,7 @@ static GameManager* _sharedGameManager = nil;
 @synthesize isMusicON;
 @synthesize currentPuzzle;
 @synthesize currentPage;
-
+@synthesize language;
 +(GameManager*)sharedGameManager {
     @synchronized([GameManager class])
     {
@@ -51,6 +51,7 @@ static GameManager* _sharedGameManager = nil;
         audioInitialized = NO;
         soundEngine = nil;
         managerSoundState = kAudioManagerUninitialized;
+        currentPage = 0;
     }
     return self;
 }

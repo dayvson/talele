@@ -11,7 +11,7 @@
 #import "GameHelper.h"
 #import "ImageHelper.h"
 #import <MobileCoreServices/UTCoreTypes.h>
-
+#import "AudioHelper.h"
 @implementation PuzzleSelectionLayer
 
 +(CCScene *) scene
@@ -22,44 +22,51 @@
 	return scene;
 }
 
-
 -(void) onClickHard {
-    [[GameManager sharedGameManager] playSoundEffect:@"Dificil.mp3"];
+    [AudioHelper playHard];
     [[GameManager sharedGameManager] runSceneWithID:kLevelHard];
 }
 
 -(void) onClickNormal {
-    [[GameManager sharedGameManager] playSoundEffect:@"Normal.mp3"];
+    [AudioHelper playNormal];
     [[GameManager sharedGameManager] runSceneWithID:kLevelNormal];
 }
 
-
 -(void) onClickEasy {
-    [[GameManager sharedGameManager] playSoundEffect:@"Facil.mp3"];
+    [AudioHelper playEasy];
     [[GameManager sharedGameManager] runSceneWithID:kLevelEasy];
 }
 
 -(void) onClickPrevPuzzle {
-    [[GameManager sharedGameManager] playSoundEffect:@"Click.mp3"];
+    [AudioHelper playClick];
     [puzzleGrid gotoPrevPage];
 }
 
 -(void) onClickNextPuzzle {
-    [[GameManager sharedGameManager] playSoundEffect:@"Click.mp3"];
+    [AudioHelper playClick];
     [puzzleGrid gotoNextPage];
 }
 
 -(void) onClickPhotoSelection {
-    [[GameManager sharedGameManager] playSoundEffect:@"EscolhaUmaFoto.mp3"];
+    [AudioHelper playSelectPicture];
     [self showPhotoLibrary];
 }
 
 -(void) initStartGameButtons {
-
+    int language = [GameManager sharedGameManager].language;
+    easyLabel = [GameHelper getLabelFontByLanguage:labelsEasy andLanguage:language];
+    normalLabel = [GameHelper getLabelFontByLanguage:labelsNormal andLanguage:language];
+    hardLabel = [GameHelper getLabelFontByLanguage:labelsHard andLanguage:language];
     easyButton = [GameHelper createMenuItemBySprite:@"btn-facil.png" target:self selector:@selector(onClickEasy)];
+    easyLabel.position = ccp(easyButton.contentSize.width/2, easyButton.contentSize.height/2);
+    [easyButton addChild:easyLabel];
     normalButton = [GameHelper createMenuItemBySprite:@"btn-normal.png" target:self selector:@selector(onClickNormal)];
+    normalLabel.position = ccp(normalButton.contentSize.width/2, normalButton.contentSize.height/2);
+    [normalButton addChild:normalLabel];
     hardButton = [GameHelper createMenuItemBySprite:@"btn-dificil.png" target:self selector:@selector(onClickHard)];
-    CCMenu *levelMenu = [CCMenu menuWithItems:easyButton,normalButton, hardButton, nil];
+    hardLabel.position = ccp(hardButton.contentSize.width/2, hardButton.contentSize.height/2);
+    [hardButton addChild:hardLabel];
+    levelMenu = [CCMenu menuWithItems:easyButton,normalButton, hardButton, nil];
     [levelMenu alignItemsHorizontallyWithPadding:40];
     if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad){
         [levelMenu setPosition: ccp(screenSize.height/2.0f + 140,100)];
@@ -103,13 +110,8 @@
     [prevButton setIsEnabled:(puzzleGrid.currentPage > 0)? YES : NO];
     [nextButton setOpacity:(puzzleGrid.currentPage < puzzleGrid.totalPages-1)? 255 : 30];
     [nextButton setIsEnabled:(puzzleGrid.currentPage < puzzleGrid.totalPages-1)? YES : NO];
-    [hardButton setIsEnabled:(puzzleGrid.totalPages > 0)];
-    [hardButton setOpacity:(puzzleGrid.totalPages > 0)? 255 : 30];
-    [easyButton setIsEnabled:(puzzleGrid.totalPages > 0)];
-    [easyButton setOpacity:(puzzleGrid.totalPages > 0)? 255 : 30];
-    [normalButton setIsEnabled:(puzzleGrid.totalPages > 0)];
-    [normalButton setOpacity:(puzzleGrid.totalPages > 0)? 255 : 30];
-
+    [levelMenu setEnabled:(puzzleGrid.totalPages > 0)? YES : NO];
+    [levelMenu setOpacity:(puzzleGrid.totalPages > 0)? 255 : 30];
 }
 -(void) initBackground {
 	CCSprite *background;
@@ -119,6 +121,7 @@
 }
 -(void) updateSelectedImage:(CCMenuItemSprite*)sender{
     //[[GameManager sharedGameManager] setCurrentPuzzle:(NSString*)sender.userData];
+    [ImageHelper removeImageFromPage:puzzleGrid.currentPage];
 }
 
 -(void) onMoveToCurrentPage:(NSObject*)obj {
@@ -149,9 +152,21 @@
     [self addChild:emptyMenu z:40 tag:40];
 }
 
+-(void)onClickDelete{
+    [ImageHelper removeImageFromPage:[(NSDictionary*)puzzleGrid.getCurrentPageData objectForKey:@"name"]];
+    if([GameManager sharedGameManager].currentPage>0){
+        [GameManager sharedGameManager].currentPage -= 1;
+    }
+    [self loadPuzzleImages];
+}
 
 -(CCMenuItemSprite*) createPuzzleSprite:(NSString*)imageName withLazyLoad:(BOOL)lazyload{
     CCSprite* bg = [[CCSprite alloc] initWithFile:@"photobg.png"];
+    CCMenuItemSprite *btnDelete = [GameHelper createMenuItemBySprite:@"btn-close.png"
+                                                              target:self selector:@selector(onClickDelete)];
+    CCMenu* menuDelete = [CCMenu menuWithItems:btnDelete, nil];
+    menuDelete.position = ccp(bg.position.x+bg.contentSize.width-(btnDelete.contentSize.width/4),
+                             bg.position.y+bg.contentSize.height-(btnDelete.contentSize.height/4));
     CCSprite* cloud = [[CCSprite alloc] initWithFile:@"cloud-photo-support-front.png"];
     cloud.anchorPoint = ccp(0,0);
     cloud.position = ccp(-40,-5);
@@ -167,16 +182,17 @@
         [bg addChild:img];
     }
     [bg addChild:cloud];
+    [bg addChild:menuDelete];
+    
     CCMenuItemSprite* item = [[CCMenuItemSprite alloc] initWithNormalSprite:bg
                                                              selectedSprite:nil
                                                              disabledSprite:nil
                                                                      target:self
-                                                                   selector:@selector(updateSelectedImage:)];
+                                                                   selector:nil];
     NSMutableDictionary* puzzleInfo = [[NSMutableDictionary alloc] init];
     [puzzleInfo setValue:imageName forKey:@"name"];
     [puzzleInfo setValue:[NSNumber numberWithBool:lazyload] forKey:@"isLazy"];
     item.userData = puzzleInfo;
-    
     return item;
    
 }
@@ -187,22 +203,6 @@
     item.position = CGPointMake(screenSize.width * puzzleGrid.totalPages,0);
     [puzzleGrid addChild:item z:puzzleGrid.totalPages tag:puzzleGrid.totalPages];
     [puzzleGrid gotoPage:puzzleGrid.totalPages-1];
-}
--(void) removeImagePuzzle{
-    NSMutableDictionary* puzzleInfo = (NSMutableDictionary*)puzzleGrid.getCurrentPageData;
-    NSMutableDictionary* dict = [GameHelper getPlist:@"puzzles"];
-    NSMutableArray *arrayNames = [[NSMutableArray alloc]
-                                  initWithArray:[dict objectForKey:@"puzzles"]];
-    for(int i=0; i<arrayNames.count;i++){
-        if([arrayNames objectAtIndex:i] == [puzzleInfo objectForKey:@"name"]){
-            [arrayNames removeObjectAtIndex:i];
-        }
-    }
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *plistpath = [documentsDirectory stringByAppendingPathComponent:@"puzzles.plist"];
-   [dict setValue:arrayNames forKey:@"puzzles"];
-   [dict writeToFile:plistpath atomically:YES];
 }
 -(void) loadPuzzleImages {
     if(puzzleGrid){
@@ -307,18 +307,48 @@
     [self loadPuzzleImages];
 }
 
--(void) initParticles {
-    CCParticleFlower* emitter_ = [GameHelper getParticles];
-    [self addChild:emitter_];
+
+-(void) createExplosionAtPosition:(CGPoint)point{
+    int zIndex = 1000;
+    if(explosion){
+        zIndex =  explosion.zOrder + 1;
+    }
+    explosion = [[CCParticleSun alloc] initWithTotalParticles:50];
+    explosion.texture = [[CCTextureCache sharedTextureCache] addImage:@"snow.png"];
+    explosion.autoRemoveOnFinish = YES;
+    explosion.speed = 30.0f;
+    explosion.duration = 0.5f;
+    explosion.emitterMode = 1;
+    explosion.startSize = 20;
+    explosion.endSize = 80;
+    explosion.life = 0.6;
+    explosion.endRadius = 120;
+    explosion.position = point;
+    [self addChild:explosion z:zIndex tag:zIndex];
 }
 
+-(void) updateLabels{
+    int language = [GameManager sharedGameManager].language;
+    [easyLabel setString:[labelsEasy objectAtIndex:language]];
+    [normalLabel setString:[labelsNormal objectAtIndex:language]];
+    [hardLabel setString:[labelsHard objectAtIndex:language]];
+}
 
 -(void) onEnter{
 	[super onEnter];
     screenSize = [[CCDirector sharedDirector] winSize];
     [CCSpriteFrameCache sharedSpriteFrameCache];
+    labelsEasy = [[NSArray alloc] initWithObjects:@"EASY",@"FÁCIL",@"TRANQUILO", nil ];
+    labelsNormal = [[NSArray alloc] initWithObjects:@"NORMAL",@"NORMAL",@"REGULAR", nil ];
+    labelsHard = [[NSArray alloc] initWithObjects:@"HARD",@"DIFÍCIL",@"DURO", nil ];
     [self initBackground];
 
+}
+
+- (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
+    CGPoint touchLocation = [self convertTouchToNodeSpace:touch];
+    [self createExplosionAtPosition:touchLocation];
+    return YES;
 }
 
 -(void)onEnterTransitionDidFinish{
@@ -326,8 +356,9 @@
     [self initStartGameButtons];
     [self initNavigationButtons];
     [self initPhotoButton];
-    [self initParticles];
     [self checkPuzzleGridForEnableButtons];
+    [[[CCDirector sharedDirector] touchDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:NO];
+
 }
 
 -(void) onExit{

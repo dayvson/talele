@@ -20,10 +20,6 @@
 	return scene;
 }
 
--(void) onClickBack {
-    [[GameManager sharedGameManager] runSceneWithID:kPuzzleSelection];
-}
-
 -(void) initBackground {
 	CCSprite *background;
     background = [CCSprite spriteWithFile:@"background-gameplay-normal.png"];
@@ -44,7 +40,6 @@
 	[super onEnter];
     [self resetScreen];
     CCDirector * director_ = [CCDirector sharedDirector];
-    [director_ purgeCachedData];
     screenSize = [director_ winSize];
     [[director_ touchDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:NO];
     self.isTouchEnabled = YES;

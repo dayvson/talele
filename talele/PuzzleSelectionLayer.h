@@ -17,11 +17,19 @@
     UIPopoverController *_popover;
     UIWindow *window;
 	UIImage *newImage;
+    CCLabelBMFont *easyLabel;
+    CCLabelBMFont *normalLabel;
+    CCLabelBMFont *hardLabel;
     CCMenuItemSprite *prevButton;
     CCMenuItemSprite *nextButton;
     CCMenuItemSprite *easyButton;
     CCMenuItemSprite *hardButton;
     CCMenuItemSprite *normalButton;
+    CCParticleSystem *explosion;
+    CCMenu *levelMenu;
+    NSArray *labelsEasy;
+    NSArray *labelsNormal;
+    NSArray *labelsHard;
 }
 
 +(CCScene *) scene;

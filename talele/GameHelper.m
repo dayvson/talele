@@ -20,6 +20,7 @@
                                             dictionaryWithContentsOfFile:plistPath];
     return plistDictionary;
 }
+
 + (float)randomFloatBetween:(float)smallNumber and:(float)bigNumber{
     float diff = bigNumber - smallNumber;
     return (((float) (arc4random() % ((unsigned)RAND_MAX + 1)) / RAND_MAX) * diff) + smallNumber;
@@ -35,6 +36,7 @@
     CFRelease(uuid);
     return [uuidStr autorelease];
 }
+
 +(CCMenuItemSprite *) createMenuItemBySprite:(NSString *)name target:(id)target selector:(SEL)selector{
     CCSprite *itemSprite = [[CCSprite alloc] initWithSpriteFrame:[[CCSpriteFrameCache
                                                                    sharedSpriteFrameCache]
@@ -42,34 +44,17 @@
     CCSprite *itemSpriteSel = [[CCSprite alloc] initWithSpriteFrame:[[CCSpriteFrameCache
                                                                       sharedSpriteFrameCache]
                                                                      spriteFrameByName:name]];
-    [itemSpriteSel setScale:1.2];
+    [itemSpriteSel setScale:1.2f];
     CCMenuItemSprite *itemMenu = [CCMenuItemSprite itemWithNormalSprite:itemSprite
                                                          selectedSprite:itemSpriteSel target:target selector:selector];
     return itemMenu;
 }
 
-+ (CCParticleFlower*) getParticles{
-    CCParticleFlower* emitter = [[CCParticleFlower alloc] initWithTotalParticles:200];
-    CGPoint p = emitter.position;
-    emitter.position = ccp( p.x, p.y+200);
-    emitter.life = 30;
-    emitter.lifeVar = 20;
-    // gravity
-    emitter.gravity = ccp(10,10);
-    // speed of particles
-    emitter.speed = 150;
-    emitter.speedVar = 120;
-    ccColor4F startColor = emitter.startColor;
-    startColor.r = 1.0f;
-    startColor.g = 1.0f;
-    startColor.b = 1.0f;
-    emitter.startColor = startColor;
-    ccColor4F startColorVar = emitter.startColorVar;
-    startColorVar.b = 0.1f;
-    emitter.startColorVar = startColorVar;
-    emitter.emissionRate = emitter.totalParticles/emitter.life;
-    emitter.texture = [[CCTextureCache sharedTextureCache] addImage: @"snow.png"];
-    return emitter;
++(CCLabelBMFont*) getLabelFontByLanguage:(NSArray*)labels andLanguage:(int)languageID{
+    CCLabelBMFont* labelFont = [CCLabelBMFont
+                                labelWithString:[labels objectAtIndex:languageID]
+                                fntFile:@"janda.fnt"];
+    return labelFont;
 }
 
 @end

@@ -32,11 +32,13 @@ typedef enum {
     kAudioManagerReady=300
 } GameManagerSoundState;
 
+typedef enum {
+    kEnglish=0,
+    kPortuguese=1,
+    kSpanish=2
+}Language;
 
 #define PLIN @"plin.wav"
-#define MATCH1 @"match1.wav"
-#define MATCH2 @"match2.wav"
-#define MATCH3 @"match3.wav"
 
 #define PLAYSOUNDEFFECT(...) \
 [[GameManager sharedGameManager] playSoundEffect:@#__VA_ARGS__]

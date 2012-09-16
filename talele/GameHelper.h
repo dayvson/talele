@@ -16,5 +16,6 @@
 + (BOOL) isRetinaIpad;
 + (NSString *)generateUUID;
 + (CCMenuItemSprite *) createMenuItemBySprite:(NSString *)name target:(id)target selector:(SEL)selector;
-+ (CCParticleFlower*) getParticles;
++ (CCLabelBMFont*) getLabelFontByLanguage:(NSArray*)labels andLanguage:(int)languageID;
+
 @end

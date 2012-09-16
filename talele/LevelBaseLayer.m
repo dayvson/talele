@@ -2,15 +2,28 @@
 #import "GameManager.h"
 #import "GameHelper.h"
 #import "ImageHelper.h"
+#import "AudioHelper.h"
 @implementation LevelBaseLayer
 
 -(void) playingPiecematch{
-    [[GameManager sharedGameManager] playSoundEffect:@"plin.wav"];
+    [AudioHelper playClick];
 }
 
+-(void)playPieceMatch{
+    if(totalPieceFixed % 5 == 0){
+        [AudioHelper playGreat];
+    }else if( totalPieceFixed % 11 == 0){
+        [AudioHelper playCongratulations];
+    }else if( totalPieceFixed % 8 == 0){
+        [AudioHelper playWoohoo];
+    }else{
+        [AudioHelper playClick];
+    }
+}
 -(void) movePieceToFinalPosition:(Piece*)piece{
     piece.fixed = YES;
     [piece setScale:1.0f];
+    [piece setZOrder:200-piece.order];
     id action = [CCMoveTo actionWithDuration:0.5f 
                                     position:CGPointMake(piece.xTarget, 
                                                          piece.yTarget)];
@@ -18,7 +31,24 @@
     totalPieceFixed++;
     [self playingPiecematch];
     [piece runAction:ease];
+    [self createExplosionAtPosition:ccp(piece.xTarget+piece.width/2,
+                                        piece.yTarget-piece.height/2)];
+    [self playPieceMatch];
     
+}
+-(void) createExplosionAtPosition:(CGPoint)point{
+    CCParticleSystem * sun = [[CCParticleSun alloc] initWithTotalParticles:50];
+    sun.texture = [[CCTextureCache sharedTextureCache] addImage:@"snow.png"];
+    sun.autoRemoveOnFinish = YES;
+    sun.speed = 30.0f;
+    sun.duration = 0.5f;
+    sun.emitterMode = 1;
+    sun.startSize = 20;
+    sun.endSize = 80;
+    sun.life = 0.6;
+    sun.endRadius = 120;
+    sun.position = point;
+    [self addChild:sun z:900];
 }
 
 - (BOOL) isPieceInRightPlace:(Piece*)piece {
@@ -48,18 +78,14 @@
     puzzleImage = [[CCSprite alloc] initWithFile:name];
     puzzleImage.anchorPoint = ccp(0,0);
     puzzleImage.opacity = 40;
-    CCSprite* cloud = [CCSprite spriteWithFile:@"cloud-puzzle-support.png"];
-    cloud.anchorPoint = ccp(0,0);
     if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad){
         puzzleImage.position = ccp(screenSize.width - puzzleImage.contentSize.width - 41,
                                screenSize.height - puzzleImage.contentSize.height - 39);
-        cloud.position = ccp(puzzleImage.position.x-21, puzzleImage.position.y-50);
     }else{
         puzzleImage.position = ccp(screenSize.width - puzzleImage.contentSize.width - 20,
                                    screenSize.height - puzzleImage.contentSize.height - 15);
     }
 	[self addChild: puzzleImage z:1 tag:100];
-    [self addChild: cloud  z:100000 tag:200];
     [puzzleImage release];
 }
 
@@ -117,6 +143,11 @@
     }
 }
 
+-(void) onClickBack {
+    [AudioHelper playBack];
+    [[GameManager sharedGameManager] runSceneWithID:kPuzzleSelection];
+}
+
 -(void) initMenu {
     CCMenuItemSprite *backButton =[GameHelper createMenuItemBySprite:@"btn-voltar-mini.png"
                                                               target:self selector:@selector(onClickBack)];
@@ -127,7 +158,7 @@
 }
 
 -(void) onClickNewGame {
-    [[GameManager sharedGameManager] playSoundEffect:@"NovoJogo.mp3"];
+    [AudioHelper playNewGame];
     [[GameManager sharedGameManager] runSceneWithID:kPuzzleSelection];
 }
 
@@ -150,7 +181,13 @@
 
     CCMenuItemSprite *newGameButton = [GameHelper createMenuItemBySprite:@"btn-novo-jogo.png" target:self selector:@selector(onClickNewGame)];
     CCMenu *mainMenu = [CCMenu menuWithItems:newGameButton,nil];
-    [[GameManager sharedGameManager] playSoundEffect:@"ParabensVamosJogarDeNovo.mp3"];
+    [AudioHelper playYouWin];
+    [self createExplosionAtPosition:puzzleImage.position];
+    [self createExplosionAtPosition:ccp(puzzleImage.position.x+ puzzleImage.contentSize.width/2,
+                                        puzzleImage.position.x+ puzzleImage.contentSize.height/2)];
+    [self createExplosionAtPosition:ccp(puzzleImage.contentSize.width,
+                                        puzzleImage.contentSize.height)];
+
     if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad){
         [mainMenu setPosition:ccp(150, screenSize.height - 240.0f)];
         [congrats setPosition:ccp(100, 50)];

@@ -21,11 +21,6 @@
 	return scene;
 }
 
--(void) onClickBack {
-    [[GameManager sharedGameManager] playSoundEffect:@"Voltar.mp3"];
-    [[GameManager sharedGameManager] runSceneWithID:kPuzzleSelection];
-}
-
 -(void) initBackground {
 	CCSprite *background;
     background = [CCSprite spriteWithFile:@"background-gameplay-easy.png"];
