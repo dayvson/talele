@@ -56,8 +56,8 @@
     NSString *imagePath = [documentsDirectory stringByAppendingPathComponent:newPuzzleName];
     NSData *webData = UIImageJPEGRepresentation(image, 0.8);
     [webData writeToFile:imagePath atomically:YES];
-    NSString *plistpath = [documentsDirectory stringByAppendingPathComponent:@"puzzles.plist"];
-    [arrayNames addObject:imagePath];
+    NSString *plistpath = [documentsDirectory stringByAppendingPathComponent:@"puzzles.plist"];    
+    [arrayNames addObject:newPuzzleName];
     [dict setValue:arrayNames forKey:@"puzzles"];
     [dict writeToFile:plistpath atomically:YES];
     return imagePath;

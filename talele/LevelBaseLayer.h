@@ -12,6 +12,7 @@
     CCSpriteFrameCache* piecesSpriteBatchNode;
     CCSpriteFrameCache* bevelSpriteBatchNode;
 }
+-(void) enableTouch:(ccTime)dt;
 -(BOOL) isPieceInRightPlace:(Piece*)piece;
 -(BOOL) isPuzzleComplete;
 -(Piece*) selectPieceForTouch:(CGPoint)touchLocation;

@@ -78,9 +78,11 @@
 }
 
 -(void) initNavigationButtons {
-    prevButton = [GameHelper createMenuItemBySprite:@"btn-voltar.png" target:self selector:@selector(onClickPrevPuzzle)];
-    nextButton = [GameHelper createMenuItemBySprite:@"btn-proximo.png" target:self selector:@selector(onClickNextPuzzle)];
-    CCMenu *navArrowMenu = [CCMenu menuWithItems:prevButton,nextButton, nil];
+    prevButton = [GameHelper createMenuItemBySprite:@"btn-voltar.png" target:self
+                                           selector:@selector(onClickPrevPuzzle)];
+    nextButton = [GameHelper createMenuItemBySprite:@"btn-proximo.png" target:self
+                                           selector:@selector(onClickNextPuzzle)];
+    navArrowMenu = [CCMenu menuWithItems:prevButton,nextButton, nil];
 
     if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad){
         [navArrowMenu setPosition: ccp(510,screenSize.height/2.0f )];
@@ -94,7 +96,8 @@
 
 -(void) initPhotoButton {
     CCMenuItemSprite *pickbutton = [GameHelper createMenuItemBySprite:@"btn-foto.png"
-                                                               target:self selector:@selector(onClickPhotoSelection)];
+                                                               target:self
+                                                             selector:@selector(onClickPhotoSelection)];
     CCMenu *photoMenu = [CCMenu menuWithItems:pickbutton, nil];
     photoMenu.anchorPoint = ccp(0,0);
     if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad){
@@ -119,10 +122,6 @@
 	background.position = ccp(screenSize.width/2, screenSize.height/2);
 	[self addChild: background z:1 tag:1];
 }
--(void) updateSelectedImage:(CCMenuItemSprite*)sender{
-    //[[GameManager sharedGameManager] setCurrentPuzzle:(NSString*)sender.userData];
-    [ImageHelper removeImageFromPage:puzzleGrid.currentPage];
-}
 
 -(void) onMoveToCurrentPage:(NSObject*)obj {
     NSDictionary* puzzleInfo = (NSDictionary*)obj;
@@ -142,10 +141,14 @@
     }
 }
 
+-(void)onClickPhoto{
+    CCLOG(@"CLICK OVER IMAGE");
+}
 -(void)showEmptyBox{
     CCSprite *itemSprite = [[CCSprite alloc] initWithFile:@"empty.png"];
     CCMenuItemSprite *itemMenu = [CCMenuItemSprite itemWithNormalSprite:itemSprite selectedSprite:nil
-                                                                 target:self selector:@selector(onClickPhotoSelection)];
+                                                                 target:self
+                                                               selector:@selector(onClickPhotoSelection)];
     CCMenu *emptyMenu = [CCMenu menuWithItems:itemMenu, nil];
     emptyMenu.anchorPoint = ccp(0,0);
     emptyMenu.position = ccp(screenSize.width/2 , screenSize.height/2 );
@@ -158,6 +161,26 @@
         [GameManager sharedGameManager].currentPage -= 1;
     }
     [self loadPuzzleImages];
+    [self checkPuzzleGridForEnableButtons];
+}
+
+-(void) onClickBack {
+    [AudioHelper playBack];
+    [[GameManager sharedGameManager] runSceneWithID:kHomeScreen];
+}
+
+-(void) initBackMenu {
+    CCMenuItemSprite *backButton =[GameHelper createMenuItemBySprite:@"btn-voltar-mini.png"
+                                                              target:self selector:@selector(onClickBack)];
+    CCMenu *backMenu = [CCMenu menuWithItems:backButton,nil];
+    [backMenu setPosition:ccp(backButton.contentSize.width-15,
+                              screenSize.height - (backButton.contentSize.height))];
+    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone){
+        [backMenu setPosition:ccp(backButton.contentSize.width-5,
+                                  screenSize.height - backButton.contentSize.height )];
+        
+    }
+    [self addChild:backMenu z:7 tag:70];
 }
 
 -(CCMenuItemSprite*) createPuzzleSprite:(NSString*)imageName withLazyLoad:(BOOL)lazyload{
@@ -171,7 +194,7 @@
     cloud.anchorPoint = ccp(0,0);
     cloud.position = ccp(-40,-5);
     if(!lazyload){
-        CCSprite* img = [CCSprite spriteWithFile:imageName];
+        CCSprite* img = [[CCSprite alloc] initWithFile:[GameHelper getResourcePathByName:imageName]];
         img.anchorPoint = ccp(0,0);
         if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad){
             img.position = ccp(23,22);
@@ -188,7 +211,7 @@
                                                              selectedSprite:nil
                                                              disabledSprite:nil
                                                                      target:self
-                                                                   selector:nil];
+                                                                   selector:@selector(onClickPhoto)];
     NSMutableDictionary* puzzleInfo = [[NSMutableDictionary alloc] init];
     [puzzleInfo setValue:imageName forKey:@"name"];
     [puzzleInfo setValue:[NSNumber numberWithBool:lazyload] forKey:@"isLazy"];
@@ -304,14 +327,16 @@
     [_popover dismissPopoverAnimated:YES];
 	[[CCDirector sharedDirector] startAnimation];
     [ImageHelper saveImageFromLibraryIntoPuzzlePlist:originalImage];
+    [GameManager sharedGameManager].currentPage = 0;
     [self loadPuzzleImages];
 }
 
 
 -(void) createExplosionAtPosition:(CGPoint)point{
-    int zIndex = 1000;
-    if(explosion){
-        zIndex =  explosion.zOrder + 1;
+    if(explosion != nil){
+        [explosion resetSystem];
+        [self removeChild:explosion cleanup:NO];
+        explosion = nil;
     }
     explosion = [[CCParticleSun alloc] initWithTotalParticles:50];
     explosion.texture = [[CCTextureCache sharedTextureCache] addImage:@"snow.png"];
@@ -324,7 +349,7 @@
     explosion.life = 0.6;
     explosion.endRadius = 120;
     explosion.position = point;
-    [self addChild:explosion z:zIndex tag:zIndex];
+    [self addChild:explosion z:1000 tag:1000];
 }
 
 -(void) updateLabels{
@@ -351,19 +376,26 @@
     return YES;
 }
 
+
 -(void)onEnterTransitionDidFinish{
     [self loadPuzzleImages];
     [self initStartGameButtons];
     [self initNavigationButtons];
     [self initPhotoButton];
     [self checkPuzzleGridForEnableButtons];
+    [self initBackMenu];
+    [[[CCDirector sharedDirector] touchDispatcher] removeDelegate:self];
     [[[CCDirector sharedDirector] touchDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:NO];
 
 }
 
 -(void) onExit{
-    [self removeAllChildrenWithCleanup:YES];
-    [self removeFromParentAndCleanup:YES];
+    [super onExit];
+    [levelMenu setEnabled:NO];
+    [navArrowMenu setEnabled:NO];
+    [[[CCDirector sharedDirector] touchDispatcher] removeDelegate:self];
+    [self removeChild:levelMenu cleanup:YES];
+    [self removeChild:navArrowMenu cleanup:YES];
 }
 
 -(void)dealloc {

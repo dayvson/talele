@@ -43,6 +43,19 @@
                 <key>sourceSize</key>
                 <string>{281,121}</string>
             </dict>
+            <key>btn-credits.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{324,2},{83,87}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{83,87}}</string>
+                <key>sourceSize</key>
+                <string>{83,87}</string>
+            </dict>
             <key>btn-dificil.png</key>
             <dict>
                 <key>frame</key>
@@ -287,7 +300,7 @@
             <key>size</key>
             <string>{512,1024}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:9744971f248e8d3a2904094ac37aed81$</string>
+            <string>$TexturePacker:SmartUpdate:989b789f3d57853d6a2c1c890601b778$</string>
             <key>textureFileName</key>
             <string>buttons-ipad.png</string>
         </dict>

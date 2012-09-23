@@ -107,12 +107,45 @@
     [self addChild:languageLabel];
     [languageLabel setString:[languages objectAtIndex:[GameManager sharedGameManager].language]];
 }
+
+-(void)onClickCredits{
+    if(credit){
+        credit.opacity = credit.opacity == 255 ? 0 : 255;
+        bgLanguage.visible = languageLabel.visible =
+        langMenu.visible = credit.opacity == 255 ? NO : YES;
+        
+        return;
+    }
+    bgLanguage.visible = languageLabel.visible = langMenu.visible = NO;
+    CGSize screenSize = [[CCDirector sharedDirector] winSize];
+    credit = [[CCSprite alloc] initWithFile:@"credits.png"];
+    credit.position = ccp(screenSize.width/2-credit.contentSize.width/6,
+                          screenSize.height/2+credit.contentSize.height/5);
+
+    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone){
+        credit.position = ccp(screenSize.width/2,
+                           screenSize.height/2+credit.contentSize.height/4);
+    }
+    [self addChild:credit z:100 tag:100];
+}
+
+-(void)creditsAnimation{
+    CCMenuItemSprite *creditButton = [GameHelper createMenuItemBySprite:@"btn-credits.png"
+                                                                 target:self
+                                                               selector:@selector(onClickCredits)];
+    creditMenu = [CCMenu menuWithItems:creditButton,nil];
+    creditMenu.position = ccp(creditButton.contentSize.width, creditButton.contentSize.height);
+    [self addChild:creditMenu z:60 tag:60];
+}
+
+
 -(void) configureOptions {
     languages = [[NSArray alloc] initWithObjects:@"LANGUAGES:",@"IDIOMAS:",@"IDIOMAS:",nil ];
     labelsButtonBack = [[NSArray alloc] initWithObjects:@"BACK",@"VOLTAR",@"VOLVER",nil ];
     [self createStaticText];
     [self createLanguagesMenu];
     [self createBtnVoltar];
+    [self creditsAnimation];
 }
 
 @end

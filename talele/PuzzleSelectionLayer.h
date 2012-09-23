@@ -26,6 +26,7 @@
     CCMenuItemSprite *hardButton;
     CCMenuItemSprite *normalButton;
     CCParticleSystem *explosion;
+    CCMenu *navArrowMenu;
     CCMenu *levelMenu;
     NSArray *labelsEasy;
     NSArray *labelsNormal;

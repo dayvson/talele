@@ -5,21 +5,19 @@
 #import "AudioHelper.h"
 @implementation LevelBaseLayer
 
--(void) playingPiecematch{
-    [AudioHelper playClick];
-}
 
 -(void)playPieceMatch{
     if(totalPieceFixed % 5 == 0){
         [AudioHelper playGreat];
-    }else if( totalPieceFixed % 11 == 0){
-        [AudioHelper playCongratulations];
     }else if( totalPieceFixed % 8 == 0){
+        [AudioHelper playCongratulations];
+    }else if( totalPieceFixed % 11 == 0){
         [AudioHelper playWoohoo];
     }else{
         [AudioHelper playClick];
     }
 }
+
 -(void) movePieceToFinalPosition:(Piece*)piece{
     piece.fixed = YES;
     [piece setScale:1.0f];
@@ -29,13 +27,13 @@
                                                          piece.yTarget)];
     id ease = [CCEaseIn actionWithAction:action rate:0.7f];
     totalPieceFixed++;
-    [self playingPiecematch];
     [piece runAction:ease];
     [self createExplosionAtPosition:ccp(piece.xTarget+piece.width/2,
                                         piece.yTarget-piece.height/2)];
     [self playPieceMatch];
     
 }
+
 -(void) createExplosionAtPosition:(CGPoint)point{
     CCParticleSystem * sun = [[CCParticleSun alloc] initWithTotalParticles:50];
     sun.texture = [[CCTextureCache sharedTextureCache] addImage:@"snow.png"];
@@ -75,7 +73,7 @@
 }
 
 -(void) loadPuzzleImage:(NSString*)name {
-    puzzleImage = [[CCSprite alloc] initWithFile:name];
+    puzzleImage = [[CCSprite alloc] initWithFile:[GameHelper getResourcePathByName:name]];
     puzzleImage.anchorPoint = ccp(0,0);
     puzzleImage.opacity = 40;
     if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad){
@@ -85,7 +83,7 @@
         puzzleImage.position = ccp(screenSize.width - puzzleImage.contentSize.width - 20,
                                    screenSize.height - puzzleImage.contentSize.height - 15);
     }
-	[self addChild: puzzleImage z:1 tag:100];
+	[self addChild: puzzleImage z:1 tag:10];
     [puzzleImage release];
 }
 
@@ -155,7 +153,7 @@
     [backMenu setPosition:ccp(backButton.contentSize.width-15,
                               screenSize.height - (backButton.contentSize.height-15))];
     if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone){
-    [backMenu setPosition:ccp(backButton.contentSize.width-15,
+        [backMenu setPosition:ccp(backButton.contentSize.width-15,
                                   screenSize.height - (backButton.contentSize.height+20))];
         
     }
@@ -178,10 +176,9 @@
 
 
 -(void) showPuzzleComplete{
-    [self performSelector:@selector(removeAllPieces) withObject:nil afterDelay:1];
-    id action = [CCFadeIn actionWithDuration:1];
-    [[self getChildByTag:100] runAction:action];
-    CCSprite *congrats = [[CCSprite alloc] initWithFile:@"congrats.png"];
+    NSArray* congratsFile = [[NSArray alloc] initWithObjects:@"congrats-eng.png",@"congrats-pt.png", @"congrats-esp.png", nil ];
+    CCSprite *congrats = [[CCSprite alloc] initWithFile:
+                          [congratsFile objectAtIndex:[GameManager sharedGameManager].language]];
     [congrats setScale:0.1f];
     NSArray* labelsComplete = [[NSArray alloc] initWithObjects:@"NEW GAME",@"NOVO JOGO", @"NUEVO JUEGO", nil ];
     CCLabelBMFont* newLabel = [GameHelper getLabelFontByLanguage:labelsComplete
@@ -210,7 +207,7 @@
                          [CCScaleTo actionWithDuration:0.5f scale:1.0f], nil]];
     congrats.anchorPoint = ccp(0,0);
 
-    [self addChild:congrats z:5000 tag:4];
+    [self addChild:congrats z:10000 tag:4];
     [self addChild:mainMenu z:4 tag:5];
 }
 
@@ -244,16 +241,16 @@
         hlimit = screenSize.height-item.height-50;
         ylimit = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 150 : 60;
         xlimit = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 90 : 40;
-        if (c % 2 == 0){
-            randX = [GameHelper randomFloatBetween:item.width and:wlimit];
-            randY = [GameHelper randomFloatBetween:item.height and: ylimit];
+        if (c % (int)[GameHelper randomBetween:2.0f and:4.0f] == 0){
+            randX = [GameHelper randomBetween:item.width and:wlimit];
+            randY = [GameHelper randomBetween:item.height and: ylimit];
         }else{
-            randX = [GameHelper randomFloatBetween:10 and:xlimit];
-            randY = [GameHelper randomFloatBetween:item.height and: hlimit];
+            randX = [GameHelper randomBetween:10 and:xlimit];
+            randY = [GameHelper randomBetween:item.height and: hlimit];
         }
         [item setPosition:ccp(item.xTarget, item.yTarget)];
         [item runAction:[CCMoveTo actionWithDuration:0.5f position:ccp(randX,randY)]];
-        [self addChild:item z:100+c tag:100+c];
+        [self addChild:item z:1000+c tag:1000+c];
         [pieces addObject:item];
     }
 }
@@ -293,11 +290,17 @@
             [self showPuzzleComplete];
         }
     }else{
-        if(selectedPiece != nil && (selectedPiece.position.x < puzzleImage.position.x ||
-                             selectedPiece.position.y < puzzleImage.position.y)){
+        if(selectedPiece != nil && ((selectedPiece.position.x+([selectedPiece getRealBoundingBox].size.width/2)) < puzzleImage.position.x || (selectedPiece.position.y+([selectedPiece getRealBoundingBox].size.height/2)) < puzzleImage.position.y)){
             [selectedPiece setScale:0.8f];
         }
     }
+}
+
+
+-(void) enableTouch:(ccTime)dt{
+    self.isTouchEnabled = YES;
+    [[[CCDirector sharedDirector] touchDispatcher] removeDelegate:self];
+    [[[CCDirector sharedDirector] touchDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:NO];
 }
 
 @end

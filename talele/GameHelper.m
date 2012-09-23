@@ -11,17 +11,22 @@
 +(NSMutableDictionary *) getPlist:(NSString*)plist{
     NSString *fullFileName = [NSString stringWithFormat:@"%@.plist",plist];
     NSString *plistPath;
-    NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    plistPath = [rootPath stringByAppendingPathComponent:fullFileName];
+    plistPath = [GameHelper getResourcePathByName:fullFileName];
     if (![[NSFileManager defaultManager] fileExistsAtPath:plistPath]) {
         plistPath = [[NSBundle mainBundle] pathForResource:plist ofType:@"plist"];
     }
+
     NSMutableDictionary *plistDictionary = [NSMutableDictionary
                                             dictionaryWithContentsOfFile:plistPath];
     return plistDictionary;
 }
-
-+ (float)randomFloatBetween:(float)smallNumber and:(float)bigNumber{
++(NSString*)getResourcePathByName:(NSString*)fileName{
+    NSString *resourcePath;
+    NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    resourcePath = [rootPath stringByAppendingPathComponent:fileName];
+    return resourcePath;
+}
++ (float)randomBetween:(float)smallNumber and:(float)bigNumber{
     float diff = bigNumber - smallNumber;
     return (((float) (arc4random() % ((unsigned)RAND_MAX + 1)) / RAND_MAX) * diff) + smallNumber;
 }
@@ -42,11 +47,13 @@
                                                                    sharedSpriteFrameCache]
                                                                   spriteFrameByName:name]];
     CCSprite *itemSpriteSel = [[CCSprite alloc] initWithSpriteFrame:[[CCSpriteFrameCache
-                                                                      sharedSpriteFrameCache]
-                                                                     spriteFrameByName:name]];
-    [itemSpriteSel setScale:1.2f];
+                                                                   sharedSpriteFrameCache]
+                                                                  spriteFrameByName:name]];
+    [itemSpriteSel setColor:ccBLACK];
     CCMenuItemSprite *itemMenu = [CCMenuItemSprite itemWithNormalSprite:itemSprite
-                                                         selectedSprite:itemSpriteSel target:target selector:selector];
+                                                         selectedSprite:itemSpriteSel
+                                                                 target:target
+                                                               selector:selector];
     return itemMenu;
 }
 

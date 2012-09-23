@@ -12,10 +12,10 @@
     
 }
 + (NSMutableDictionary *) getPlist:(NSString*)plist;
-+ (float)randomFloatBetween:(float)smallNumber and:(float)bigNumber;
++ (float)randomBetween:(float)smallNumber and:(float)bigNumber;
 + (BOOL) isRetinaIpad;
 + (NSString *)generateUUID;
 + (CCMenuItemSprite *) createMenuItemBySprite:(NSString *)name target:(id)target selector:(SEL)selector;
 + (CCLabelBMFont*) getLabelFontByLanguage:(NSArray*)labels andLanguage:(int)languageID;
-
++(NSString*)getResourcePathByName:(NSString*)fileName;
 @end

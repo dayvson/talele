@@ -209,6 +209,9 @@
     emitter = [[CCParticleFlower alloc] initWithTotalParticles:200];
     CGPoint p = emitter.position;
     emitter.position = ccp( p.x-110, p.y-110);
+    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone){
+        emitter.position = ccp( p.x, p.y);
+    }
     emitter.life = 30;
     emitter.lifeVar = 20;
     // gravity
@@ -253,6 +256,8 @@
     [optMenu setEnabled:YES];
     [startLabel setString:[startLabels objectAtIndex:[GameManager sharedGameManager].language]];
 }
+
+
 -(void)optionsAnimation:(ccTime)dt{
     CCMenuItemSprite *optButton = [GameHelper createMenuItemBySprite:@"btn-opcoes.png"
                                                                   target:self
@@ -262,7 +267,6 @@
     optButton.opacity = 0;
     [optMenu runAction:[CCFadeIn actionWithDuration:0.5]];
     [self addChild:optMenu z:90 tag:90];
-
     [GameManager sharedGameManager].language = kPortuguese;
 }
 
@@ -279,6 +283,7 @@
     [self scheduleOnce:@selector(piecesAroundAnimation:) delay:0.9];
     [self scheduleOnce:@selector(initParticles:) delay:0.9];
     [self scheduleOnce:@selector(optionsAnimation:) delay:1.5];
+    //[self scheduleOnce:@selector(creditsAnimation:) delay:1.5];
 }
 -(void)onExit{
     [emitter resetSystem];

@@ -29,6 +29,7 @@
 }
 
 -(void)onExit{
+    [super onExit];
     [[CCSpriteFrameCache sharedSpriteFrameCache] removeSpriteFramesFromFile:@"pieces_8x6.plist"];
     [[CCTextureCache sharedTextureCache] removeTextureForKey:@"pieces_8x6.png"];
     [[CCSpriteFrameCache sharedSpriteFrameCache] removeSpriteFramesFromFile:@"pieces_8x6_bevel.plist"];
@@ -42,19 +43,20 @@
     [self resetScreen];
     CCDirector * director_ = [CCDirector sharedDirector];
     screenSize = [director_ winSize];
-    [[director_ touchDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:NO];
-    self.isTouchEnabled = YES;
-    [self loadPuzzleImage:[GameManager sharedGameManager].currentPuzzle];
-    [self loadLevelSprites:@"8x6"];
-    zIndex = 400;
     [self initBackground];
+    [self loadPuzzleImage:[GameManager sharedGameManager].currentPuzzle];
+    zIndex = 1100;
+
 }
 -(void) onEnterTransitionDidFinish{
     int cols = 8;
     int rows = 6;
     pieces = [[NSMutableArray alloc] initWithCapacity:cols*rows];
+    [self loadLevelSprites:@"8x6"];
     [self loadPieces:@"levelHard" withCols:cols andRols:rows];
     [self initMenu];
+    [self scheduleOnce:@selector(enableTouch:) delay:0.5];
+
 }
 -(void)dealloc {
     [super dealloc];

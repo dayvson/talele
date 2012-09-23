@@ -16,6 +16,8 @@
     CCLabelBMFont *languageLabel;
     CCLabelBMFont* btLabel;
     CCMenu *langMenu;
+    CCMenu *creditMenu;
+    CCSprite *credit;
     CCSprite *bgLanguage;
     NSArray* languages;
     NSArray* labelsButtonBack;
