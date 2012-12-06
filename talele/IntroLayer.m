@@ -28,6 +28,7 @@
 	background.position = ccp(size.width/2, size.height/2);
 	[self addChild: background];
 	[self scheduleOnce:@selector(makeTransition:) delay:1];
+    
 }
 -(void)onExit{
     [self removeAllChildrenWithCleanup:YES];

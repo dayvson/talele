@@ -162,9 +162,22 @@
     [self addChild: logo z:50 tag:50];
     
 }
+
+-(void)loadLanguage{
+    NSString* lang = [GameHelper getSystemLanguage];
+    if([lang isEqual:@"pt"]){
+        [GameManager sharedGameManager].language = kPortuguese;
+    }else if([lang isEqual:@"es"]){
+        [GameManager sharedGameManager].language = kSpanish;
+    }else{
+        [GameManager sharedGameManager].language = kEnglish;
+    }
+}
+
 -(void) onEnter{
     [super onEnter];
     screenSize = [[CCDirector sharedDirector] winSize];
+    [self loadLanguage];
     [self loadPlistLevel];
     [self initBackground];
 }

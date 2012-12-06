@@ -17,5 +17,6 @@
 + (NSString *)generateUUID;
 + (CCMenuItemSprite *) createMenuItemBySprite:(NSString *)name target:(id)target selector:(SEL)selector;
 + (CCLabelBMFont*) getLabelFontByLanguage:(NSArray*)labels andLanguage:(int)languageID;
-+(NSString*)getResourcePathByName:(NSString*)fileName;
++ (NSString*)getResourcePathByName:(NSString*)fileName;
++ (NSString*)getSystemLanguage;
 @end

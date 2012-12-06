@@ -64,4 +64,9 @@
     return labelFont;
 }
 
++(NSString*)getSystemLanguage{
+    NSString * language = [[NSLocale preferredLanguages] objectAtIndex:0];
+    return language;
+}
+
 @end
