@@ -1,6 +1,9 @@
 talele
 ======
-### I created that because my son want to play jigsaw puzzle with his pictures and Talele is the name of his imaginary friend :)
+
+#### Motivation
+I made it because my son is 4 years old once told me he wanna to play jigsaw puzzle with family pictures. 
+Also Talele is the name of his imaginary friend :)
 
 
 ###What's is TALELE
