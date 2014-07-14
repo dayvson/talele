@@ -1,0 +1,95 @@
+info face="Arial" size=36 bold=0 italic=0 charset="" unicode=0 stretchH=100 smooth=1 aa=1 padding=0,0,0,0 spacing=2,2
+common lineHeight=41 base=34 scaleW=1024 scaleH=256 pages=1 packed=0
+page id=0 file="john-wd.png"
+chars count=52
+char id=32     x=462   y=40    width=0     height=0     xoffset=0     yoffset=33    xadvance=10    page=0 chnl=0 letter="space"
+char id=46     x=454   y=40    width=6     height=6     xoffset=3     yoffset=27    xadvance=10    page=0 chnl=0 letter="."
+char id=58     x=446   y=40    width=6     height=21    xoffset=3     yoffset=12    xadvance=10    page=0 chnl=0 letter=":"
+char id=65     x=2     y=40    width=27    height=28    xoffset=-0    yoffset=5     xadvance=24    page=0 chnl=0 letter="A"
+char id=66     x=371   y=40    width=22    height=28    xoffset=3     yoffset=5     xadvance=24    page=0 chnl=0 letter="B"
+char id=67     x=865   y=2     width=25    height=29    xoffset=2     yoffset=4     xadvance=26    page=0 chnl=0 letter="C"
+char id=68     x=171   y=40    width=24    height=28    xoffset=3     yoffset=5     xadvance=26    page=0 chnl=0 letter="D"
+char id=69     x=323   y=40    width=22    height=28    xoffset=3     yoffset=5     xadvance=24    page=0 chnl=0 letter="E"
+char id=70     x=395   y=40    width=20    height=28    xoffset=3     yoffset=5     xadvance=22    page=0 chnl=0 letter="F"
+char id=71     x=837   y=2     width=26    height=29    xoffset=2     yoffset=4     xadvance=28    page=0 chnl=0 letter="G"
+char id=72     x=248   y=40    width=23    height=28    xoffset=3     yoffset=5     xadvance=26    page=0 chnl=0 letter="H"
+char id=73     x=438   y=40    width=6     height=28    xoffset=3     yoffset=5     xadvance=10    page=0 chnl=0 letter="I"
+char id=74     x=942   y=2     width=17    height=29    xoffset=1     yoffset=4     xadvance=18    page=0 chnl=0 letter="J"
+char id=75     x=197   y=40    width=24    height=28    xoffset=3     yoffset=5     xadvance=24    page=0 chnl=0 letter="K"
+char id=76     x=417   y=40    width=19    height=28    xoffset=3     yoffset=5     xadvance=20    page=0 chnl=0 letter="L"
+char id=77     x=31    y=40    width=27    height=28    xoffset=3     yoffset=5     xadvance=30    page=0 chnl=0 letter="M"
+char id=78     x=298   y=40    width=23    height=28    xoffset=3     yoffset=5     xadvance=26    page=0 chnl=0 letter="N"
+char id=79     x=808   y=2     width=27    height=29    xoffset=2     yoffset=4     xadvance=28    page=0 chnl=0 letter="O"
+char id=80     x=347   y=40    width=22    height=28    xoffset=3     yoffset=5     xadvance=24    page=0 chnl=0 letter="P"
+char id=81     x=778   y=2     width=28    height=31    xoffset=2     yoffset=4     xadvance=28    page=0 chnl=0 letter="Q"
+char id=82     x=144   y=40    width=25    height=28    xoffset=3     yoffset=5     xadvance=26    page=0 chnl=0 letter="R"
+char id=83     x=917   y=2     width=23    height=29    xoffset=2     yoffset=4     xadvance=24    page=0 chnl=0 letter="S"
+char id=84     x=223   y=40    width=23    height=28    xoffset=1     yoffset=5     xadvance=22    page=0 chnl=0 letter="T"
+char id=85     x=892   y=2     width=23    height=29    xoffset=3     yoffset=4     xadvance=26    page=0 chnl=0 letter="U"
+char id=86     x=116   y=40    width=26    height=28    xoffset=0     yoffset=5     xadvance=24    page=0 chnl=0 letter="V"
+char id=87     x=961   y=2     width=36    height=28    xoffset=0     yoffset=5     xadvance=34    page=0 chnl=0 letter="W"
+char id=88     x=88    y=40    width=26    height=28    xoffset=0     yoffset=5     xadvance=24    page=0 chnl=0 letter="X"
+char id=89     x=60    y=40    width=26    height=28    xoffset=0     yoffset=5     xadvance=24    page=0 chnl=0 letter="Y"
+char id=90     x=273   y=40    width=23    height=28    xoffset=1     yoffset=5     xadvance=22    page=0 chnl=0 letter="Z"
+char id=193    x=508   y=2     width=27    height=35    xoffset=-0    yoffset=-2    xadvance=24    page=0 chnl=0 letter="Á"
+char id=199    x=329   y=2     width=25    height=36    xoffset=2     yoffset=4     xadvance=26    page=0 chnl=0 letter="Ç"
+char id=202    x=537   y=2     width=22    height=35    xoffset=3     yoffset=-2    xadvance=24    page=0 chnl=0 letter="Ê"
+char id=205    x=561   y=2     width=9     height=35    xoffset=2     yoffset=-2    xadvance=10    page=0 chnl=0 letter="Í"
+char id=209    x=643   y=2     width=23    height=34    xoffset=3     yoffset=-1    xadvance=26    page=0 chnl=0 letter="Ñ"
+char id=20013  x=298   y=2     width=29    height=36    xoffset=5     yoffset=1     xadvance=36    page=0 chnl=0 letter="中"
+char id=20307  x=356   y=2     width=37    height=35    xoffset=1     yoffset=1     xadvance=36    page=0 chnl=0 letter="体"
+char id=21333  x=471   y=2     width=35    height=35    xoffset=2     yoffset=2     xadvance=36    page=0 chnl=0 letter="单"
+char id=21518  x=706   y=2     width=34    height=33    xoffset=2     yoffset=2     xadvance=36    page=0 chnl=0 letter="后"
+char id=22797  x=189   y=2     width=35    height=36    xoffset=2     yoffset=1     xadvance=36    page=0 chnl=0 letter="复"
+char id=22987  x=40    y=2     width=36    height=36    xoffset=1     yoffset=0     xadvance=36    page=0 chnl=0 letter="始"
+char id=23481  x=152   y=2     width=35    height=36    xoffset=2     yoffset=0     xadvance=36    page=0 chnl=0 letter="容"
+char id=24320  x=742   y=2     width=34    height=33    xoffset=2     yoffset=3     xadvance=36    page=0 chnl=0 letter="开"
+char id=25103  x=433   y=2     width=36    height=35    xoffset=1     yoffset=1     xadvance=36    page=0 chnl=0 letter="戏"
+char id=25991  x=395   y=2     width=36    height=35    xoffset=1     yoffset=1     xadvance=36    page=0 chnl=0 letter="文"
+char id=26032  x=115   y=2     width=35    height=36    xoffset=2     yoffset=1     xadvance=36    page=0 chnl=0 letter="新"
+char id=26131  x=609   y=2     width=32    height=34    xoffset=3     yoffset=3     xadvance=36    page=0 chnl=0 letter="易"
+char id=26434  x=226   y=2     width=35    height=36    xoffset=2     yoffset=1     xadvance=36    page=0 chnl=0 letter="杂"
+char id=28216  x=2     y=2     width=36    height=36    xoffset=1     yoffset=0     xadvance=36    page=0 chnl=0 letter="游"
+char id=31616  x=78    y=2     width=35    height=36    xoffset=2     yoffset=1     xadvance=36    page=0 chnl=0 letter="简"
+char id=35328  x=263   y=2     width=33    height=36    xoffset=3     yoffset=0     xadvance=36    page=0 chnl=0 letter="言"
+char id=35821  x=572   y=2     width=35    height=34    xoffset=2     yoffset=2     xadvance=36    page=0 chnl=0 letter="语"
+char id=36864  x=668   y=2     width=36    height=33    xoffset=1     yoffset=3     xadvance=36    page=0 chnl=0 letter="退"
+kernings count=38
+kerning first=32 second=65 amount=-2
+kerning first=32 second=84 amount=-1
+kerning first=32 second=89 amount=-1
+kerning first=65 second=32 amount=-2
+kerning first=65 second=84 amount=-3
+kerning first=65 second=86 amount=-3
+kerning first=65 second=87 amount=-1
+kerning first=65 second=89 amount=-3
+kerning first=70 second=46 amount=-4
+kerning first=70 second=65 amount=-2
+kerning first=76 second=32 amount=-1
+kerning first=76 second=84 amount=-3
+kerning first=76 second=86 amount=-3
+kerning first=76 second=87 amount=-3
+kerning first=76 second=89 amount=-3
+kerning first=79 second=82 amount=-2
+kerning first=80 second=32 amount=-1
+kerning first=80 second=46 amount=-5
+kerning first=80 second=65 amount=-3
+kerning first=82 second=84 amount=-1
+kerning first=82 second=86 amount=-1
+kerning first=82 second=87 amount=-1
+kerning first=82 second=89 amount=-1
+kerning first=84 second=32 amount=-1
+kerning first=84 second=46 amount=-4
+kerning first=84 second=58 amount=-4
+kerning first=84 second=65 amount=-3
+kerning first=84 second=79 amount=-1
+kerning first=86 second=46 amount=-3
+kerning first=86 second=58 amount=-1
+kerning first=86 second=65 amount=-3
+kerning first=87 second=46 amount=-2
+kerning first=87 second=58 amount=-1
+kerning first=87 second=65 amount=-1
+kerning first=89 second=32 amount=-1
+kerning first=89 second=46 amount=-5
+kerning first=89 second=58 amount=-2
+kerning first=89 second=65 amount=-3

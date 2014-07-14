@@ -63,7 +63,7 @@ static GameManager* _sharedGameManager = nil;
 
     switch (sceneID) {
         case kHomeScreen:
-            sceneToRun = [CCTransitionFade transitionWithDuration:1.0 scene:[HomeScreen scene] ];
+            sceneToRun = [CCTransitionFade transitionWithDuration:1 scene:[HomeScreen scene] ];
             break;
         case kPuzzleSelection:
             sceneToRun = [CCTransitionSlideInT transitionWithDuration:0.5 scene:[PuzzleSelectionLayer scene]];
@@ -89,9 +89,9 @@ static GameManager* _sharedGameManager = nil;
 
     if ([[CCDirector sharedDirector] runningScene] == nil) {
         [[CCDirector sharedDirector] runWithScene:sceneToRun];
-    } else {        
+    } else {
         [[CCDirector sharedDirector] replaceScene:sceneToRun];
-    }   
+    }
 }
 
 -(void)initAudioAsync {
