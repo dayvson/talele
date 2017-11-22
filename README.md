@@ -13,6 +13,7 @@ Talele is an iOS jigsaw puzzle game. It allows a user to select pictures from th
 
 
 ###Who is Talele for?
+
 Talele is designed for children with the main aim of having fun with pictures and a sub-aim of building cognitive (problem-solving) and emotional (patience) skills. This game can be played in English, Portuguese, and Spanish to help children learn about navigation and discover new words through audio and text.
 Imagine that your son or daughter asks to create a puzzle of their favorite cartoon or superhero. Talele makes it so simple! Search for the image online and save the photo in your personal library. Voi la, you have your very own Talele game.
 
@@ -22,6 +23,7 @@ Talele is an iOS jigsaw puzzle game which you can select pictures from your phot
 
 
 ###Game interface
+
 <img src="https://raw.githubusercontent.com/dayvson/talele/master/1.jpg" />
 <img src="https://raw.githubusercontent.com/dayvson/talele/master/2.jpg" />
 <img src="https://raw.githubusercontent.com/dayvson/talele/master/3.jpg" />
@@ -30,10 +32,12 @@ Talele is an iOS jigsaw puzzle game which you can select pictures from your phot
 
 
 ###Apple store
+
 https://itunes.apple.com/br/app/talele/id564442751?mt=8
 
 
 ###License 
+
 You can get the code to study how it was made. 
 It is open sourced to research purposes. 
 So if you want to lunch a new non commercial version of Talele feel free to contact me and please keep the credits of it.
