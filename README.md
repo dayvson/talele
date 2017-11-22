@@ -30,6 +30,6 @@ https://itunes.apple.com/br/app/talele/id564442751?mt=8
 
 ###License 
 You can get the code to study how it was made. 
-I'm open source it to research purposes. 
-So if you wanna lunch a new non commercial version of Talele feel free to contact me and please keep the credits of it.
+It is open sourced to research purposes. 
+So if you want to lunch a new non commercial version of Talele feel free to contact me and please keep the credits of it.
 
