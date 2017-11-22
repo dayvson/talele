@@ -31,10 +31,6 @@ Talele is an iOS jigsaw puzzle game which you can select pictures from your phot
 <img src="https://raw.githubusercontent.com/dayvson/talele/master/5.jpg" />
 
 
-#Apple store
-
-https://itunes.apple.com/br/app/talele/id564442751?mt=8
-
 
 #License 
 
