@@ -18,10 +18,6 @@ Talele is designed for children with the main aim of having fun with pictures an
 Imagine that your son or daughter asks to create a puzzle of their favorite cartoon or superhero. Talele makes it so simple! Search for the image online and save the photo in your personal library. Voi la, you have your very own Talele game.
 
 
-
-Talele is an iOS jigsaw puzzle game which you can select pictures from your photo library and create an infinite number of jigsaw puzzles. Now your kid can puzzle every picture in his or her library in three different levels EASY (12 pieces), NORMAL (24 pieces) and HARD (48 pieces). Imagine if your son or daughter asks you a puzzle of one of their favorite cartoons or heroes. That is so simple, you can just browse on safari for an image and save that photo into your library. Now, that is available for selection in Talele or even selecting pictures of your family and puzzle it. This is a multi-language text and audio game in ENGLISH, PORTUGUESE, and SPANISH to help your children learn about navigation and discover new words and sounds in a magic environment. This game is targeted at helping your kid in their learning process through sound feedback stimulating them in every right move.
-
-
 #Game interface
 
 <img src="https://raw.githubusercontent.com/dayvson/talele/master/1.jpg" />
